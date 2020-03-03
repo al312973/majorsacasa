@@ -16,8 +16,8 @@ public class ElderlyDAO {
 	private JdbcTemplate jdbcTemplate;
 	
 	@Autowired 
-	public void setDataSource(DataSource datasource){
-		jdbcTemplate  =new JdbcTemplate(datasource);
+	public void setDataSource(DataSource dataSource){
+		jdbcTemplate  =new JdbcTemplate(dataSource);
 	}
 	
 	public void addElderly(Elderly elderly){
@@ -37,8 +37,8 @@ public class ElderlyDAO {
 								elderly.getSocialWorker_userCAS());
 	}
 	
-	public void deleteElderly(Elderly elderly){
-		jdbcTemplate.update("DELETE FROM ELDERLY WHERE DNI = ?", elderly.getDNI());
+	public void deleteElderly(String DNI){
+		jdbcTemplate.update("DELETE FROM ELDERLY WHERE DNI = ?", DNI);
 	}
 	
 	public void updateElderly(Elderly elderly){

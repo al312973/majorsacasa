@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+   <title>Add a new elderly</title>
+   <meta charset="UTF-8" />
+   <link rel="stylesheet"
+         href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
+</head>
+<body>
+<div class="container">
+   <h2>New elderly</h2>
+   <form class="form-horizontal" action="#" th:action="@{/elderly/add}"
+         th:object="${elderly}" method="post">
+
+       <div class="form-group row">
+           <label class="control-label col-sm-2" for="name">Name:</label>
+           <div class="col-sm-4">
+               <input type="text" class="form-control" id="name" th:field="*{name}" />
+           </div>
+       </div>
+       <div class="form-group row">
+           <label class="control-label col-sm-2" for="surname">Surname:</label>
+           <div class="col-sm-4">
+               <input type="text" class="form-control" id="surname" th:field="*{surname}" />
+           </div>
+       </div>
+       
+       <div class="form-group row">
+		   <label class="control-label col-sm-2" for="DNI">DNI:</label>
+           <div class="col-sm-4">
+               <input type="text" class="form-control" id="DNI" th:field="*{DNI}" />
+           </div>
+       </div>
+
+
+
+       <div class="form-group row">
+           <label class="control-label col-sm-2" for="birthDate">Birthdate:</label>
+           <div class="col-sm-4">
+               <input type="text" class="form-control" id="birthDate" th:field="*{birthDate}"/>
+           </div>
+       </div>
+
+       <div class="form-group row">
+           <label class="control-label col-sm-2" for="address">Address:</label>
+           <div class="col-sm-4">
+               <input type="text" class="form-control" id="address" th:field="*{address}"/>
+           </div>
+       </div>
+
+       <div class="form-group row">
+           <label class="control-label col-sm-2" for="phoneNumber">Phone number:</label>
+           <div class="col-sm-4">
+               <input type="text" class="form-control" id="phoneNumber" th:field="*{phoneNumber}"/>
+           </div>
+       </div>
+
+       <div class="form-group row">
+           <label class="control-label col-sm-2" for="bankAccountNumber">Bank account number:</label>
+           <div class="col-sm-4">
+               <input type="text" class="form-control" id="bankAccountNumber" th:field="*{bankAccountNumber}"/>
+           </div>
+       </div>
+
+       <div class="form-group row">
+           <label class="control-label col-sm-2" for="email">email:</label>
+           <div class="col-sm-4">
+               <input type="text" class="form-control" id="email" th:field="*{email}"/>
+           </div>
+       </div>
+
+       <div class="form-group row">
+           <label class="control-label col-sm-2" for="dateCreation">Date creation:</label>
+           <div class="col-sm-4">
+               <input type="text" class="form-control" id="dateCreation" th:field="*{dateCreation}"/>
+           </div>
+       </div>
+
+       <div class="form-group row">
+           <label class="control-label col-sm-2" for="alergies">Alergies:</label>
+           <div class="col-sm-4">
+               <input type="text" class="form-control" id="alergies" th:field="*{alergies}"/>
+           </div>
+       </div>
+
+       <div class="form-group row">
+           <label class="control-label col-sm-2" for="diseases">Diseases:</label>
+           <div class="col-sm-4">
+               <input type="text" class="form-control" id="diseases" th:field="*{diseases}"/>
+           </div>
+       </div>
+
+       <div class="form-group row">
+           <label class="control-label col-sm-2" for="socialWorker_user">Social worker:</label>
+           <div class="col-sm-4">
+               <input type="text" class="form-control" id="socialWorker_user" th:field="*{socialWorker_user}"/>
+           </div>
+       </div>
+
+       <div class="form-group row">
+           <div class="col-sm-offset-2 col-sm-4">
+               <button type="submit" class="btn btn-primary">Afegeix classificacio</button>
+           </div>
+       </div>
+
+   </form>
+</div>
+</body>
+</html>
