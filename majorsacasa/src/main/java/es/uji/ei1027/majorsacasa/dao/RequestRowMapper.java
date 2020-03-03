@@ -1,0 +1,27 @@
+package es.uji.ei1027.majorsacasa.dao;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalTime;
+import java.util.Date;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.jdbc.core.RowMapper;
+import es.uji.ei1027.majorsacasa.model.Request;
+
+public final class RequestRowMapper implements RowMapper<Request>{
+
+	public Request mapRow(ResultSet rs, int rowNum) throws SQLException {
+		Request request = new Request();
+		request.setNumber(rs.getInt("number"));
+		request.setServiceType(rs.getInt("serviceType"));
+		request.setCreationDate(rs.getDate("creationDate"));
+		request.setState(rs.getInt("state"));
+		request.setApprovedDate(rs.getDate("approvedDate"));
+		request.setRejectedDate(rs.getDate("rejectedDate"));
+		request.setComments(rs.getString("comments"));
+		request.setEndDate(rs.getDate("endDate"));
+		request.setElderly_dni(rs.getString("elderly_dni"));
+		request.setContract_number(rs.getInt("contract_number"));
+		return request;
+	}
+}
