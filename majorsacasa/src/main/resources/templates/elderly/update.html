@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-   <title>Add a new elderly</title>
+   <title>Edit an elderly</title>
    <meta charset="UTF-8" />
    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
 </head>
 <body>
-	<h2>New elderly</h2>
-	<form action="#" th:action="@{/elderly/add}" th:object="${elderly}" method="post">
+	<h2>Edit elderly</h2>
+	<form action="#" th:action="@{/elderly/update}" th:object="${elderly}" method="post">
 		<table>
 			<tr>
 				<td><label>Name:</label></td>
@@ -54,7 +54,7 @@
 	        	<td><input type="text" th:field="*{diseases}" /></td>
 	        </tr>
 	        <tr>
-	            <td colspan="2"><input class="btn btn-success" type="submit" value="Add" role="button"/></td>
+	            <td colspan="2"><input class="btn btn-success" type="submit" value="Save changes" role="button"/></td>
 	        </tr>
         </table>
     </form>  

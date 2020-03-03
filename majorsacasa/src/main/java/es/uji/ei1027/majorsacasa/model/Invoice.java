@@ -4,7 +4,7 @@ import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class Invoice {
-	@DateTimeFormat(pattern = "yyyy-mm-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date date;
 	private int number;
 	private float amount;

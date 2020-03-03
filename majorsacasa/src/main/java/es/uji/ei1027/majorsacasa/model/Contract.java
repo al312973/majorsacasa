@@ -6,7 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 public class Contract {
 	private int number;
-	@DateTimeFormat(pattern = "yyyy-mm-dd HH:mm:ss.SSS")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date dateBeginning;
 	private String description;
 	private int serviceType;

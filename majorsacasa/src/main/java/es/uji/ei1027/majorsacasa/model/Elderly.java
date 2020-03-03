@@ -8,7 +8,7 @@ public class Elderly {
 	private String name;
 	private String DNI;
 	private String surname;
-	@DateTimeFormat(pattern = "yyyy-mm-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date birthDate;
 	private String address;
 	private String phoneNumber;

@@ -6,7 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class Request {
 	private int number;
 	private int serviceType;
-	@DateTimeFormat(pattern = "yyyy-mm-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date creationDate;
 	private int state;
 	private Date approvedDate;

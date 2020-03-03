@@ -5,7 +5,7 @@ import java.time.LocalTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class Availability {
-	@DateTimeFormat(pattern = "yyyy-mm-dd HH:mm:ss.SSS")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date date;
 	private LocalTime begginingHour;
 	private LocalTime endingHour;

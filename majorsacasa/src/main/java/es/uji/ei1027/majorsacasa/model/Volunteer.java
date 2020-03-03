@@ -10,7 +10,7 @@ public class Volunteer {
 	private String usr;
 	private String pwd;
 	private String hobbies;
-	@DateTimeFormat(pattern = "yyyy-mm-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date applicationDate;
 	private Date acceptationDate;
 	private boolean accepted;

@@ -1,5 +1,7 @@
 package es.uji.ei1027.majorsacasa.controller;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,30 +33,52 @@ public class ElderlyController {
 	
 	@RequestMapping(value="/add") 
     public String addElderly(Model model) {
-        model.addAttribute("nadador", new Elderly());
+        model.addAttribute("elderly", new Elderly());
         return "elderly/add";
     }
 
 	@RequestMapping(value="/add", method=RequestMethod.POST)
 	public String processAddSubmit(@ModelAttribute("elderly") Elderly elderly, BindingResult bindingResult) {
+		//Completa y/o modifica los campos con los atributos que se necesitan y no proporciona el usuario
+		elderly.setDateCreation(new Date());
+		if (elderly.getAlergies().equals(""))
+			elderly.setAlergies(null);
+		if (elderly.getDiseases().equals(""))
+			elderly.setDiseases(null);
+		
 		if (bindingResult.hasErrors())
 			return "elderly/add";
         elderlyDao.addElderly(elderly);
-        return "redirect:list.html";
+        return "redirect:list";
     }
 
+	//Variable interna en la que guardamos la fecha de creacion de un elderly para que no se
+	// modifique cuando actualizamos sus datos
+	private Date dateCreation;
+		
+		
 	@RequestMapping(value="/update/{DNI}", method = RequestMethod.GET)
     public String editEldery(Model model, @PathVariable String DNI) {
-        model.addAttribute("elderly", elderlyDao.getElderly(DNI));
+		Elderly elderly = elderlyDao.getElderly(DNI);
+		dateCreation = elderly.getDateCreation();
+        model.addAttribute("elderly", elderly);
         return "elderly/update"; 
     }
 
-	@RequestMapping(value="/update", method = RequestMethod.POST) 
+	
+	@RequestMapping(value="/update", method = RequestMethod.POST)
     public String processUpdateSubmit(@ModelAttribute("elderly") Elderly elderly, BindingResult bindingResult) {
-         if (bindingResult.hasErrors()) 
-             return "elderly/update";
-         elderlyDao.updateElderly(elderly);
-         return "redirect:list.html"; 
+		//Completa y/o modifica los campos con los atributos que se necesitan y no proporciona el usuario
+		elderly.setDateCreation(dateCreation);
+		if (elderly.getAlergies().equals(""))
+			elderly.setAlergies(null);
+		if (elderly.getDiseases().equals(""))
+			elderly.setDiseases(null);
+		
+        if (bindingResult.hasErrors()) 
+        	return "elderly/update";
+        elderlyDao.updateElderly(elderly);
+        return "redirect:list"; 
     }
 
    @RequestMapping(value="/delete/{DNI}")
@@ -62,6 +86,4 @@ public class ElderlyController {
            elderlyDao.deleteElderly(DNI);
            return "redirect:../list"; 
     }
-
-
 }
