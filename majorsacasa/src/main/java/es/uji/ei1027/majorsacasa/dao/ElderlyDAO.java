@@ -17,7 +17,7 @@ public class ElderlyDAO {
 	
 	@Autowired 
 	public void setDataSource(DataSource dataSource){
-		jdbcTemplate  =new JdbcTemplate(dataSource);
+		jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	
 	public void addElderly(Elderly elderly){

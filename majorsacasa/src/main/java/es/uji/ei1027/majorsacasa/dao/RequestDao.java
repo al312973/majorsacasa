@@ -38,7 +38,7 @@ public class RequestDao {
 		}
 		
 		public void deleteRequest(int number){
-			jdbcTemplate.update("DELETE FROM request WHERE NUMBER = ?", number);
+			jdbcTemplate.update("DELETE FROM REQUEST WHERE NUMBER = ?", number);
 		}
 		
 		public void updateRequest(Request request){

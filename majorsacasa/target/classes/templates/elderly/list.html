@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+   <title>Gestionar Elderlies</title>
+   <meta charset="UTF-8" />
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+</head>
+<body>
+   <h1>Elderlies list</h1>
+   <table class="table table-striped">
+     <thead>
+       <tr>
+         <th>Name</th>
+         <th>Surname</th>
+         <th>DNI</th>
+         <th>Birth Date</th>
+         <th>Address</th>
+         <th>Phone Number</th>
+         <th>Alergies</th>
+         <th>Diseases</th>
+         <th></th>
+         <th></th>
+       </tr>
+     </thead>
+     <tbody>
+       <tr th:each="elderly: ${elderlies}">
+         <td th:text="${elderly.name}"></td>
+         <td th:text="${elderly.surname}"></td>
+         <td th:text="${elderly.DNI}"></td>
+         <td th:text="${elderly.birthDate}"></td>
+         <td th:text="${elderly.address}"></td>
+         <td th:text="${elderly.phoneNumber}"></td>
+         <td th:text="${elderly.alergies}"></td>
+         <td th:text="${elderly.diseases}"></td>
+         <td><a class="btn btn-warning" th:href="@{/elderly/update/{DNI}(DNI=${elderly.DNI})}" role="button">Edit</a>
+         </td>
+         <td><a class="btn btn-danger" th:href="@{/elderly/delete/{DNI}(DNI=${elderly.DNI})}" role="button">Delete</a>
+         </td>
+       </tr>
+     </tbody>
+   </table>
+   <a class="btn btn-success" href="add" role="button">Add new elderly</a>
+</body>
+</html>
