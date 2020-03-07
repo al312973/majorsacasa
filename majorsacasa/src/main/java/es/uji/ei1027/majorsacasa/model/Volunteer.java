@@ -15,6 +15,7 @@ public class Volunteer {
 	private Date acceptationDate;
 	private boolean accepted;
 	private Date birthDate;
+	private Date endDate;
 	
 	public Volunteer() {
 		
@@ -24,7 +25,7 @@ public class Volunteer {
 	public String toString() {
 		return "Volunteer [name=" + name + ", phoneNumber=" + phoneNumber + ", email=" + email + ", usr=" + usr
 				+ ", pwd=" + pwd + ", hobbies=" + hobbies + ", applicationDate=" + applicationDate
-				+ ", acceptationDate=" + acceptationDate + ", accepted=" + accepted + ", birthDate=" + birthDate + "]";
+				+ ", acceptationDate=" + acceptationDate + ", accepted=" + accepted + ", birthDate=" + birthDate + ", endDate=" + endDate + "]";
 	}
 
 	public String getName() {
@@ -105,6 +106,14 @@ public class Volunteer {
 
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
+	}
+	
+	public Date getEndDate(){
+		return endDate;
+	}
+	
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 	
 }
