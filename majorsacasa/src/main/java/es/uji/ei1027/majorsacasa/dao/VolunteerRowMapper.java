@@ -21,6 +21,7 @@ public final class VolunteerRowMapper implements RowMapper<Volunteer>{
 		volunteer.setAcceptationDate(rs.getDate("acceptationDate"));
 		volunteer.setAccepted(rs.getBoolean("accepted"));
 		volunteer.setBirthDate(rs.getDate("birthDate"));
+		volunteer.setEndDate(rs.getDate("endDate"));
 		return volunteer;
 	}
 }
