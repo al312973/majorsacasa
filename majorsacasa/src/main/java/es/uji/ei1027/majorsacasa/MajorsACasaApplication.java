@@ -17,4 +17,5 @@ public class MajorsACasaApplication{
         // Auto-configura l'aplicació
         new SpringApplicationBuilder(MajorsACasaApplication .class).run(args);
     }
+    
 }

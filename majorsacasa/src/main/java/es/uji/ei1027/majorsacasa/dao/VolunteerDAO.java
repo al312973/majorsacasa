@@ -42,9 +42,8 @@ public class VolunteerDAO {
 							);
 			}
 	
-	public void deleteVoulunteer(String Usr) {
-		Date fechaBaja = new Date();
-		jdbcTemplate.update("UPDATE FROM VOLUNTEER SET ENDDATE = " + new SimpleDateFormat("yyyy-MM-dd").format(fechaBaja) + " WHERE USR = ?", Usr);
+	public void deleteVoulunteer(String Usr, Date endDate) {
+		jdbcTemplate.update("UPDATE FROM VOLUNTEER SET ENDDATE = " + new SimpleDateFormat("yyyy-MM-dd").format(endDate) + " WHERE USR = ?", Usr);
 	}
 	
 	public void updateVolunteer(Volunteer volunteer){
