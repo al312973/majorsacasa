@@ -6,6 +6,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +24,9 @@ public class VolunteerDAO {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	
+	
+	//ANDREEA al insertar un nuevo voluntario , el campo isAccepted lo actualiza un trabajador social y lo mismo ocurre con el
+	//campo endDate. No se deben insertar ahora
 	public void addVolunteer(Volunteer volunteer) {
 		jdbcTemplate.update("INSERT INTO VOLUNTEER VALUES(?,?,?,?,?,?,?,?,?)",
 							volunteer.getName(),
@@ -38,7 +43,8 @@ public class VolunteerDAO {
 			}
 	
 	public void deleteVoulunteer(String Usr) {
-		jdbcTemplate.update("DELETE FROM VOLUNTEER WHERE USR = ?", Usr);
+		Date fechaBaja = new Date();
+		jdbcTemplate.update("UPDATE FROM VOLUNTEER SET ENDDATE = " + new SimpleDateFormat("yyyy-MM-dd").format(fechaBaja) + " WHERE USR = ?", Usr);
 	}
 	
 	public void updateVolunteer(Volunteer volunteer){
