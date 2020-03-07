@@ -23,6 +23,7 @@ public class ElderlyController {
 	@Autowired
 	public void setElderlyDao(ElderlyDAO elderlyDao) {
 		this.elderlyDao=elderlyDao;
+		
 	}
 	
 	@RequestMapping(value="/list")
