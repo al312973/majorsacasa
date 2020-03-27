@@ -2,13 +2,17 @@ package es.uji.ei1027.majorsacasa.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import es.uji.ei1027.majorsacasa.model.Elderly;
 import es.uji.ei1027.majorsacasa.model.Volunteer;
 
 @Repository
@@ -40,8 +44,8 @@ public class VolunteerDAO {
 							);
 			}
 	
-	public void deleteVoulunteer(String Usr, Date endDate) {
-		jdbcTemplate.update("UPDATE FROM VOLUNTEER SET ENDDATE = " + new SimpleDateFormat("yyyy-MM-dd").format(endDate) + " WHERE USR = ?", Usr);
+	public void deleteVolunteer(String Usr) {
+		jdbcTemplate.update("UPDATE FROM VOLUNTEER SET ENDDATE = " + new Date() + " WHERE USR = ?", Usr);
 	}
 	
 	public void updateVolunteer(Volunteer volunteer){

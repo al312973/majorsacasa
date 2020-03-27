@@ -20,6 +20,7 @@
 	        <tr>
 				<td><label>DNI:</label></td>
 	        	<td><input type="text" th:field="*{DNI}" required/></td>
+	        	            <td th:if="${#fields.hasErrors('DNI')}" th:errors="*{DNI}"></td>
 	        </tr>
 	        <tr>
 				<td><label>Birth Date:</label></td>
@@ -39,7 +40,7 @@
 	        </tr>
 	        <tr>
 				<td><label>Email:</label></td>
-	        	<td><input type="email" th:field="*{email}" required/></td>
+	        	<td><input type="text" th:field="*{email}" required/></td>
 	        </tr>
 	        <tr>
 				<td><label>Password:</label></td>
