@@ -1,0 +1,29 @@
+/* Importamos la fuente que queremos usar para las cabeceras de primer nivel */
+@font-face {
+  font-family:"Pacifico";
+  src: url("../fonts/Pacifico.ttf") format("truetype");
+}
+
+/* Cuerpo de la pagina */
+body {
+	font-family: Helvetica, Arial, sans-serif; 
+	background-color: white;
+}
+
+/* Encabezado de nivel 1 */
+h1 { 
+	font-family: "Pacifico", Helvetica, Arial;
+	font-size: 16vh;
+}
+
+/* Clase css que reduce el tamanyo del pie de pagina */
+.reduce_footer {
+    padding: 20px 0;
+}
+
+/*Clase css que permite insertar filas vacías en las tablas*/
+.blank_row
+{
+    height: 40px !important;
+    background-color: #FFFFFF;
+}
