@@ -20,7 +20,7 @@ public class SocialWorkerDAO {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	
-	public void addElderly(SocialWorker socialworker){
+	public void addSocialWorker(SocialWorker socialworker){
 		jdbcTemplate.update("INSERT INTO SOCIALWORKER VALUES(?,?,?,?,?)",
 								socialworker.getName(), 
 								socialworker.getUserCAS(), 

@@ -1,7 +1,5 @@
 package es.uji.ei1027.majorsacasa.controller;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +14,7 @@ import es.uji.ei1027.majorsacasa.model.SocialWorker;
 
 
 @Controller
-@RequestMapping("/socialworker")
+@RequestMapping("/socialWorker")
 public class SocialWorkerController {
 	private SocialWorkerDAO socialworkerDao;
 	
@@ -27,42 +25,42 @@ public class SocialWorkerController {
 	
 	@RequestMapping(value="/list")
 	public String listSocialWorkers(Model model) {
-		model.addAttribute("elderlies", socialworkerDao.getSocialWorkers());
-		return "socialworker/list";
+		model.addAttribute("socialWorkers", socialworkerDao.getSocialWorkers());
+		return "socialWorker/list";
 	}
 	
 	@RequestMapping(value="/add") 
     public String addSocialWorker(Model model) {
-        model.addAttribute("socialworker", new SocialWorker());
-        return "socialworker/add";
+        model.addAttribute("socialWorker", new SocialWorker());
+        return "socialWorker/add";
     }
 
-//	@RequestMapping(value="/add", method=RequestMethod.POST)
-//	public String processAddSubmit(@ModelAttribute("socialworker") SocialWorker socialworker, BindingResult bindingResult) {
-//		//Completa y/o modifica los campos con los atributos que se necesitan y no proporciona el usuario
-//		
-//		if (bindingResult.hasErrors())
-//			return "socialworker/add";
-//		socialworkerDao.addSocialWorker(socialworker);
-//        return "redirect:list";
-//    }
+	@RequestMapping(value="/add", method=RequestMethod.POST)
+	public String processAddSubmit(@ModelAttribute("socialWorker") SocialWorker socialworker, BindingResult bindingResult) {
+		//Completa y/o modifica los campos con los atributos que se necesitan y no proporciona el usuario
+		
+		if (bindingResult.hasErrors())
+			return "socialWorker/add";
+		socialworkerDao.addSocialWorker(socialworker);
+        return "redirect:list";
+    }
 
 		
 		
 	@RequestMapping(value="/update/{USERCAS}", method = RequestMethod.GET)
     public String editSocialWorker(Model model, @PathVariable String USERCAS) {
 		SocialWorker socialworker = socialworkerDao.getSocialWorker(USERCAS);
-        model.addAttribute("socialworker", socialworker);
-        return "socialworker/update"; 
+        model.addAttribute("socialWorker", socialworker);
+        return "socialWorker/update"; 
     }
 
 	
 	@RequestMapping(value="/update", method = RequestMethod.POST)
-    public String processUpdateSubmit(@ModelAttribute("socialworker") SocialWorker socialworker, BindingResult bindingResult) {
+    public String processUpdateSubmit(@ModelAttribute("socialWorker") SocialWorker socialworker, BindingResult bindingResult) {
 		//Completa y/o modifica los campos con los atributos que se necesitan y no proporciona el usuario
 				
         if (bindingResult.hasErrors()) 
-        	return "socialworker/update";
+        	return "socialWorker/update";
         socialworkerDao.updateSocialWorker(socialworker);
         return "redirect:list"; 
     }
