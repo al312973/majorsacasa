@@ -8,6 +8,20 @@
 body {
 	font-family: Helvetica, Arial, sans-serif; 
 	background-color: white;
+	text-align: center;
+}
+
+/* Encabezado */
+header{
+	text-align: center;
+}
+
+/* Titulo del encabezado */
+#titletext{
+	display: inline-block;
+	vertical-align: top;
+	font-family: "Pacifico", Helvetica, Arial;
+	font-size: 8vh;
 }
 
 /* Encabezado de nivel 1 */
@@ -16,9 +30,37 @@ h1 {
 	font-size: 16vh;
 }
 
-/* Clase css que reduce el tamanyo del pie de pagina */
-.reduce_footer {
-    padding: 20px 0;
+/* Encabezado de nivel 2 */
+h2 { 
+	font-weight: bold;
+	font-size: 10vh;
+	color: #d66f66;
+}
+
+/* Tablas */
+table{
+	margin: 0 auto;
+	margin-left:auto; 
+    margin-right:auto;
+}
+
+div.form {
+    display: block;
+}
+
+form {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}
+
+footer {
+    width: 100%;
+    height: 81px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 
 /*Clase css que permite insertar filas vacías en las tablas*/
