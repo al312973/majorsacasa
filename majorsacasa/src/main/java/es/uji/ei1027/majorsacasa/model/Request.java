@@ -9,9 +9,12 @@ public class Request {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date creationDate;
 	private int state;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date approvedDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date rejectedDate;
 	private String comments;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date endDate;
 	private String elderly_dni;
 	private int contract_number;

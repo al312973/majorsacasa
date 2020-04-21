@@ -1,6 +1,7 @@
 package es.uji.ei1027.majorsacasa.model;
 
 import java.util.Date;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class Volunteer {
@@ -12,9 +13,12 @@ public class Volunteer {
 	private String hobbies;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date applicationDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date acceptationDate;
 	private boolean accepted;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date birthDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date endDate;
 	
 	public Volunteer() {

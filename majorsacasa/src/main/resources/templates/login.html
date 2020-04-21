@@ -15,7 +15,7 @@
 	<form action="#" th:action="@{/login}" th:object="${user}" method="post">
 		<table>
 		<tr>
-		<td colspan="2" align="center" class="alert alert-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></td>
+		<td colspan="2" align="center" class="alert alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></td>
 		</tr>
 			<tr>
 				<td><label>Email:</label></td>
@@ -39,8 +39,8 @@
 			</tr>
 			<tr class="blank_row"></tr>
 			<tr>
-	            <td><input class="btn btn-info" type="submit" value="Iniciar sesión" role="button"/></td>
-	    		<td align="right"><a class="btn btn-outline-info" href="/" role="button">Volver al inicio</a></td>
+	            <td><input class="btn btn-info" type="submit" value="Inicia sessió" role="button"/></td>
+	    		<td align="right"><a class="btn btn-outline-info" href="/" role="button">Torna a l'inici</a></td>
 	    	</tr>
 	    </table>
 	</form>

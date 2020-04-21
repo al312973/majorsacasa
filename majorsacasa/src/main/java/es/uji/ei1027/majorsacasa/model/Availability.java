@@ -5,9 +5,11 @@ import java.time.LocalTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class Availability {
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date date;
+	@DateTimeFormat(pattern = "HH:mm:ss")
 	private LocalTime begginingHour;
+	@DateTimeFormat(pattern = "HH:mm:ss")
 	private LocalTime endingHour;
 	private boolean stateAvailable;
 	private String elderly_dni;

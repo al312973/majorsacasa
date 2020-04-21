@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import es.uji.ei1027.majorsacasa.dao.ElderlyDAO;
 import es.uji.ei1027.majorsacasa.dao.VolunteerDAO;
-import es.uji.ei1027.majorsacasa.model.Elderly;
 import es.uji.ei1027.majorsacasa.model.Volunteer;
 
 
@@ -42,39 +40,22 @@ private VolunteerDAO volunteerDao;
 	@RequestMapping(value="/add", method=RequestMethod.POST)
 	public String processAddSubmit(@ModelAttribute("volunteer") Volunteer volunteer, BindingResult bindingResult) {
 		volunteer.setApplicationDate(new Date());
-		//volunteer.setAcceptationDate(new Date());
-//		if (volunteer.getHobbies().equals(""))
-//			volunteer.setHobbies(null);
 
 		if (bindingResult.hasErrors())
 			return "volunteer/add";
 		volunteerDao.addVolunteer(volunteer);
         return "redirect:list";
-    }
-
-	//Variable interna en la que guardamos la fecha de creacion de un elderly para que no se
-	// modifique cuando actualizamos sus datos
-	private Date ApplicationDate;
-	//private Date AcceptationDate;
-		
+    } 
 		
 	@RequestMapping(value="/update/{USR}", method = RequestMethod.GET)
     public String editVolunteer(Model model, @PathVariable String USR) {
-		Volunteer volunteer = volunteerDao.getVolunteer(USR);
-		ApplicationDate = volunteer.getApplicationDate();
+		Volunteer volunteer = volunteerDao.getVolunteerByUsr(USR);
         model.addAttribute("volunteer", volunteer);
         return "volunteer/update"; 
     }
-
 	
 	@RequestMapping(value="/update", method = RequestMethod.POST)
     public String processUpdateSubmit(@ModelAttribute("volunteer") Volunteer volunteer, BindingResult bindingResult) {
-		//Completa y/o modifica los campos con los atributos que se necesitan y no proporciona el usuario
-		volunteer.setApplicationDate(new Date());
-		//volunteer.setAcceptationDate(new Date());
-//		if (volunteer.getHobbies().equals(""))
-//			volunteer.setHobbies(null);
-
         if (bindingResult.hasErrors()) 
         	return "volunteer/update";
         volunteerDao.updateVolunteer(volunteer);

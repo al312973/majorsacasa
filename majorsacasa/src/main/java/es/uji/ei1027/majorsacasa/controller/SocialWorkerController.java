@@ -37,28 +37,21 @@ public class SocialWorkerController {
 
 	@RequestMapping(value="/add", method=RequestMethod.POST)
 	public String processAddSubmit(@ModelAttribute("socialWorker") SocialWorker socialworker, BindingResult bindingResult) {
-		//Completa y/o modifica los campos con los atributos que se necesitan y no proporciona el usuario
-		
 		if (bindingResult.hasErrors())
 			return "socialWorker/add";
 		socialworkerDao.addSocialWorker(socialworker);
         return "redirect:list";
     }
-
-		
 		
 	@RequestMapping(value="/update/{USERCAS}", method = RequestMethod.GET)
     public String editSocialWorker(Model model, @PathVariable String USERCAS) {
-		SocialWorker socialworker = socialworkerDao.getSocialWorker(USERCAS);
+		SocialWorker socialworker = socialworkerDao.getSocialWorkerByUserCAS(USERCAS);
         model.addAttribute("socialWorker", socialworker);
         return "socialWorker/update"; 
     }
-
 	
 	@RequestMapping(value="/update", method = RequestMethod.POST)
-    public String processUpdateSubmit(@ModelAttribute("socialWorker") SocialWorker socialworker, BindingResult bindingResult) {
-		//Completa y/o modifica los campos con los atributos que se necesitan y no proporciona el usuario
-				
+    public String processUpdateSubmit(@ModelAttribute("socialWorker") SocialWorker socialworker, BindingResult bindingResult) {		
         if (bindingResult.hasErrors()) 
         	return "socialWorker/update";
         socialworkerDao.updateSocialWorker(socialworker);

@@ -2,17 +2,14 @@ package es.uji.ei1027.majorsacasa.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import es.uji.ei1027.majorsacasa.model.Elderly;
 import es.uji.ei1027.majorsacasa.model.Volunteer;
 
 @Repository
@@ -30,7 +27,7 @@ public class VolunteerDAO {
 	//campo endDate. No se deben insertar ahora
 	
 	public void addVolunteer(Volunteer volunteer) {
-		jdbcTemplate.update("INSERT INTO VOLUNTEER VALUES(?,?,?,?,?,?,?,?,?)",
+		jdbcTemplate.update("INSERT INTO VOLUNTEER VALUES(?,?,?,?,?,?,?,?,?,?,?)",
 							volunteer.getName(),
 							volunteer.getPhoneNumber(),
 							volunteer.getEmail(),
@@ -39,8 +36,9 @@ public class VolunteerDAO {
 							volunteer.getHobbies(),
 							volunteer.getApplicationDate(),
 							volunteer.getAcceptationDate(),
-							//volunteer.getAccepted(),
-							volunteer.getBirthDate()
+							volunteer.isAccepted(),
+							volunteer.getBirthDate(),
+							volunteer.getEndDate()
 							);
 			}
 	
@@ -66,9 +64,17 @@ public class VolunteerDAO {
 			
 	}
 	
-	public Volunteer getVolunteer(String Usr) {
+	public Volunteer getVolunteerByUsr(String Usr) {
 		try{
 			return jdbcTemplate.queryForObject("SELECT * FROM VOLUNTEER WHERE USR = ?", new VolunteerRowMapper(), Usr);
+		}catch (EmptyResultDataAccessException e){
+			return null;
+		}
+	}
+	
+	public Volunteer getVolunteerByEmail(String email) {
+		try{
+			return jdbcTemplate.queryForObject("SELECT * FROM VOLUNTEER WHERE EMAIL = ?", new VolunteerRowMapper(), email);
 		}catch (EmptyResultDataAccessException e){
 			return null;
 		}

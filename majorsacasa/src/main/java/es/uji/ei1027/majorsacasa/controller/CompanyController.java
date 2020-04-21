@@ -1,7 +1,5 @@
 package es.uji.ei1027.majorsacasa.controller;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -54,7 +52,6 @@ public class CompanyController {
         return "company/update"; 
     }
 
-	
 	@RequestMapping(value="/update", method = RequestMethod.POST)
     public String processUpdateSubmit(@ModelAttribute("company") Company company, BindingResult bindingResult) {
 		

@@ -1,7 +1,5 @@
 package es.uji.ei1027.majorsacasa.controller;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,16 +37,11 @@ public class PayController {
 
 	@RequestMapping(value="/add", method=RequestMethod.POST)
 	public String processAddSubmit(@ModelAttribute("pay") Pay pay, BindingResult bindingResult) {
-		//Completa y/o modifica los campos con los atributos que se necesitan y no proporciona el usuario
-			
 		if (bindingResult.hasErrors())
 			return "pay/add";
 		payDao.addPay(pay);
         return "redirect:list";
     }
-
-	//Variable interna en la que guardamos la fecha de creacion de un elderly para que no se
-	// modifique cuando actualizamos sus datos
 		
 //	@RequestMapping(value="/update/{request_number, invoice_number}", method = RequestMethod.GET)
 //    public String editEldery(Model model, @PathVariable Pay Pay) {

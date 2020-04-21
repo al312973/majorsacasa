@@ -15,6 +15,7 @@ public class Elderly {
 	private String bankAccountNumber;
 	private String email;
 	private String userPwd;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateCreation;
 	private String alergies;
 	private String diseases;

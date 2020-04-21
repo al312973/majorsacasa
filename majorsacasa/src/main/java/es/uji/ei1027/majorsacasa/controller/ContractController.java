@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import es.uji.ei1027.majorsacasa.dao.ContractDAO;
 import es.uji.ei1027.majorsacasa.model.Contract;
 
-
 @Controller
 @RequestMapping("/contract")
 public class ContractController {
@@ -39,7 +38,6 @@ public class ContractController {
 
 	@RequestMapping(value="/add", method=RequestMethod.POST)
 	public String processAddSubmit(@ModelAttribute("contract") Contract contract, BindingResult bindingResult) {
-		//Completa y/o modifica los campos con los atributos que se necesitan y no proporciona el usuario
 		contract.setDateBeginning(new Date());
 				
 		if (bindingResult.hasErrors())
@@ -48,7 +46,7 @@ public class ContractController {
         return "redirect:list";
     }
 
-	//Variable interna en la que guardamos la fecha de creacion de un elderly para que no se
+	//Variable interna en la que guardamos la fecha de creacion de un contrato para que no se
 	// modifique cuando actualizamos sus datos
 	private Date dateBeginning;
 		

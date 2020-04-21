@@ -48,10 +48,9 @@ public class AvailabilityController {
         return "redirect:list";
     }
 
-	//Variable interna en la que guardamos la fecha de creacion de un elderly para que no se
+	//Variable interna en la que guardamos la fecha de creacion de una disponibilidad para que no se
 	// modifique cuando actualizamos sus datos
 	//private Date date;
-		
 		
 	@RequestMapping(value="/update/{availability}", method = RequestMethod.GET)
     public String editAvailability(Model model, @PathVariable Availability availability) {
@@ -59,8 +58,7 @@ public class AvailabilityController {
 		//date = availability.getDate();
         model.addAttribute("availability", availability1);
         return "availability/update"; 
-    }
-
+	}
 	
 	@RequestMapping(value="/update", method = RequestMethod.POST)
     public String processUpdateSubmit(@ModelAttribute("availability") Availability availability, BindingResult bindingResult) {
@@ -70,5 +68,4 @@ public class AvailabilityController {
         availabilityDao.updateAvailability(availability);
         return "redirect:list"; 
     }
-
 }

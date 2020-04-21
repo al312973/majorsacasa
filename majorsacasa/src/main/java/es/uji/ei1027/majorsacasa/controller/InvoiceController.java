@@ -1,7 +1,5 @@
 package es.uji.ei1027.majorsacasa.controller;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,18 +37,12 @@ public class InvoiceController {
 
 	@RequestMapping(value="/add", method=RequestMethod.POST)
 	public String processAddSubmit(@ModelAttribute("invoice") Invoice invoice, BindingResult bindingResult) {
-		//Completa y/o modifica los campos con los atributos que se necesitan y no proporciona el usuario
-		
 		if (bindingResult.hasErrors())
 			return "invoice/add";
 		invoiceDao.addInvoice(invoice);
         return "redirect:list";
     }
 
-	//Variable interna en la que guardamos la fecha de creacion de un elderly para que no se
-	// modifique cuando actualizamos sus datos
-
-		
 	@RequestMapping(value="/update/{number}", method = RequestMethod.GET)
     public String editInvoice(Model model, @PathVariable int number) {
 		Invoice invoice = invoiceDao.getInvoice(number);
@@ -59,11 +51,8 @@ public class InvoiceController {
         return "invoice/update"; 
     }
 
-	
 	@RequestMapping(value="/update", method = RequestMethod.POST)
     public String processUpdateSubmit(@ModelAttribute("invoice") Invoice invoice, BindingResult bindingResult) {
-		//Completa y/o modifica los campos con los atributos que se necesitan y no proporciona el usuario
-		
         if (bindingResult.hasErrors()) 
         	return "invoice/update";
         invoiceDao.updateInvoice(invoice);

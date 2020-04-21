@@ -50,7 +50,7 @@ public class RequestController {
         return "redirect:list";
     }
 
-	//Variable interna en la que guardamos la fecha de creacion de un elderly para que no se
+	//Variable interna en la que guardamos la fecha de creacion de una solicitud para que no se
 	// modifique cuando actualizamos sus datos
 	private Date dateCreation;
 		
@@ -62,7 +62,6 @@ public class RequestController {
         return "request/update"; 
     }
 
-	
 	@RequestMapping(value="/update", method = RequestMethod.POST)
     public String processUpdateSubmit(@ModelAttribute("request") Request request, BindingResult bindingResult) {
 		//Completa y/o modifica los campos con los atributos que se necesitan y no proporciona el usuario     
