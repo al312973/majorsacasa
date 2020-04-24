@@ -1,0 +1,79 @@
+/* Importamos las fuente que queremos usar para las cabeceras de primer y segundo nivel */
+@font-face {
+  font-family:"Pacifico";
+  src: url("../fonts/Pacifico.ttf") format("truetype");
+}
+@font-face {
+  font-family:"Summit_Attack";
+  src: url("../fonts/Summit_attack.ttf") format("truetype");
+}
+
+/* Cuerpo de la pagina */
+body {
+	font-family: Helvetica, Arial, sans-serif; 
+	margin:0;
+  	padding:0;
+	width: 100%;
+	min-height: 100vh;
+	background-color: white;
+	text-align: center;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+}
+
+/* Titulo del encabezado */
+#titletext{
+	display: inline-block;
+	vertical-align: top;
+	font-family: "Pacifico", Helvetica, Arial;
+	font-size: 8vh;
+}
+
+/* Encabezado de nivel 1 */
+h1 { 
+	font-family: "Pacifico", Helvetica, Arial;
+	font-size: 16vh;
+}
+
+/* Encabezado de nivel 2 */
+h2 { 
+	font-weight: bold;
+	font-size: 10vh;
+	color: #d66f66;
+}
+
+/* Encabezado de nivel 3 */
+h3 { 
+	font-family: "Summit_Attack", Helvetica, Arial;
+	font-size: 6vh;
+}
+
+/* Tablas */
+table{
+	margin: 0 auto;
+	margin-left:auto; 
+    margin-right:auto;
+}
+
+div {
+  flex: 1;
+}
+
+div.form {
+    display: block;
+}
+
+form {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}
+
+/*Clase css que permite insertar filas vacías en las tablas*/
+.blank_row
+{
+    height: 40px !important;
+    background-color: #FFFFFF;
+}

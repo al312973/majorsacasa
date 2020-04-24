@@ -6,13 +6,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 public class Contract {
 	private int number;
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateBeginning;
 	private String description;
 	private int serviceType;
 	private int quantityServices;
 	private String unitsOfMeasure;
 	private float priceUnit;
+	@DateTimeFormat(pattern = "HH:mm:ss")
 	private LocalTime beginningHour;
 	private LocalTime endingHour;
 	private String company_cif;
