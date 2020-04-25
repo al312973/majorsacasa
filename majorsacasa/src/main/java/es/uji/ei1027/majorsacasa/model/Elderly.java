@@ -22,7 +22,7 @@ public class Elderly {
 	private String socialWorker_userCAS;
 	
 	public Elderly() {
-		
+	
 	}
 
 	@Override

@@ -51,7 +51,7 @@ public class UserController {
 			return user;
 		}
 		
-		//Comprobamos si es un trabajador social
+		//Comprobamos si es un voluntario 
 		Volunteer volunteer = volunteerDao.getVolunteerByEmail(email.trim());
 		if (volunteer!=null) {
 			UserDetails user = new UserDetails();

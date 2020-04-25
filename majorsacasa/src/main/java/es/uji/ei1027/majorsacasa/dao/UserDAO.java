@@ -35,7 +35,7 @@ public class UserDAO {
 	}
 	
 	public UserDAO() {
-		passwordEncryptor = new BasicPasswordEncryptor();
+		passwordEncryptor = new BasicPasswordEncryptor();		
 		
 		//Se obtienen todos los mayores y se guardan para hacer comprobaciones en el login
 		for (Elderly elderly : elderlyDao.getElderlies()) {
@@ -77,5 +77,6 @@ public class UserDAO {
 	     }else {//Credenciales incorrectas
 			 return null; 
 		 }
+		 
 	}
 }
