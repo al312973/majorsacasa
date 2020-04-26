@@ -17,6 +17,11 @@ public class AvailabilityDAO {
 	@Autowired 
 	public void setDataSource(DataSource dataSource){
 		jdbcTemplate = new JdbcTemplate(dataSource);
+		
+		
+		
+		
+		
 	}
 	
 	//Crea una nueva disponibilidad
