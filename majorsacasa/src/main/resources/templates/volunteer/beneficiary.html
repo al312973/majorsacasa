@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/basevolunteer}">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Voluntari</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+   	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+	<h2>Beneficiari</h2>
+	<hr style="margin-top:0;"/>
+	<table class="showinfo" th:object="${elderly}">
+		<tr>
+			<th><label>Nom:</label></th>
+	       	<td><p th:text="*{name}"></p></td>
+	    </tr>
+	    <tr>
+			<th><label>Cognoms:</label></th>
+			<td><p th:text="*{surname}"></p></td>
+	    </tr>
+	    <tr>
+			<th><label>DNI:</label></th>
+			<td><p th:text="*{DNI}"></p></td>
+	    </tr>
+	    <tr>
+			<th><label>Data de naixement:</label></th>
+			<td><p th:text="*{birthDate}"></p></td>
+	    </tr>
+	    <tr>
+			<th><label>Adreça:</label></th>
+	       	<td><p th:text="*{address}"></p></td>
+	    </tr>
+	    <tr>
+			<th><label>Telèfon:</label></th>
+			<td><p th:text="*{phoneNumber}"></p></td>
+	    </tr>
+	    <tr>
+			<th><label>Email:</label></th>
+			<td><p th:text="*{email}"></p></td>
+	    </tr>
+	    <tr>
+			<th><label>Alèrgies:</label></th>
+			<td><p th:text="*{alergies}"></p></td>
+	    </tr>
+	    <tr>
+			<th><label>Enfermetats:</label></th>
+			<td><p th:text="*{diseases}"></p></td>
+	    </tr>
+	</table> 
+	<a class="btn btn-info" href="/volunteer/services" role="button">Torna enrere</a>
+</div>
+</body>
+</html>
