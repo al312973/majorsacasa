@@ -27,7 +27,7 @@ public class AvailabilityController {
 	
 	@RequestMapping(value="/list")
 	public String listAvailabilitys(Model model) {
-		model.addAttribute("Availabilitys", availabilityDao.getAvailabilitys());
+//		model.addAttribute("Availabilitys", availabilityDao.getAvailabilities());
 		return "availability/list";
 	}
 	

@@ -1,15 +1,11 @@
 package es.uji.ei1027.majorsacasa.controller;
 
-import java.util.Calendar;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,6 +15,7 @@ import es.uji.ei1027.majorsacasa.dao.SocialWorkerDAO;
 import es.uji.ei1027.majorsacasa.dao.VolunteerDAO;
 import es.uji.ei1027.majorsacasa.model.UserDetails;
 import es.uji.ei1027.majorsacasa.model.Volunteer;
+import es.uji.ei1027.majorsacasa.validator.VolunteerValidator;
 
 @Controller
 public class LoginRegisterController {
@@ -70,7 +67,7 @@ public class LoginRegisterController {
 			if (user.getType().equals("socialWorker")) {
 				return "redirect:/socialWorker/list";
 			} else {
-				return "redirect:/volunteer/list";
+				return "redirect:/volunteer/services";
 			}
 		}
 	}
@@ -98,7 +95,7 @@ public class LoginRegisterController {
 		}
 		
 	    //Comprobamos que no haya errores
-		VolunteerValidator volunteerValidator = new VolunteerValidator(); 
+		VolunteerValidator volunteerValidator = new VolunteerValidator(volunteerDao, null); 
 		volunteerValidator.validate(volunteer, bindingResult);
 		if (bindingResult.hasErrors()) {
 			return "register/volunteer";
@@ -119,53 +116,12 @@ public class LoginRegisterController {
 				+ "\tNom: "+volunteer.getName()+"\n"
 				+ "\tUsuari: "+volunteer.getUsr()+"\n"
 				+ "\tContrasenya: "+volunteer.getPwd());
-		return "redirect:/volunteer/list";
+		return "redirect:/volunteer/services";
 	}
 	
 	@RequestMapping("/logout") 
 	public String logout(HttpSession session) {
 		session.invalidate(); 
 		return "redirect:/";
-	}
-	
-	
-	//Clase interna para validar los datos introducidos por un voluntario durante su registro
-	private class VolunteerValidator implements Validator {
-		public boolean supports(Class<?> clazz) {
-			return Volunteer.class.isAssignableFrom(clazz);
-		}
-
-		public void validate(Object obj, Errors errors) {
-			//No comprobamos si los campos estan vacios porque de eso se encarga el formulario de la vista html
-			Volunteer volunteer = (Volunteer) obj;
-			
-			//Comprobamos si el nombre de usuario está disponible
-			Volunteer existingUsr = volunteerDao.getVolunteerByUsr(volunteer.getUsr());
-			if (existingUsr!=null) {
-				errors.rejectValue("usr", "usrocupat", "Nom d'usuari no disponible");
-			}
-			
-			//Comprobamos si el email ya ha sido registrado
-			existingUsr = volunteerDao.getVolunteerByEmail(volunteer.getEmail());
-			if (existingUsr!=null) {
-				errors.rejectValue("email", "emailregistrat", "Aquest email ja ha sigut registrat a l'aplicació");
-			}
-			
-			//Comprobamos si el numero de telefono es correcto
-			if (volunteer.getPhoneNumber().length()!=9) {
-				errors.rejectValue("phoneNumber", "telefonincorrecte", "Telèfon invàlid");
-			}
-			//Comprobamos si la fecha de inicio de los servicios es posterior o igual a la actual
-			Calendar applicationDate = Calendar.getInstance();
-			applicationDate.setTime(volunteer.getApplicationDate());
-			Calendar today = Calendar.getInstance();
-			today.set(Calendar.HOUR_OF_DAY, 0);
-			today.set(Calendar.MINUTE, 0);
-			today.set(Calendar.SECOND, 0);
-			today.set(Calendar.MILLISECOND, 0);
-			if (applicationDate.compareTo(today)<0) {
-				errors.rejectValue("applicationDate", "telefonincorrecte", "Data d'inici invàlida");
-			}
-		}
 	}
 }

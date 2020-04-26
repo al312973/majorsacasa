@@ -19,21 +19,37 @@ public class AvailabilityDAO {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	
+	//Crea una nueva disponibilidad
 	public void addAvailability(Availability availability){
 		jdbcTemplate.update("INSERT INTO AVAILABILITY VALUES(?,?,?,?,?)",
 								availability.getDate(), 
 								availability.getBegginingHour(), 
 								availability.getEndingHour(), 
-								//availability.getStateAvailable(), 
+								availability.isStateAvailable(), 
 								availability.getElderly_dni(), 
 								availability.getVolunteer_usr()
 
 								);
 	}
 	
-//	public void deleteAvailability(Date date){
-//		jdbcTemplate.update("DELETE FROM AVAILABILAITY WHERE DATE = ?", date);
+//	//Lista todas las disponibilidades registradas en la BBDD
+//	public List<Availability> getAvailabilities(){
+//		try{
+//			return jdbcTemplate.query("SELECT * FROM AVAILABILITY", new AvailabilityRowMapper());
+//		}catch (EmptyResultDataAccessException e){
+//			return new ArrayList<Availability>();
+//		}
 //	}
+	
+	//Lista todas las disponibilidades de un voluntario concreto
+	public List<Availability> getAvailabilitiesFromVolunteer(String volunteer){
+		try{
+			return jdbcTemplate.query("SELECT * FROM AVAILABILITY WHERE VOLUNTEER_USR = ?", 
+					new AvailabilityRowMapper(), volunteer);
+		}catch (EmptyResultDataAccessException e){
+			return new ArrayList<Availability>();
+		}
+	}
 	
 	public void deleteAvailability(Availability availability){
 		jdbcTemplate.update("DELETE FROM AVAILABILAITY WHERE DATE = ?, BEGGININGHOUR = ?, ENDINGHOUR = ?",
@@ -68,14 +84,5 @@ public class AvailabilityDAO {
 			return null;
 		}
 	}
-	
-	public List<Availability> getAvailabilitys(){
-		try{
-			return jdbcTemplate.query("SELECT * FROM AVAILABILAITY", new AvailabilityRowMapper());
-		}catch (EmptyResultDataAccessException e){
-			return new ArrayList<Availability>();
-		}
-	}
-	
 }
 

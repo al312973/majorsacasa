@@ -47,19 +47,16 @@ public class VolunteerDAO {
 	}
 	
 	public void updateVolunteer(Volunteer volunteer){
-		jdbcTemplate.update("UPDATE ELDERLY SET NAME = ?, PHONENUMBER = ?, EMAIL = ?, USR = ?, PWD = ?, HOBBIES = ?,"
-							+ " APPLICATIONDATE = ?, ACCEPTATIONDATE = ?, BIRTHDATE = ? WHERE USR = ?",
+		jdbcTemplate.update("UPDATE VOLUNTEER SET NAME = ?, PHONENUMBER = ?, EMAIL = ?, USR = ?, PWD = ?, HOBBIES = ?,"
+							+" BIRTHDATE = ? WHERE USR = ?",
 							volunteer.getName(),
 							volunteer.getPhoneNumber(),
 							volunteer.getEmail(),
+							volunteer.getUsr(),
 							volunteer.getPwd(),
 							volunteer.getHobbies(),
-							volunteer.getApplicationDate(),
-							volunteer.getAcceptationDate(),
-							//volunteer.getAccepted(),
 							volunteer.getBirthDate(),
 							volunteer.getUsr()
-
 							);
 			
 	}

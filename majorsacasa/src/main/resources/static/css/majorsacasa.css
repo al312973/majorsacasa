@@ -52,8 +52,15 @@ h3 {
 /* Tablas */
 table{
 	margin: 0 auto;
-	margin-left:auto; 
-    margin-right:auto;
+	margin-left: auto; 
+    margin-right: auto;
+}
+
+table.showinfo{
+	border-collapse: separate;
+  	border-spacing:  10px;
+  	vertical-align: middle;
+	text-align: left;
 }
 
 div {
