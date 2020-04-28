@@ -20,9 +20,10 @@ public class UserController {
 		this.volunteerDao = volunteerDao;
 	}
 	
-	public UserDetails checkCredentials(String email, String password) { 
+	public UserDetails checkCredentials(String userEmail, String password) { 
 		//Comprobamos si es una persona mayor
-		Elderly elderly = elderlyDao.getElderlyByEmail(email.trim());
+		//Las personas mayores solo pueden acceder a la aplicación con email
+		Elderly elderly = elderlyDao.getElderlyByEmail(userEmail.trim());
 		if (elderly!=null) {
 			UserDetails user = new UserDetails();
 			user.setEmail(elderly.getEmail());
@@ -37,7 +38,12 @@ public class UserController {
 		}
 		
 		//Comprobamos si es un trabajador social
-		SocialWorker socialWorker = socialWorkerDao.getSocialWorkerByEmail(email.trim());
+		SocialWorker socialWorker;
+		if (userEmail.contains("@")) {
+			socialWorker = socialWorkerDao.getSocialWorkerByEmail(userEmail.trim());
+		} else {
+			socialWorker = socialWorkerDao.getSocialWorkerByUserCAS(userEmail.trim());
+		}
 		if (socialWorker!=null) {
 			UserDetails user = new UserDetails();
 			user.setEmail(socialWorker.getEmail());
@@ -52,7 +58,12 @@ public class UserController {
 		}
 		
 		//Comprobamos si es un trabajador social
-		Volunteer volunteer = volunteerDao.getVolunteerByEmail(email.trim());
+		Volunteer volunteer;
+		if (userEmail.contains("@")) {
+			volunteer = volunteerDao.getVolunteerByEmail(userEmail.trim());
+		} else {
+			volunteer = volunteerDao.getVolunteerByUsr(userEmail.trim());
+		}
 		if (volunteer!=null) {
 			UserDetails user = new UserDetails();
 			user.setEmail(volunteer.getEmail());

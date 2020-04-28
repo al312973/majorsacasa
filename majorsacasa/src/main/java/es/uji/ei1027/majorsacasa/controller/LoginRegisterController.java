@@ -112,7 +112,9 @@ public class LoginRegisterController {
 		session.setAttribute("user", user); 
 		
 		//Se envía un correo de confirmación
-		System.out.println("S'ha manat un correu de confirmació a "+volunteer.getEmail()+"\n"
+		System.out.println("S'ha manat un correu de confirmació a "+volunteer.getEmail()
+				+"\nUs heu registrat correctament com a voluntari a l'aplicació majors a casa.\n"
+				+"Les vostres credencials son:\n"
 				+ "\tNom: "+volunteer.getName()+"\n"
 				+ "\tUsuari: "+volunteer.getUsr()+"\n"
 				+ "\tContrasenya: "+volunteer.getPwd());

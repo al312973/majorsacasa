@@ -18,7 +18,7 @@
 		<td colspan="2" align="center" class="alert alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></td>
 		</tr>
 			<tr>
-				<td><label>Email:</label></td>
+				<td><label>Email o usuari:</label></td>
 	        	<td th:unless="${#fields.hasErrors('email')}">
 	        		<input type="text" class="form-control" th:field="*{email}" required/>
 	        	</td>
