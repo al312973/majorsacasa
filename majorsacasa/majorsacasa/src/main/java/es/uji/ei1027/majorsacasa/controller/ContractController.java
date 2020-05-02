@@ -75,4 +75,6 @@ public class ContractController {
            contractDao.deleteContract(number);
            return "redirect:../list"; 
     }
+	
+	//PRUEBA DE PULL DESDEGIT
 }
