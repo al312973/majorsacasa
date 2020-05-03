@@ -10,7 +10,7 @@ public final class AvailabilityRowMapper implements RowMapper<Availability>{
 	public Availability mapRow(ResultSet rs, int rowNum) throws SQLException {
 		Availability availability = new Availability();
 		availability.setDate(rs.getDate("date"));
-		availability.setBegginingHour(rs.getTime("beginninghour").toLocalTime());
+		availability.setBeginningHour(rs.getTime("beginninghour").toLocalTime());
 		availability.setEndingHour(rs.getTime("endinghour").toLocalTime());
 		availability.setStateAvailable(rs.getBoolean("stateavalilable"));
 		availability.setElderly_dni(rs.getString("elderly_dni"));

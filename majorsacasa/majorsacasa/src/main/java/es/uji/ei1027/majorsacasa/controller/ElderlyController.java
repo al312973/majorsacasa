@@ -127,11 +127,6 @@ public class ElderlyController {
 	   return "redirect:../elderlyRequest";
    }
    
-   @RequestMapping(value="/elderlyDeleteAvailability/{date}/{begginingHour}/{endingHour}")
-   public String processDeleteAvailability(@PathVariable String date, @PathVariable String begginingHour, @PathVariable String endingHour){
-	   availabilityDao.deleteAvailability(date, begginingHour, endingHour);
-	   return "redirect:../elderlyRequest";
-   }
    
    @RequestMapping(value="/elderlyContract")
    public String listContract(Model model){

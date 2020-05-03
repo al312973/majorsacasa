@@ -22,10 +22,6 @@ public class VolunteerDAO {
 		
 	}
 	
-	
-	//ANDREEA al insertar un nuevo voluntario , el campo isAccepted lo actualiza un trabajador social y lo mismo ocurre con el
-	//campo endDate. No se deben insertar ahora
-	
 	public void addVolunteer(Volunteer volunteer) {
 		jdbcTemplate.update("INSERT INTO VOLUNTEER VALUES(?,?,?,?,?,?,?,?,?,?,?)",
 							volunteer.getName(),
@@ -58,7 +54,6 @@ public class VolunteerDAO {
 							volunteer.getBirthDate(),
 							volunteer.getUsr()
 							);
-			
 	}
 	
 	public Volunteer getVolunteerByUsr(String Usr) {

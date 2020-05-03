@@ -35,7 +35,6 @@ public class VolunteerValidator implements Validator {
 				if (!currentVolunteer.getUsr().equals(existingUsr.getUsr()))
 					errors.rejectValue("usr", "usrocupat", "Nom d'usuari no disponible");
 			}
-			
 		}
 		
 		//Comprobamos si el email ya ha sido registrado

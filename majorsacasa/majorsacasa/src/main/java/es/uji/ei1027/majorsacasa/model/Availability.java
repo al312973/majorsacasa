@@ -7,9 +7,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class Availability {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date date;
-	@DateTimeFormat(pattern = "HH:mm:ss")
-	private LocalTime begginingHour;
-	@DateTimeFormat(pattern = "HH:mm:ss")
+	@DateTimeFormat(pattern = "HH:mm")
+	private LocalTime beginningHour;
+	@DateTimeFormat(pattern = "HH:mm")
 	private LocalTime endingHour;
 	private boolean stateAvailable;
 	private String elderly_dni;
@@ -21,7 +21,7 @@ public class Availability {
 
 	@Override
 	public String toString() {
-		return "Availability [date=" + date + ", begginingHour=" + begginingHour + ", endingHour=" + endingHour
+		return "Availability [date=" + date + ", begginingHour=" + beginningHour + ", endingHour=" + endingHour
 				+ ", stateAvailable=" + stateAvailable + ", elderly_dni=" + elderly_dni + ", volunteer_usr="
 				+ volunteer_usr + "]";
 	}
@@ -34,12 +34,12 @@ public class Availability {
 		this.date = date;
 	}
 
-	public LocalTime getBegginingHour() {
-		return begginingHour;
+	public LocalTime getBeginningHour() {
+		return beginningHour;
 	}
 
-	public void setBegginingHour(LocalTime begginingHour) {
-		this.begginingHour = begginingHour;
+	public void setBeginningHour(LocalTime beginningHour) {
+		this.beginningHour = beginningHour;
 	}
 
 	public LocalTime getEndingHour() {

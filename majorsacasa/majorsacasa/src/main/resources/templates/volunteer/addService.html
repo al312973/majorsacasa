@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/basevolunteer}">
+<head>
+<meta charset="UTF-8"/>
+	<title>Majors a casa</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+   	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+	<h2>Nou servei</h2>
+	<form action="#" th:action="@{/volunteer/addService}" th:object="${availability}" method="post">
+		<table>
+		<tr th:if="${#fields.hasErrors('date')}">
+			<td colspan="2" align="center" class="alert alert-danger" th:errors="*{date}"></td>
+		</tr>
+		<tr th:if="${#fields.hasErrors('beginningHour')}">
+			<td colspan="2" align="center" class="alert alert-danger" th:errors="*{beginningHour}"></td>
+		</tr>
+		<tr th:if="${#fields.hasErrors('endingHour')}">
+			<td colspan="2" align="center" class="alert alert-danger" th:errors="*{endingHour}"></td>
+		</tr>
+		<tr>
+			<td><label>Data:</label></td>
+			<td th:unless="${#fields.hasErrors('date') or #fields.hasErrors('beginningHour')}">
+        		<input type="date" class="form-control" th:field="*{date}" required/>
+        	</td>
+        	
+        	<td th:if="${#fields.hasErrors('date') or #fields.hasErrors('beginningHour')}">
+           		<input type="date" class="form-control is-invalid" th:field="*{date}" required/>
+           	</td>
+	    </tr>
+	    <tr>
+			<td><label>Hora inicial:</label></td>
+	        <td th:unless="${#fields.hasErrors('beginningHour')}">
+        		<input type="time" class="form-control" th:field="*{beginningHour}" required/>
+        	</td>
+        	
+        	<td th:if="${#fields.hasErrors('beginningHour')}">
+           		<input type="time" class="form-control is-invalid" th:field="*{beginningHour}" required/>
+           	</td>
+	    </tr>
+	    <tr>
+			<td><label>Hora final</label></td>
+	        <td th:unless="${#fields.hasErrors('endingHour')}">
+        		<input type="time" class="form-control" th:field="*{endingHour}" required/>
+        	</td>
+        	
+        	<td th:if="${#fields.hasErrors('endingHour')}">
+           		<input type="time" class="form-control is-invalid" th:field="*{endingHour}" required/>
+           	</td>
+	    </tr>
+	    <tr class="blank_row"></tr>
+		<tr>
+	        <td><a class="btn btn-outline-info" href="/volunteer/services" role="button">Torna enrere</a></td>
+	        <td align="right"><input class="btn btn-info" type="submit" value="Afegeix" role="button"/></td>
+	    </tr>
+        </table>
+    </form>  
+</div>
+</body>
+</html>
