@@ -10,6 +10,7 @@ public final class ContractRowMapper implements RowMapper<Contract>{
 		Contract contract = new Contract();
 		contract.setNumber(rs.getInt("number"));
 		contract.setDateBeginning(rs.getDate("dateBeginning"));
+		contract.setDateEnding(rs.getDate("dateEnding"));
 		contract.setDescription(rs.getString("description"));
 		contract.setServiceType(rs.getInt("serviceType"));
 		contract.setQuantityServices(rs.getInt("quantityServices"));

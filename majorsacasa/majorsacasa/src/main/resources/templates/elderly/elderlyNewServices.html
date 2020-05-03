@@ -10,7 +10,7 @@
 </head>
 <body>
 <div layout:fragment="content">
-   <h2>Les meues sol·licituds</h2>
+   <h2>Llistar nous servicis</h2>
    <table class="table table-striped">
      <thead>
        <tr>
@@ -18,21 +18,24 @@
          <th>Tipus servici:</th>
          <th>Preu unitat:</th>
          <th></th>
-         <th></th>
        </tr>
      </thead>
      <tbody>
        <tr th:each="contract: ${contracts}">
          <td th:text="${contract.description}"></td>
-         <td th:if="${contract.serviceType == 0}">Servicis de menjar</td>
-         <td th:if="${contract.serviceType == 1}">Servicis sanitaris</td>
-         <td th:if="${contract.serviceType == 2}">Servicis de neteja</td>
-         <td th:if="${contract.serviceType == 3}">Servicis de companyia</td> 
-         <td th:text="${contract.priceUnit}"></td>         
+         <td th:if="${contract.serviceType == 0}">Servici de menjar</td>
+         <td th:if="${contract.serviceType == 1}">Servici sanitaris</td>
+         <td th:if="${contract.serviceType == 2}">Servici de neteja</td>
+         <td th:if="${contract.serviceType == 3}">Servici de companyia</td> 
+         <td th:text="${contract.priceUnit}"></td>      
+         <td><a class="btn btn-success" th:href="@{/elderly/elderlyAddRequest/{number}(number=${contract.number})}" role="button">Afegir</a></td>   
        </tr>
        
        <tr th:each="availability: ${availabilities}">
-       	<td th:if="${availability.serviceType == 0}">Servicis de menjar</td>
+       	<td></td>
+       	<td>Servici de companyia</td>
+       	<td>0.00</td>
+       	<td><a class="btn btn-success" th:href="@{/elderly/elderlyUpdateAvailability}" role="button">Afegir</a></td>
        </tr>
      </tbody>
    </table>

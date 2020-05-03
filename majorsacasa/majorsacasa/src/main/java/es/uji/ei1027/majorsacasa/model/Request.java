@@ -20,7 +20,6 @@ public class Request {
 	private int contract_number;
 	
 	public Request() {
-		
 	}
 	
 	@Override

@@ -11,7 +11,7 @@
 <body>
 <div layout:fragment="content">
    <h2>Les meues sol·licituds</h2>
-   <table class="table table-striped">
+  <table class="table table-striped">
      <thead>
        <tr>
          <th>Tipus servici:</th>
@@ -25,14 +25,16 @@
          <th>Hora final:</th>
          <th>Voluntari:</th>
          <th></th>
-         <th></th>
        </tr>
+       
      </thead>
      <tbody>
        <tr th:each="request: ${requests}">
+
          <td th:if="${request.serviceType == 0}">Servici de menjar</td>
          <td th:if="${request.serviceType == 1}">Servici sanitaris</td>
          <td th:if="${request.serviceType == 2}">Servici de neteja</td>
+         <td th:if="${request.serviceType == 3}">Servici de companyia</td>
          <td th:text="${request.creationDate}"></td>
          <td th:if="${request.state == 0}">Pendent d'acceptació</td>
          <td th:if="${request.state == 1}">Acceptada</td>
@@ -41,15 +43,12 @@
          <td th:text="${request.rejectedDate}"></td>
          <td th:text="${request.comments}"></td>
          <td th:text="${request.endDate}"></td>   
+         <td></td>
+         <td></td>
+         <td th:if="${request.endDate.after(${request.creationDate})}">dgfdsg</td>
          
-
-         
-         <td><a class="btn btn-warning" th:href="" role="button">Modifica</a>
-         </td>
-         <td><a class="btn btn-danger" th:href="@{/elderly/elderlyDeleteRequest/{number}(request.number)}" role="button">Suprimeix</a>
-         </td>    
-         
-         
+         <td><a class="btn btn-danger" th:href="@{/elderly/elderlyDeleteRequest/{number}(number=${request.number})}" role="button">Suprimeix</a></td> 
+        
        </tr>
        <tr th:each="availability: ${availabilities}">
         <td>Servici de companyia</td>
@@ -63,20 +62,11 @@
        	<td th:text="${availability.begginingHour}"></td>
         <td th:text="${availability.endingHour}"></td>
         <td th:text="${availability.volunteer_usr}"></td>
-        
-        
-        
-         
-         <td><a class="btn btn-warning" th:href="" role="button">Modifica</a>
-         </td>
-         <td><a class="btn btn-danger" th:href="@{/elderly/elderlyDeleteAvailability/{date}(date=${availability.date})/{begginingHour}(begginingHour=${availability.begginingHour})/{endingHour}(endingHour=${availability.endingHour})}" role="button">Suprimeix</a>
-         </td>
-         
-         
-         
-       </tr>
+        <td><a class="btn btn-danger" th:href="@{/elderly/elderlyUpdateAvailability/{date}/{begginingHour}/{endingHour}( date=${availability.date}, begginingHour=${availability.begginingHour}, endingHour=${availability.endingHour} )}" role="button">Suprimeix</a></td>
+      </tr>
+      
      </tbody>
-   </table>
+   </table> 
 </div>
 </body>
 </html>

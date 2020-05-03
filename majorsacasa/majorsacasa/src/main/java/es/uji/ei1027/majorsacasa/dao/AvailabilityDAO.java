@@ -58,23 +58,15 @@ public class AvailabilityDAO {
 	}
 	
 	public void deleteAvailability(Availability availability){
-		jdbcTemplate.update("DELETE FROM AVAILABILAITY WHERE DATE = ?, BEGGININGHOUR = ?, ENDINGHOUR = ?",
+		jdbcTemplate.update("DELETE FROM AVAILABILITY WHERE DATE = ?, BEGININGHOUR = ?, ENDINGHOUR = ?",
 								availability.getDate(), 
 								availability.getBegginingHour(), 
 								availability.getEndingHour()
 								);
 	}
 	
-	public void deleteAvailability(String date, String begginingHour, String endingHour){
-		jdbcTemplate.update("DELETE FROM AVAILABILAITY WHERE DATE = ?, BEGGININGHOUR = ?, ENDINGHOUR = ?",
-				date, 
-				begginingHour, 
-				endingHour
-				);		
-	}
-	
 	public void updateAvailability(Availability availability){
-		jdbcTemplate.update("UPDATE AVAILABILAITY SET ELDERLY_DNI = ?, VOLUNTEER_USR = ?"
+		jdbcTemplate.update("UPDATE AVAILABILITY SET ELDERLY_DNI = ?, VOLUNTEER_USR = ?"
 							+ " WHERE DATE = ?, BEGGININGHOUR = ?, ENDINGHOUR = ?",
 //								
 								//availability.getStateAvailable(), 
@@ -88,7 +80,7 @@ public class AvailabilityDAO {
 	
 	public Availability getAvailability(Availability availability){
 		try{
-			return jdbcTemplate.queryForObject("SELECT * FROM AVAILABILAITY WHERE DATE = ?, BEGGININGHOUR = ?, ENDINGHOUR = ?", 
+			return jdbcTemplate.queryForObject("SELECT * FROM AVAILABILITY WHERE DATE = ?, BEGGININGHOUR = ?, ENDINGHOUR = ?", 
 					new AvailabilityRowMapper(),
 					availability.getDate(), 
 					availability.getBegginingHour(), 

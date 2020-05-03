@@ -16,64 +16,64 @@
 	<div>
 	<form action="#" th:action="@{/elderly/elderlyProfile}" th:object="${elderly}" method="post">
 		<table>
-
-
-
-
-
-
-
-
-
+			<tr th:if="${#fields.hasErrors('email')}">
+				<td colspan="2" align="center" class="alert alert-danger" th:errors="*{email}"></td>
+			</tr>
+			<tr th:if="${#fields.hasErrors('bankAccountNumber')}">
+				<td colspan="2" align="center" class="alert alert-danger" th:errors="*{bankAccountNumber}"></td>
+			</tr>
+			<tr th:if="${#fields.hasErrors('phoneNumber')}">
+				<td colspan="2" align="center" class="alert alert-danger" th:errors="*{phoneNumber}"></td>
+			</tr>
 			<tr>
-				<td><label>Name:</label></td>
-	        	<td><input type="text" th:field="*{name}" required/></td>
+				<td><label>Nom:</label></td>
+	        	<td><input type="text" class="form-control" th:field="*{name}" required/></td>
+	        	
+	        </tr> 
+	        <tr>
+				<td><label>Cognom:</label></td>
+	        	<td><input type="text" class="form-control" th:field="*{surname}" required/></td>
+	        </tr>   
+	        <tr>
+				<td><label>Data de naiximent:</label></td>
+	        	<td><input type="date" class="form-control" th:field="*{birthDate}" required/></td>
 	        </tr>
 	        <tr>
-				<td><label>Surname:</label></td>
-	        	<td><input type="text" th:field="*{surname}" required/></td>
-	        </tr>
+				<td><label>Direcció:</label></td>
+	        	<td><input type="text" class="form-control" th:field="*{address}" required/></td>
+	        </tr> 
 	        <tr>
-				<td><label>Birth Date:</label></td>
-	        	<td><input type="date" th:field="*{birthDate}" required/></td>
-	        </tr>
+				<td><label>Telèfon:</label></td>
+				<td th:unless="${#fields.hasErrors('phoneNumber')}"><input type="tel" class="form-control" th:field="*{phoneNumber}" required/></td>
+	        	<td th:if="${#fields.hasErrors('phoneNumber')}"><input type="tel" class="form-control is-invalid" th:field="*{phoneNumber}" required/></td>
+	        </tr>  
 	        <tr>
-				<td><label>Address:</label></td>
-	        	<td><input type="text" th:field="*{address}" required/></td>
-	        </tr>
-	        <tr>
-				<td><label>Phone Number:</label></td>
-	        	<td><input type="text" th:field="*{phoneNumber}" required/></td>
-	        </tr>
-	        <tr>
-				<td><label>Bank Account:</label></td>
-	        	<td><input type="text" th:field="*{bankAccountNumber}" required/></td>
-	        </tr>
+				<td><label>Conte bancari:</label></td>
+				<td th:unless="${#fields.hasErrors('bankAccountNumber')}"><input type="text" class="form-control" th:field="*{bankAccountNumber}" required/></td>
+				<td th:if="${#fields.hasErrors('bankAccountNumber')}"><input type="text" class="form-control is-invalid" th:field="*{bankAccountNumber}" required></td>
+	        </tr> 
 	        <tr>
 				<td><label>Email:</label></td>
-	        	<td><input type="text" th:field="*{email}" required/></td>
+				<td th:unless="${#fields.hasErrors('email')}"><input type="text" class="form-control" th:field="*{email}" required/></td>
+				<td th:if="${#fields.hasErrors('email')}"><input type="text" class="form-control is-invalid" th:field="*{email}" required></td>
 	        </tr>
 	        <tr>
-				<td><label>Password:</label></td>
-	        	<td><input type="password" th:field="*{userPwd}" required/></td>
+				<td><label>Contrasenya:</label></td>
+	        	<td><input type="password" class="form-control" th:field="*{userPwd}" required/></td>
 	        </tr>
 	        <tr>
-				<td><label>Alergies:</label></td>
-	        	<td><input type="text" th:field="*{alergies}" /></td>
+				<td><label>Alèrgies:</label></td>
+	        	<td><input type="text" class="form-control" th:field="*{alergies}" /></td>
 	        </tr>
 	        <tr>
-				<td><label>Diseases:</label></td>
-	        	<td><input type="text" th:field="*{diseases}" /></td>
+				<td><label>Malalties:</label></td>
+	        	<td><input type="text" class="form-control" th:field="*{diseases}" /></td>
 	        </tr>
-	        
-	        
-	        
-
-		<tr class="blank_row"></tr>
-		<tr>
-            <td><a class="btn btn-outline-info" href="/elderly/elderlyRequest" role="button">Torna enrere</a></td>
-            <td align="right"><input class="btn btn-info" type="submit" value="Aplica els canvis" role="button"/></td>
-    	</tr>
+			<tr class="blank_row"></tr>
+			<tr>
+	            <td><a class="btn btn-outline-info" href="/elderly/elderlyRequest" role="button">Torna enrere</a></td>
+	            <td align="right"><input class="btn btn-info" type="submit" value="Aplica els canvis" role="button"/></td>
+	    	</tr>
 	    </table>
 	</form>
 	</div>
