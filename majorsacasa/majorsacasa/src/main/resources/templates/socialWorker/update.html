@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+   <title>Edit a Social Worker</title>
+   <meta charset="UTF-8" />
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+</head>
+<body>
+	<h2>Edit Social Worker</h2>
+	<form action="#" th:action="@{/socialWorker/update}" th:object="${socialWorker}" method="post">
+		<table>
+			<tr>
+				<td><label>Name:</label></td>
+	        	<td><input type="text" th:field="*{name}" required/></td>
+	        </tr>
+	        <tr>
+				<td><label>User:</label></td>
+	        	<td><input type="text" th:field="*{userCAS}" required/></td>
+	        </tr>
+	        <tr>
+				<td><label>Phone Number:</label></td>
+	        	<td><input type="text" th:field="*{phoneNumber}" required/></td>
+	        </tr>
+	        <tr>
+				<td><label>Password:</label></td>
+	        	<td><input type="password" th:field="*{pwd}" required/></td>
+	        </tr>
+	        <tr>
+				<td><label>Email:</label></td>
+	        	<td><input type="email" th:field="*{email}" required/></td>
+	        </tr>
+	        <tr>
+	            <td colspan="2"><input class="btn btn-success" type="submit" value="Save changes" role="button"/></td>
+	        </tr>
+        </table>
+    </form>  
+</body>
+</html>

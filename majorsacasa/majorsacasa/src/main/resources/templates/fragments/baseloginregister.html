@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"    
+                xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+	<title layout:title-pattern="$CONTENT_TITLE">Majors a casa</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+   	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+
+<body class="container">
+	<header>
+		<div th:replace="fragments/header"></div>
+		<hr style="margin-top:0;"/>
+	</header>
+		<div layout:fragment="content"></div>
+	<footer>
+		<div th:replace="fragments/footer"></div>
+	</footer>
+</body>
+</html>

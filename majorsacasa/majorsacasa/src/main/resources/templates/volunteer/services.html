@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/basevolunteer}">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Voluntari</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+   	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+   <h2>Els meus serveis</h2>
+   <table class="table table-striped">
+     <thead>
+       <tr>
+         <th>Día:</th>
+         <th>Hora inicial:</th>
+         <th>Hora final:</th>
+         <th>Estat:</th>
+         <th>Assignat a:</th>
+         <th></th>
+         <th></th>
+       </tr>
+     </thead>
+     <tbody>
+       <tr th:each="availability: ${availabilities}">
+         <td th:text="${availability.date}"></td>
+         <td th:text="${availability.begginingHour}"></td>
+         <td th:text="${availability.endingHour}"></td>
+         <td th:if="${availability.stateAvailable} == true">Acceptada</td>
+         <td th:if="${availability.stateAvailable == false}">Pendent d'acceptació</td>
+         <td th:if="${availability.elderly_dni == null}">No assignat</td>
+         <td th:unless="${availability.elderly_dni == null}">
+         	<a th:href="@{/volunteer/services/beneficiary/{elderly_dni}(elderly_dni=${availability.elderly_dni})}" th:text="${availability.elderly_dni}"></a></td>
+         
+         <td><a class="btn btn-warning" th:href="@{/volunteer/{date}(date=${availability.date})/{begginingHour}(beginningHour=${availability.beginningHour})/{endingHour}(endingHour=${availability.endingHour})}" role="button">Modifica</a>
+         </td>
+         <td><a class="btn btn-danger" th:href="@{/volunteer/{date}(date=${availability.date})/{begginingHour}(beginningHour=${availability.beginningHour})/{endingHour}(endingHour=${availability.endingHour})}" role="button">Suprimeix</a>
+         </td>
+       </tr>
+     </tbody>
+   </table>
+   <a class="btn btn-success" href="add" role="button">Afegeix un nou servei</a>
+</div>
+</body>
+</html>
