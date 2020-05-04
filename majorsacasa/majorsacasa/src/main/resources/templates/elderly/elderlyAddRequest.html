@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/baseElderly}">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Majors a casa</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+   	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+   <h2>Comentaris</h2>
+   <table class="table table-striped">
+   	 <thead>
+       <tr>
+         <th>Afegisca els comentaris que necessites abans d'enviar la sol·licitut, per eixemple si precisa un servei de menjsar especificar una dieta especial, si precisa un servei sanitari especificar la necessitat aixi com indicar l'horari en el que vol ser atés a domicili:</th>
+       </tr>
+     </thead>
+     <tbody>
+        <form action="#" th:action="@{/elderly/elderlyAddRequest}" th:object="${request}" method="post">
+     	<tr>
+     		<td><textarea rows="5" cols="100" th:field="${request.comments}" required/> </textarea></td> 	
+     	</tr>
+     	<tr>
+     		<td colspan="3">
+     			<form action="#" th:action="@{/elderly/updateBankAccount}" th:object="${cuentaBancaria}" method="post">
+     		
+	     			<input type="text" th:field="${cuentaBancaria}" required/>
+	     			
+	     			
+	     			<Label></Label>
+	     			
+	     			<input class="btn btn-info" type="submit" value="Actualizar" role="button"/>
+     			</form>
+     		</td>
+     		
+     	
+     	</tr>
+     	<tr>
+     		<td colspan="2">
+     			<a class="btn btn-outline-info" href="/elderly/elderlyNewServices" role="button">Torna enrere</a>
+     			<input class="btn btn-info" type="submit" value="Enviar" role="button"/>
+     		</td>   
+     	</tr>
+   		</form> 
+</tbody>   
+</table> 
+</div>
+</body>
+</html>
