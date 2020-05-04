@@ -45,8 +45,7 @@
          <td th:text="${request.endDate}"></td>   
          <td></td>
          <td></td>
-         <td th:if="${request.endDate.after(${request.creationDate})}">dgfdsg</td>
-         
+       
          <td><a class="btn btn-danger" th:href="@{/elderly/elderlyDeleteRequest/{number}(number=${request.number})}" role="button">Suprimeix</a></td> 
         
        </tr>
