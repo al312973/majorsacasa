@@ -59,10 +59,10 @@
         <td></td>
         <td></td>
         <td></td>
-       	<td th:text="${availability.begginingHour}"></td>
+       	<td th:text="${availability.beginningHour}"></td>
         <td th:text="${availability.endingHour}"></td>
         <td th:text="${availability.volunteer_usr}"></td>
-        <td><a class="btn btn-danger" th:href="@{/elderly/elderlyUpdateAvailability/{date}/{begginingHour}/{endingHour}( date=${availability.date}, begginingHour=${availability.begginingHour}, endingHour=${availability.endingHour} )}" role="button">Suprimeix</a></td>
+        <td><a class="btn btn-danger" th:href="@{/elderly/elderlyUpdateAvailability/{date}/{begginingHour}/{endingHour}( date=${availability.date}, begginingHour=${availability.beginningHour}, endingHour=${availability.endingHour} )}" role="button">Suprimeix</a></td>
       </tr>
       
      </tbody>

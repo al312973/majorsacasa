@@ -19,6 +19,12 @@ import es.uji.ei1027.majorsacasa.dao.ElderlyDAO;
 import es.uji.ei1027.majorsacasa.dao.RequestDAO;
 import es.uji.ei1027.majorsacasa.model.Elderly;
 import es.uji.ei1027.majorsacasa.model.UserDetails;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import es.uji.ei1027.majorsacasa.model.Availability;
+import es.uji.ei1027.majorsacasa.model.Contract;
+import es.uji.ei1027.majorsacasa.model.Request;
+import es.uji.ei1027.majorsacasa.validator.ElderlyValidator;
 
 
 @Controller
@@ -29,6 +35,7 @@ public class ElderlyController {
 	private RequestDAO requestDao;
 	private ContractDAO contractDao;
 	private AvailabilityDAO availabilityDao;
+	private int contract_number;
 	
 	@Autowired
 	public void setAvailabilityDao(AvailabilityDAO availabilityDao){
@@ -122,17 +129,20 @@ public class ElderlyController {
    }
    
    @RequestMapping(value="/elderlyDeleteRequest/{number}")
-   public String processDeleteRequest(@PathVariable String number){
-	   requestDao.deleteRequest(Integer.parseInt(number));
+   public String processDeleteRequest(@PathVariable int number){
+	   Request r = requestDao.getRequest(number);
+	   java.sql.Date fechaActual = new java.sql.Date(new Date().getTime());
+	   r.setEndDate(fechaActual);
+	   requestDao.updateRequest(r);
 	   return "redirect:../elderlyRequest";
    }
    
    
-   @RequestMapping(value="/elderlyContract")
-   public String listContract(Model model){
-	   model.addAttribute("contracts", contractDao.getContracts());
+   @RequestMapping(value="/elderlyNewServices")
+   public String listNewServices(Model model){
+	   model.addAttribute("contracts", contractDao.getFreeContracts());
 	   model.addAttribute("availabilities", availabilityDao.getFreeAvailability());
-	   return "elderly/elderlyContract";
+	   return "elderly/elderlyNewServices";
    }
    
 	@RequestMapping(value="/elderlyProfile", method = RequestMethod.GET)
@@ -145,12 +155,13 @@ public class ElderlyController {
     public String processUpdateSubmit(@ModelAttribute("elderly") Elderly elderly, BindingResult bindingResult, HttpSession session) {
 		
 		//Comprobamos que no haya errores
-		//ElderlyValidator volunteerValidator = new ElderlyValidator(elderlyDao, currentElderly); 
-		//elderlyValidator.validate(elderly, bindingResult);
+		ElderlyValidator elderlyValidator = new ElderlyValidator(elderlyDao, currentElderly); 
+		elderlyValidator.validate(elderly, bindingResult);
 		
 		if (bindingResult.hasErrors()) 
         	return "elderly/elderlyProfile";
 		
+		elderly.setDNI(currentElderly.getDNI());
         elderlyDao.updateElderly(elderly);
         
         //Cambiamos los datos de la sesion
@@ -158,4 +169,64 @@ public class ElderlyController {
         session.setAttribute("user", user); 
         return "redirect:elderlyRequest"; 
     }
+	
+	   @RequestMapping(value="/elderlyUpdateAvailability/{date}/{begginingHour}/{endingHour}")
+	   public String processUpdateAvailability(@PathVariable Date date, @PathVariable LocalTime begginingHour, @PathVariable LocalTime endingHour){   
+		   //TODO
+		   return "redirect:../elderlyRequest";
+	   }
+	   
+	   @RequestMapping(value="/elderlyAddRequest/{number}")
+	   public String processAddRequest( Model model, @PathVariable int number){
+		   contract_number = number;
+		   model.addAttribute("request", new Request());
+		   model.addAttribute("cuentaBancaria", currentElderly.getBankAccountNumber());
+		   System.out.println(currentElderly.getBankAccountNumber());
+		   return "elderly/elderlyAddRequest";
+	   }
+	   
+	   @RequestMapping(value="/updateBankAccount/{bankAccountNumber}")
+	   public String processUpdateBankAccount(@PathVariable String bankAccountNumber){
+		   currentElderly.setBankAccountNumber(bankAccountNumber);
+		   return "elderly/elderlyAddRequest";
+	   }
+	   
+	   @RequestMapping(value="/elderlyAddRequest", method=RequestMethod.POST)
+	   public String processAddRequestSubmit(@ModelAttribute("request") Request request , BindingResult bindingResult){
+		   if (bindingResult.hasErrors()) 
+	       	return "elderly/elderlyAddRequest";
+		   
+		   //Completa y/o modifica los campos con los atributos que se necesitan y no proporciona el usuario
+		   Contract contract = contractDao.getContract(contract_number);
+		   request.setServiceType(contract.getServiceType());
+		   request.setContract_number(contract.getNumber());
+		   request.setElderly_dni(currentElderly.getDNI());
+		   request.setApprovedDate(null);
+		   request.setRejectedDate(null);
+		   request.setState(0);
+		   
+		   //Conseguimos el número máximo del id
+		   ArrayList<Request> listSolicitudes = new ArrayList<Request>(requestDao.getRequests());
+		   int i = 0;
+		   for (Request r: listSolicitudes){
+			  if (r.getNumber() > i)
+			  	i = r.getNumber();
+		   }
+		   request.setNumber(i + 1);
+		   
+		   //Ponemos la fecha actual como fecha de creación
+		   java.sql.Date fechaActual = new java.sql.Date(new Date().getTime());
+		   request.setCreationDate(fechaActual);
+		   
+		   request.setEndDate(contract.getDateEnding());
+		   requestDao.addRequest(request);
+		   return "redirect:elderlyNewServices";   
+	   }
+	   
+	   @RequestMapping(value="/elderlyUpdateAvailability")
+	   public String processUpdateNewAvailability(){
+		   //TODO
+		   return "";
+	   }
+	   
 }

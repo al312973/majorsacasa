@@ -8,6 +8,8 @@ public class Contract {
 	private int number;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dateBeginning;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date dateEnding;
 	private String description;
 	private int serviceType;
 	private int quantityServices;
@@ -24,7 +26,7 @@ public class Contract {
 
 	@Override
 	public String toString() {
-		return "Contract [number=" + number + ", dateBeginning=" + dateBeginning + ", description=" + description
+		return "Contract [number=" + number + ", dateBeginning=" + dateBeginning + ", dateEnding=" + "dateEnding" + ", description=" + description
 				+ ", serviceType=" + serviceType + ", quantityServices=" + quantityServices + ", unitsOfMeasure="
 				+ unitsOfMeasure + ", priceUnit=" + priceUnit + ", beginningHour=" + beginningHour + ", endingHour="
 				+ endingHour + ", company_cif=" + company_cif + "]";
@@ -44,6 +46,14 @@ public class Contract {
 
 	public void setDateBeginning(Date dateBeginning) {
 		this.dateBeginning = dateBeginning;
+	}
+	
+	public Date getDateEnding(){
+		return dateEnding;
+	}
+	
+	public void setDateEnding(Date dateEnding){
+		this.dateEnding = dateEnding;
 	}
 
 	public String getDescription() {

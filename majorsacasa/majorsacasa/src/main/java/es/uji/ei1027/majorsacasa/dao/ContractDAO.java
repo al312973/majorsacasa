@@ -20,9 +20,10 @@ public class ContractDAO {
 	}
 	
 	public void addContract(Contract contract){
-		jdbcTemplate.update("INSERT INTO CONTRACT VALUES(?,?,?,?,?,?,?,?,?,?)",
+		jdbcTemplate.update("INSERT INTO CONTRACT VALUES(?,?,?,?,?,?,?,?,?,?,?)",
 								contract.getNumber(), 
 								contract.getDateBeginning(), 
+								contract.getDateEnding(),
 								contract.getDescription(), 
 								contract.getServiceType(), 
 								contract.getQuantityServices(), 
@@ -39,10 +40,11 @@ public class ContractDAO {
 	}
 	
 	public void updateContract(Contract contract){
-		jdbcTemplate.update("UPDATE PAY SET DATEBEGINNING = ?, DESCRIPTION = ?, SERVICETYPE = ?,"
+		jdbcTemplate.update("UPDATE CONTRACT SET DATEBEGINNING = ?, DATEENDING = ?, DESCRIPTION = ?, SERVICETYPE = ?,"
 							+ " QUANTITYSERVICES = ?, UNITSOFMEASURE = ?, PRICEUNIT = ?, BEGINNINGHOUR = ?,"
 							+ " ENDINGHOUR = ?, COMPANY_CIF = ? WHERE NUMBER = ?",
 								contract.getDateBeginning(), 
+								contract.getDateEnding(),
 								contract.getDescription(), 
 								contract.getServiceType(), 
 								contract.getQuantityServices(), 
@@ -69,6 +71,14 @@ public class ContractDAO {
 		}catch (EmptyResultDataAccessException e){
 			return new ArrayList<Contract>();
 		}
+	}
+	
+	public List<Contract> getFreeContracts(){
+		try{
+			return jdbcTemplate.query(" select * from contract where  number not in ( select contract_number from request where contract_number is not null) ", new ContractRowMapper());
+		}catch (EmptyResultDataAccessException e){
+			return new ArrayList<Contract>();
+		}		
 	}
 	
 }
