@@ -17,25 +17,36 @@
          <th>Descripció:</th>
          <th>Tipus servici:</th>
          <th>Preu unitat:</th>
+         <th>Data:</th>
+         <th>Hora inici:</th>
+         <th>Hora fi:</th>
          <th></th>
        </tr>
      </thead>
      <tbody>
        <tr th:each="contract: ${contracts}">
-         <td th:text="${contract.description}"></td>
-         <td th:if="${contract.serviceType == 0}">Servici de menjar</td>
-         <td th:if="${contract.serviceType == 1}">Servici sanitaris</td>
-         <td th:if="${contract.serviceType == 2}">Servici de neteja</td>
-         <td th:if="${contract.serviceType == 3}">Servici de companyia</td> 
-         <td th:text="${contract.priceUnit}"></td>      
-         <td><a class="btn btn-success" th:href="@{/elderly/elderlyAddRequest/{number}(number=${contract.number})}" role="button">Afegir</a></td>   
+		<div th:if="${imprimir == true}">
+	         <td th:text="${contract.description}"></td>
+	         <td th:if="${contract.serviceType == 0}">Servici de menjar</td>
+	         <td th:if="${contract.serviceType == 1}">Servici sanitaris</td>
+	         <td th:if="${contract.serviceType == 2}">Servici de neteja</td>
+	         <td th:if="${contract.serviceType == 3}">Servici de companyia</td> 
+	         <td th:text="${contract.priceUnit}"></td>  
+	         <td></td>
+	         <td></td>
+	         <td></td>   
+	         <td><a class="btn btn-success" th:href="@{/elderly/elderlyAddRequest/{number}(number=${contract.number})}" role="button">Afegir</a></td>  
+		</div>
        </tr>
        
-       <tr th:each="availability: ${availabilities}">
+       <tr th:each="availability: ${availabilities}">     
        	<td></td>
        	<td>Servici de companyia</td>
        	<td>0.00</td>
-       	<td><a class="btn btn-success" th:href="@{/elderly/elderlyUpdateAvailability}" role="button">Afegir</a></td>
+       	<td th:text="${availability.date}"></td>
+       	<td th:text="${availability.beginningHour}"></td>
+       	<td th:text="${availability.endingHour}"></td>
+       	<td><a class="btn btn-success" th:href="@{/elderly/elderlyNewAvailability/{date}/{volunteer_usr}/{beginningHour}/{endingHour} (date=${availability.date}, volunteer_usr=${availability.volunteer_usr}, beginningHour=${availability.beginningHour}, endingHour=${availability.endingHour})}" role="button">Afegir</a></td>
        </tr>
      </tbody>
    </table>

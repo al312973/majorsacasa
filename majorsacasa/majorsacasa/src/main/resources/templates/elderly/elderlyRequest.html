@@ -46,8 +46,12 @@
          <td></td>
          <td></td>
          <td></td>
-
-		<td><a class="btn btn-danger" th:href="@{/elderly/elderlyDeleteRequest/{number}(number=${request.number})}" role="button">Suprimeix</a></td>
+         <td th:if="${request.habilitado == true}">
+         	   <button type="button" class="btn btn-danger" th:href="@{/elderly/elderlyDeleteRequest/{number}(number=${request.number})}">Suprimeix</button>
+         </td>
+         <td th:unless="${request.habilitado == true}">
+         		<button type="button" class="btn btn-danger" disabled="disabled" th:href="@{/elderly/elderlyDeleteRequest/{number}(number=${request.number})}">Suprimeix</button>
+         </td>
 
        </tr>
        <tr th:each="availability: ${availabilities}">
@@ -61,8 +65,8 @@
         <td></td>
        	<td th:text="${availability.beginningHour}"></td>
         <td th:text="${availability.endingHour}"></td>
-        <td th:text="${availability.volunteer_usr}"></td>
-        <td><a class="btn btn-danger" th:href="@{/elderly/elderlyUpdateAvailability/{date}/{begginingHour}/{endingHour}( date=${availability.date}, begginingHour=${availability.beginningHour}, endingHour=${availability.endingHour} )}" role="button">Suprimeix</a></td>
+        <td><a th:href="@{/elderly/showVolunteer/{volunteer_usr}(volunteer_usr=${availability.volunteer_usr})}"  th:text="${availability.volunteer_usr}"></a></td>
+        <td><a class="btn btn-danger" th:href="@{/elderly/elderlyDeleteAvailability/{date}/{beginningHour}/{volunteer_usr}/{endingHour} ( date=${availability.date}, beginningHour=${availability.beginningHour}, volunteer_usr=${availability.volunteer_usr}, endingHour=${availability.endingHour} )}" role="button">Suprimeix</a></td>
       </tr>
       
      </tbody>

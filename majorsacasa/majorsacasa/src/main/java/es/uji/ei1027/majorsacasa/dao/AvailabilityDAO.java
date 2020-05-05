@@ -90,5 +90,16 @@ public class AvailabilityDAO {
 			return new ArrayList<Availability>();
 		}
 	}
+	
+	public void setElderly(Availability availability){
+		jdbcTemplate.update("UPDATE AVAILABILITY SET ELDERLY_DNI = ?"
+				+ " WHERE DATE = ? AND BEGINNINGHOUR = ? AND VOLUNTEER_USR = ?", 
+					availability.getElderly_dni(),
+					availability.getDate(),
+					availability.getBeginningHour(),
+					availability.getVolunteer_usr()
+		
+				);
+	}
 }
 

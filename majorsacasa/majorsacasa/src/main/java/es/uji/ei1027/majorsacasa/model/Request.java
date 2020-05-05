@@ -18,6 +18,7 @@ public class Request {
 	private Date endDate;
 	private String elderly_dni;
 	private int contract_number;
+	public boolean habilitado;
 	
 	public Request() {
 		
