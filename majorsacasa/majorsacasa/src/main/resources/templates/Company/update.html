@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+   <title>Edit a company</title>
+   <meta charset="UTF-8" />
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+</head>
+<body>
+	<h2>Edit company</h2>
+	<form action="#" th:action="@{/company/update}" th:object="${company}" method="post">
+		<table>
+			<tr>
+				<td><label>Name:</label></td>
+	        	<td><input type="text" th:field="*{name}" required/></td>
+	        </tr>
+	        <tr>
+				<td><label>CIF:</label></td>
+	        	<td><input type="text" th:field="*{CIF}" required/></td>
+	        	            <td th:if="${#fields.hasErrors('CIF')}" th:errors="*{CIF}"></td>
+	        </tr>
+	        <tr>
+				<td><label>Address:</label></td>
+	        	<td><input type="text" th:field="*{address}" required/></td>
+	        </tr>
+	        <tr>
+				<td><label>Contact Person Name:</label></td>
+	        	<td><input type="text" th:field="*{contactPersonName}" required/></td>
+	        </tr>
+	        <tr>
+				<td><label>Contact Person Phone Number:</label></td>
+	        	<td><input type="text" th:field="*{contactPersonPhoneNumber}" required/></td>
+	        </tr>
+	        <tr>
+				<td><label>Contact Person Email:</label></td>
+	        	<td><input type="text" th:field="*{contactPersonEmail}" required/></td>
+	        </tr>
+	        <tr>
+				<td><label>Service Type:</label></td>
+	        	<td><input type="text" th:field="*{serviceType}" required/></td>
+	        </tr>
+	        <tr>
+	            <td colspan="2"><input class="btn btn-success" type="submit" value="Save changes" role="button"/></td>
+	        </tr>
+        </table>
+    </form>  
+</body>
+</html>

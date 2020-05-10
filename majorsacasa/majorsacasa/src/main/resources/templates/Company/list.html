@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+   <title>Gestionar Treballadors Companies</title>
+   <meta charset="UTF-8" />
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+</head>
+<body>
+   <h1>Company list</h1>
+   <table class="table table-striped">
+     <thead>
+       <tr>
+         <th>Name</th>
+         <th>Address</th>
+         <th>Contact Person Name</th>
+         <th>Contact Person Phone Number</th>
+         <th>Contact Person Email</th>
+         <th>Service Type</th>
+         <th>CIF</th>
+         <th></th>
+         <th></th>
+       </tr>
+     </thead>
+     <tbody>
+       <tr th:each="company: ${companies}">
+         <td th:text="${company.name}"></td>
+         <td th:text="${company.Address}"></td>
+         <td th:text="${company.ContactPersonName}"></td>
+         <td th:text="${company.ContactPersonPhoneNumber}"></td>
+         <td th:text="${company.ContactPersonEmail}"></td>
+         <td th:text="${company.ServiceType}"></td>
+         <td th:text="${company.CIF}"></td>
+         
+         <td><a class="btn btn-warning" th:href="@{/company/update/{CIF}(CIF=${company.CIF})}" role="button">Edit</a>
+         </td>
+         <td><a class="btn btn-danger" th:href="@{/company/delete/{CIF}(CIF=${company.CIF})}" role="button">Delete</a>
+         </td>
+       </tr>
+     </tbody>
+   </table>
+   <a class="btn btn-success" href="add.html" role="button">Add new Company</a>
+</body>
+</html>
