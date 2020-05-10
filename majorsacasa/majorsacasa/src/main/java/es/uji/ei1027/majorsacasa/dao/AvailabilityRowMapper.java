@@ -13,6 +13,7 @@ public final class AvailabilityRowMapper implements RowMapper<Availability>{
 		availability.setBeginningHour(rs.getTime("beginninghour").toLocalTime());
 		availability.setEndingHour(rs.getTime("endinghour").toLocalTime());
 		availability.setStateAvailable(rs.getBoolean("stateavalilable"));
+		availability.setUnsuscribeDate(rs.getDate("unsuscribedate"));
 		availability.setElderly_dni(rs.getString("elderly_dni"));
 		availability.setVolunteer_usr(rs.getString("volunteer_usr"));
 		return availability;

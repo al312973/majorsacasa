@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/baseElderly}">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Majors a casa</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+   	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+   <h2>Dades del voluntari</h2>
+		<table class="showinfo" th:object="${volunteer}">
+			<tr>
+				<th><label>Nom:</label></th>
+	        	<td><p th:text="*{name}"></p></td>
+	        </tr>			
+			<tr>
+				<th><label>Telèfon:</label></th>
+				<td><p th:text="*{phoneNumber}" ></p></td>
+	        </tr>			
+			<tr>
+				<th><label>Email:</label></th>
+				<td><p th:text="*{email}"></p></td>
+	        </tr>			
+			<tr>
+				<th><label>Usuari:</label></th>
+	        	<td><p th:text="*{usr}"></p></td>
+	        </tr>			
+			<tr>
+				<th><label>Aficions:</label></th>
+	        	<td><p th:text="*{hobbies}"></p></td>
+	        </tr>
+	        <tr>
+				<th><label>Data naiximent:</label></th>
+	        	<td><p th:text="*{birthDate}"></p></td>
+	        </tr>
+	</table>
+	<a th:if="${availabilitiesPage == 0}" class="btn btn-outline-info" href="/elderly/requests/volunteerrequests" role="button">Torna enrere</a>
+	<a th:if="${availabilitiesPage == 1}" class="btn btn-outline-info" href="/elderly/newrequest/newvolunteerrequest" role="button">Torna enrere</a>
+   </div>
+</body>
+</html>

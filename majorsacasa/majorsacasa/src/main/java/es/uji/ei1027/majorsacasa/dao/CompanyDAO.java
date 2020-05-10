@@ -49,6 +49,7 @@ public class CompanyDAO {
 							);
 	}
 	
+	//Obtiene una empresa concreta a partir de su CIF
 	public Company getCompany(String CIF){
 		try{
 			return jdbcTemplate.queryForObject("SELECT * FROM COMPANY WHERE CIF = ?", new CompanyRowMapper(), CIF);

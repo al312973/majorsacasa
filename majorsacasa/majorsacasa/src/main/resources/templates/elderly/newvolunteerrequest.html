@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/baseelderly}">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Majors a casa</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+   	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+   <h2>Disponibilitats de voluntaris</h2>
+   <table class="table table-striped">
+     <thead>
+       <tr>
+         <th>Día:</th>
+         <th>Hora inicial:</th>
+         <th>Hora final:</th>
+         <th>Voluntari:</th>
+         <th></th>
+       </tr>
+     </thead>
+     <tbody>
+       <tr th:each="availability: ${availabilities}">
+         <td th:text="${availability.date}"></td>
+         <td th:text="${availability.beginningHour}"></td>
+         <td th:text="${availability.endingHour}"></td>
+         <td>
+         	<a th:href="@{/elderly/volunteer/{volunteer_usr}(volunteer_usr=${availability.volunteer_usr})}" th:text="${availability.volunteer_usr}"></a>
+         </td>
+         <td><a class="btn btn-success" th:href="@{/elderly/newrequest/newvolunteerrequest/add/{date}/{beginningHour}/{volunteer_usr}(date=${availability.date}, beginningHour=${availability.beginningHour}, volunteer_usr=${availability.volunteer_usr})}" role="button">Contracta</a>
+         </td>
+       </tr>
+     </tbody>
+   </table>
+</div>
+</body>
+</html>

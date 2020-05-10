@@ -6,9 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import es.uji.ei1027.majorsacasa.model.Volunteer;
 
@@ -22,6 +20,7 @@ public class VolunteerDAO {
 		
 	}
 	
+	//Añade un nuevo voluntario a la BBDD
 	public void addVolunteer(Volunteer volunteer) {
 		jdbcTemplate.update("INSERT INTO VOLUNTEER VALUES(?,?,?,?,?,?,?,?,?,?,?)",
 							volunteer.getName(),
@@ -38,10 +37,25 @@ public class VolunteerDAO {
 							);
 			}
 	
-	public void deleteVolunteer(String Usr) {
-		jdbcTemplate.update("UPDATE FROM VOLUNTEER SET ENDDATE = " + new Date() + " WHERE USR = ?", Usr);
+	//Obtiene un voluntario a partir de su nombre de usuario
+	public Volunteer getVolunteerByUsr(String Usr) {
+		try{
+			return jdbcTemplate.queryForObject("SELECT * FROM VOLUNTEER WHERE USR = ?", new VolunteerRowMapper(), Usr);
+		}catch (EmptyResultDataAccessException e){
+			return null;
+		}
 	}
 	
+	//Obtiene un voluntario a partir de su email
+	public Volunteer getVolunteerByEmail(String email) {
+		try{
+			return jdbcTemplate.queryForObject("SELECT * FROM VOLUNTEER WHERE EMAIL = ?", new VolunteerRowMapper(), email);
+		}catch (EmptyResultDataAccessException e){
+			return null;
+		}
+	}
+	
+	//Actualiza la información de un voluntario
 	public void updateVolunteer(Volunteer volunteer){
 		jdbcTemplate.update("UPDATE VOLUNTEER SET NAME = ?, PHONENUMBER = ?, EMAIL = ?, USR = ?, PWD = ?, HOBBIES = ?,"
 							+" BIRTHDATE = ? WHERE USR = ?",
@@ -56,28 +70,9 @@ public class VolunteerDAO {
 							);
 	}
 	
-	public Volunteer getVolunteerByUsr(String Usr) {
-		try{
-			return jdbcTemplate.queryForObject("SELECT * FROM VOLUNTEER WHERE USR = ?", new VolunteerRowMapper(), Usr);
-		}catch (EmptyResultDataAccessException e){
-			return null;
-		}
+	//Borra un voluntario de la BBDD
+	public void deleteVolunteer(String Usr) {
+		jdbcTemplate.update("UPDATE FROM VOLUNTEER SET ENDDATE = " + new Date() + " WHERE USR = ?", Usr);
 	}
-	
-	public Volunteer getVolunteerByEmail(String email) {
-		try{
-			return jdbcTemplate.queryForObject("SELECT * FROM VOLUNTEER WHERE EMAIL = ?", new VolunteerRowMapper(), email);
-		}catch (EmptyResultDataAccessException e){
-			return null;
-		}
-	}
-	
-	public List<Volunteer> getVolunteers(){
-		try{
-			return jdbcTemplate.query("SELECT * FROM VOLUNTEER", new VolunteerRowMapper());
-		}catch (EmptyResultDataAccessException e){
-			return new ArrayList<Volunteer>();
-		}
-		
-	}
+
 }

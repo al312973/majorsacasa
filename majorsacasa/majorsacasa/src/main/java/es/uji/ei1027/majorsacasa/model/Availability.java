@@ -12,6 +12,8 @@ public class Availability {
 	@DateTimeFormat(pattern = "HH:mm")
 	private LocalTime endingHour;
 	private boolean stateAvailable;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date unsuscribeDate;
 	private String elderly_dni;
 	private String volunteer_usr;
 	
@@ -21,9 +23,9 @@ public class Availability {
 
 	@Override
 	public String toString() {
-		return "Availability [date=" + date + ", begginingHour=" + beginningHour + ", endingHour=" + endingHour
-				+ ", stateAvailable=" + stateAvailable + ", elderly_dni=" + elderly_dni + ", volunteer_usr="
-				+ volunteer_usr + "]";
+		return "Availability [date=" + date + ", beginningHour=" + beginningHour + ", endingHour=" + endingHour
+				+ ", stateAvailable=" + stateAvailable + ", unsuscribeDate=" + unsuscribeDate + ", elderly_dni="
+				+ elderly_dni + ", volunteer_usr=" + volunteer_usr + "]";
 	}
 
 	public Date getDate() {
@@ -58,6 +60,14 @@ public class Availability {
 		this.stateAvailable = stateAvailable;
 	}
 
+	public Date getUnsuscribeDate() {
+		return unsuscribeDate;
+	}
+
+	public void setUnsuscribeDate(Date unsuscribeDate) {
+		this.unsuscribeDate = unsuscribeDate;
+	}
+
 	public String getElderly_dni() {
 		return elderly_dni;
 	}
@@ -73,6 +83,4 @@ public class Availability {
 	public void setVolunteer_usr(String volunteer_usr) {
 		this.volunteer_usr = volunteer_usr;
 	}
-	
-	
 }

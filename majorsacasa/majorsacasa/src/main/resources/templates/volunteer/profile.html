@@ -16,18 +16,33 @@
 	<div>
 	<form action="#" th:action="@{/volunteer/profile}" th:object="${volunteer}" method="post">
 		<table>
+		<tr th:if="${#fields.hasErrors('name')}">
+			<td colspan="2" align="center" class="alert alert-danger" th:errors="*{name}"></td>
+		</tr>
+		<tr th:if="${#fields.hasErrors('phoneNumber')}">
+			<td colspan="2" align="center" class="alert alert-danger" th:errors="*{phoneNumber}"></td>
+		</tr>
+		<tr th:if="${#fields.hasErrors('hobbies')}">
+			<td colspan="2" align="center" class="alert alert-danger" th:errors="*{hobbies}"></td>
+		</tr>
 		<tr th:if="${#fields.hasErrors('email')}">
 			<td colspan="2" align="center" class="alert alert-danger" th:errors="*{email}"></td>
 		</tr>
 		<tr th:if="${#fields.hasErrors('usr')}">
 			<td colspan="2" align="center" class="alert alert-danger" th:errors="*{usr}"></td>
 		</tr>
-		<tr th:if="${#fields.hasErrors('phoneNumber')}">
-			<td colspan="2" align="center" class="alert alert-danger" th:errors="*{phoneNumber}"></td>
+		<tr th:if="${#fields.hasErrors('pwd')}">
+			<td colspan="2" align="center" class="alert alert-danger" th:errors="*{pwd}"></td>
 		</tr>
 		<tr>
 			<td><label>Nom complet:</label></td>
-        	<td><input type="text" class="form-control" th:field="*{name}" required/></td>
+			<td th:unless="${#fields.hasErrors('name')}">
+        		<input type="text" class="form-control" th:field="*{name}" required/>
+        	</td>
+        	
+        	<td th:if="${#fields.hasErrors('name')}">
+           		<input type="text" class="form-control is-invalid" th:field="*{name}" required/>
+           	</td>
 		</tr>
 		<tr>
 			<td><label>Data de naixement:</label></td>
@@ -45,7 +60,13 @@
 		</tr>
 		<tr>
 			<td><label>Hobbies:</label></td>
-        	<td><input type="text" class="form-control" th:field="*{hobbies}" required/></td>
+			<td th:unless="${#fields.hasErrors('hobbies')}">
+        		<input type="text" class="form-control" th:field="*{hobbies}" required/>
+        	</td>
+        	
+        	<td th:if="${#fields.hasErrors('hobbies')}">
+           		<input type="text" class="form-control is-invalid" th:field="*{hobbies}" required/>
+           	</td>
 		</tr>
 		<tr>
 			<td><label>Data d'inici de servei:</label></td>
@@ -73,8 +94,13 @@
 		</tr>
 		<tr>
 			<td><label>Contrasenya:</label></td>
-			<td><input type="password" class="form-control" th:field="*{pwd}" required/></td>
-        
+			<td th:unless="${#fields.hasErrors('pwd')}">
+        		<input type="password" class="form-control" th:field="*{pwd}" required/>
+        	</td>
+        	
+        	<td th:if="${#fields.hasErrors('pwd')}">
+           		<input type="password" class="form-control is-invalid" th:field="*{pwd}" required/>
+           	</td>
 		</tr>
 		<tr class="blank_row"></tr>
 		<tr>

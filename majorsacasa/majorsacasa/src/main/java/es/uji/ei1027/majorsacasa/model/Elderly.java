@@ -19,7 +19,6 @@ public class Elderly {
 	private Date dateCreation;
 	private String alergies;
 	private String diseases;
-	private String socialWorker_userCAS;
 	
 	public Elderly() {
 		
@@ -30,7 +29,7 @@ public class Elderly {
 		return "Elderly [name=" + name + ", DNI=" + DNI + ", surname=" + surname + ", birthDate=" + birthDate
 				+ ", address=" + address + ", phoneNumber=" + phoneNumber + ", bankAccountNumber=" + bankAccountNumber
 				+ ", email=" + email + ", userPwd=" + userPwd + ", dateCreation=" + dateCreation + ", alergies="
-				+ alergies + ", diseases=" + diseases + ", socialWorker_userCAS=" + socialWorker_userCAS + "]";
+				+ alergies + ", diseases=" + diseases + "]";
 	}
 
 	public String getName() {
@@ -127,13 +126,5 @@ public class Elderly {
 
 	public void setDiseases(String diseases) {
 		this.diseases = diseases;
-	}
-
-	public String getSocialWorker_userCAS() {
-		return socialWorker_userCAS;
-	}
-
-	public void setSocialWorker_userCAS(String socialWorker_userCAS) {
-		this.socialWorker_userCAS = socialWorker_userCAS;
 	}
 }

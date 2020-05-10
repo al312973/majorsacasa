@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/baseElderly}">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Majors a casa</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+   	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+<body><div layout:fragment="content" th:object="${request}">
+   <h2 th:if="${request.serviceType == 0}">Sol·licitud de menjar a domicili</h2>
+   <h2 th:if="${request.serviceType == 1}">Sol·licitud de servei sanitari</h2>
+   <h2 th:if="${request.serviceType == 2}">Sol·licitud de servei de neteja</h2>
+   <br>
+   <div><form action="#" th:action="@{/elderly/newrequest/newfoodhealthcleaningrequest}" th:object="${request}" method="post">
+		<table>
+		<tr th:if="${#fields.hasErrors('comments')}">
+			<td colspan="2" align="center" class="alert alert-danger" th:errors="*{comments}"></td>
+		</tr>
+		<tr th:if="${#fields.hasErrors('endDate')}">
+			<td colspan="2" align="center" class="alert alert-danger" th:errors="*{endDate}"></td>
+		</tr>
+		<tr th:if="${#fields.hasErrors('elderly_dni')}">
+			<td colspan="2" align="center" class="alert alert-danger" th:errors="*{elderly_dni}"></td>
+		</tr>
+		<tr>
+			<td colspan="2">
+			<label><b>Selecciona els dies d'atenció:</b></label>
+			</td>
+		</tr>
+		<tr class="form-check form-check-inline">
+		<td colspan="2">
+  			<input class="form-check-input" type="checkbox" id="monday" name="monday">
+  			<label class="form-check-label" for="monday">Dilluns</label>
+		
+			<input class="form-check-input" type="checkbox" id="tuesday" name="tuesday">
+ 			<label class="form-check-label" for="tuesday">Dimarts</label>
+		
+  			<input class="form-check-input" type="checkbox" id="wednesday" name="wednesday">
+  			<label class="form-check-label" for="wednesday">Dimecres</label>
+
+			<input class="form-check-input" type="checkbox" id="thursday" name="thursday">
+ 			<label class="form-check-label" for="thursday">Dijous</label>
+		
+  			<input class="form-check-input" type="checkbox" id="friday" name="friday">
+  			<label class="form-check-label" for="friday">Divendres</label>
+		
+			<input class="form-check-input" type="checkbox" id="saturday" name="saturday">
+ 			<label class="form-check-label" for="saturday">Dissabte</label>
+		
+  			<input class="form-check-input" type="checkbox" id="sunday" name="sunday">
+  			<label class="form-check-label" for="sunday">Diumenge</label>
+		</td>
+		</tr>
+		<tr class="blank_row"></tr>
+		
+		<tr>
+			<td colspan="2">
+				<label><b>Data per a finalitzar el servei:</b></label>
+				<small class="form-text text-muted">Deixa-la vuida si es tracta d'un servei indefinit.</small>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2"  th:unless="${#fields.hasErrors('endDate')}">
+        		<input type="date" class="form-control" th:field="*{endDate}"/>
+        	</td>
+        	
+        	<td colspan="2"  th:if="${#fields.hasErrors('endDate')}">
+           		<input type="date" class="form-control is-invalid" th:field="*{endDate}"/>
+           	</td>
+        </tr>
+        <tr class="blank_row"></tr>
+	    <tr>
+			<td colspan="2">
+				<label><b>Comentaris:</b></label>
+				<small th:if="${request.serviceType == 0}" class="form-text text-muted">Indica ací si necessites un menú diabetic, baix en greix, baix en sal, etc.</small>
+				<small th:if="${request.serviceType == 1}" class="form-text text-muted">Indica ací breument la necessitat per la que vols sol·licitar el servei.</small>
+				<small th:if="${request.serviceType == 2}" class="form-text text-muted">Indica ací les hores de servei per a cada día. A més, pots explicar la tasca que vols que es duga a terme.</small>
+			</td>
+		</tr>
+		<tr>
+	        <td colspan="2" th:unless="${#fields.hasErrors('comments')}">
+        		<textarea class="form-control" rows="3" th:field="*{comments}"></textarea>
+        	</td>
+        	
+        	<td colspan="2" th:if="${#fields.hasErrors('comments')}">
+           		<textarea class="form-control is-invalid" rows="3" th:field="*{comments}"></textarea>
+           	</td>
+	    </tr> 
+	    
+		<tr class="blank_row"></tr>
+		<tr>
+	        <td><a class="btn btn-outline-info" href="/elderly/newrequest" role="button">Torna enrere</a></td>
+	        <td align="right"><input class="btn btn-info" type="submit" value="Sol·licita" role="button"/></td>
+	    </tr>
+	    </table>
+	</form>
+	</div>
+</div>
+</body>
+</html>

@@ -28,15 +28,13 @@
          <td th:text="${availability.date}"></td>
          <td th:text="${availability.beginningHour}"></td>
          <td th:text="${availability.endingHour}"></td>
-         <td th:if="${availability.stateAvailable} == true">Assignada</td>
-         <td th:if="${availability.stateAvailable == false}">Pendent d'assignació</td>
          <td th:if="${availability.elderly_dni == null}">No assignat</td>
          <td th:unless="${availability.elderly_dni == null}">
          	<a th:href="@{/volunteer/services/beneficiary/{elderly_dni}(elderly_dni=${availability.elderly_dni})}" th:text="${availability.elderly_dni}"></a></td>
          
          <td><a class="btn btn-warning" th:href="@{/volunteer/updateService/{date}/{beginningHour}(date=${availability.date}, beginningHour=${availability.beginningHour})}" role="button">Modifica</a>
          </td>
-         <td><a class="btn btn-danger" th:href="@{/volunteer/services/delete/{date}/{beginningHour}(date=${availability.date}, beginningHour=${availability.beginningHour})}" role="button">Suprimeix</a>
+         <td><a class="btn btn-danger" th:href="@{/volunteer/services/delete/{date}/{beginningHour}(date=${availability.date}, beginningHour=${availability.beginningHour})}" role="button">Dóna de baixa</a>
          </td>
        </tr>
      </tbody>

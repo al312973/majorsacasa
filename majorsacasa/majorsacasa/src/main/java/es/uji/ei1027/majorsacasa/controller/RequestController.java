@@ -27,7 +27,7 @@ public class RequestController {
 	
 	@RequestMapping(value="/list")
 	public String listRequests(Model model) {
-		model.addAttribute("requests", requestDao.getRequests());
+//		model.addAttribute("requests", requestDao.getRequests());
 		return "request/list";
 	}
 	
@@ -56,9 +56,9 @@ public class RequestController {
 		
 	@RequestMapping(value="/update/{number}", method = RequestMethod.GET)
     public String editEldery(Model model, @PathVariable int number) {
-		Request request = requestDao.getRequest(number);
-		dateCreation = request.getCreationDate();
-        model.addAttribute("request", request);
+//		Request request = requestDao.getRequest(number);
+//		dateCreation = request.getCreationDate();
+//        model.addAttribute("request", request);
         return "request/update"; 
     }
 
@@ -78,7 +78,7 @@ public class RequestController {
    @RequestMapping(value="/delete/{number}")
     public String processDelete(@PathVariable int number) {
 	   
-	   	   requestDao.deleteRequest(number);
+//	   	   requestDao.deleteRequest(number);
            return "redirect:../list"; 
     }
 }

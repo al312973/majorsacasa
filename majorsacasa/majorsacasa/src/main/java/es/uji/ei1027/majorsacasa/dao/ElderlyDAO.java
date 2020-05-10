@@ -19,7 +19,7 @@ public class ElderlyDAO {
 	}
 	
 	public void addElderly(Elderly elderly){
-		jdbcTemplate.update("INSERT INTO ELDERLY VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",
+		jdbcTemplate.update("INSERT INTO ELDERLY VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
 								elderly.getName(), 
 								elderly.getDNI(),
 								elderly.getSurname(),
@@ -31,8 +31,7 @@ public class ElderlyDAO {
 								elderly.getUserPwd(),
 								elderly.getDateCreation(),
 								elderly.getAlergies(),
-								elderly.getDiseases(),
-								elderly.getSocialWorker_userCAS());
+								elderly.getDiseases());
 	}
 	
 	public void deleteElderly(String DNI){
@@ -41,7 +40,7 @@ public class ElderlyDAO {
 	
 	public void updateElderly(Elderly elderly){
 		jdbcTemplate.update("UPDATE ELDERLY SET NAME = ?, SURNAME = ?, BIRTHDATE = ?, ADDRESS = ?, PHONENUMBER = ?, BANKACCOUNTNUMBER = ?,"
-							+ " EMAIL = ?, USERPWD = ?, ALERGIES = ?, DISEASES = ?, SOCIALWORKER_USERCAS = ? "
+							+ " EMAIL = ?, USERPWD = ?, ALERGIES = ?, DISEASES = ? "
 							+ "WHERE DNI = ?",
 							elderly.getName(),
 							elderly.getSurname(),
@@ -53,7 +52,6 @@ public class ElderlyDAO {
 							elderly.getUserPwd(),
 							elderly.getAlergies(),
 							elderly.getDiseases(),
-							elderly.getSocialWorker_userCAS(),
 							elderly.getDNI()
 							);
 	}

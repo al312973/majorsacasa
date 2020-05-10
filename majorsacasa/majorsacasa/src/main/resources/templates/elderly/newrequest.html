@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/baseElderly}">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Majors a casa</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+   	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+   <h2>Tramitar una nova sol·licitud</h2>
+   <h3>Quin tipus de servei vols sol·licitar?</h3>
+   <a class="btn btn-info" href="/elderly/newrequest/newfoodhealthcleaningrequest/0" role="button">Servei de menjar a domicili</a><br>
+   <br><a class="btn btn-info" href="/elderly/newrequest/newvolunteerrequest" role="button">Servei de companyia</a><br>
+   <br><a class="btn btn-info" href="/elderly/newrequest/newfoodhealthcleaningrequest/1" role="button">Servei sanitari</a><br>
+   <br><a class="btn btn-info" href="/elderly/newrequest/newfoodhealthcleaningrequest/2" role="button">Servei de neteja</a><br>
+ </div>
+</body>
+</html>

@@ -12,72 +12,79 @@ import es.uji.ei1027.majorsacasa.model.Request;
 
 @Repository
 public class RequestDAO {
-		private JdbcTemplate jdbcTemplate;
+	private JdbcTemplate jdbcTemplate;
 		
-		@Autowired 
-		public void setDataSource(DataSource dataSource){
-			jdbcTemplate  =new JdbcTemplate(dataSource);
-		}
+	@Autowired 
+	public void setDataSource(DataSource dataSource){
+		jdbcTemplate  =new JdbcTemplate(dataSource);
+	}
 		
-		public void addRequest(Request request){
-			jdbcTemplate.update("INSERT INTO REQUEST VALUES(?,?,?,?,?,?,?,?,?,?)",
-									request.getNumber(), 
-									request.getServiceType(),
-									request.getCreationDate(),
-									request.getState(),
-									request.getApprovedDate(),
-									request.getRejectedDate(),
-									request.getComments(),
-									request.getEndDate(),
-									request.getElderly_dni(),
-									request.getContract_number());
-			
+	//Añade una nueva solicitud a la BBDD
+	public void addRequest(Request request){
+		jdbcTemplate.update("INSERT INTO REQUEST VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
+							request.getNumber(), 
+							request.getServiceType(),
+							request.getCreationDate(),
+							request.getState(),
+							request.getApprovedDate(),
+							request.getRejectedDate(),
+							request.getComments(),
+							request.getEndDate(),
+							request.isFinished(),
+							request.getElderly_dni(),
+							request.getContract_number(),
+							request.getUserCAS());
+	}
+	
+	//Obtiene una solicitud concreta
+	public Request getRequest(int number){
+		try{
+			return jdbcTemplate.queryForObject("SELECT * FROM REQUEST WHERE NUMBER = ?", new RequestRowMapper(), number);
+		}catch (EmptyResultDataAccessException e){
+			return null;
 		}
-		
-		public void deleteRequest(int number){
-			jdbcTemplate.update("DELETE FROM REQUEST WHERE NUMBER = ?", number);
+	}
+	
+	//Obtiene todas las solicitudes de servicios de comida de una persona mayor
+	public List<Request> getFoodRequestsFromElderly(String dni_elderly){
+		try{
+			return jdbcTemplate.query("SELECT * FROM REQUEST WHERE ELDERLY_DNI = ? AND SERVICETYPE = 0 AND FINISHED = FALSE",
+					new RequestRowMapper(), dni_elderly);
+		}catch(EmptyResultDataAccessException e){
+			return new ArrayList<Request>();
 		}
-		
-		public void updateRequest(Request request){
-			jdbcTemplate.update("UPDATE REQUEST SET SERVICETYPE = ?, CREATIONDATE = ?, STATE = ?, APPROVEDDATE = ?, REJECTEDDATE = ?,"
-								+ " COMMENTS = ?, ENDDATE = ?, ELDERLY_DNI = ?, CONTRACT_NUMBER = ? "
-								+ "WHERE NUMBER = ?",
-								request.getServiceType(),
-								request.getCreationDate(),
-								request.getState(),
-								request.getApprovedDate(),
-								request.getRejectedDate(),
-								request.getComments(),
-								request.getEndDate(),
-								request.getElderly_dni(),
-								request.getContract_number(),
-								request.getNumber()
-								);
+	}
+	
+	//Obtiene todas las solicitudes de servicios sanitarios de una persona mayor
+	public List<Request> getHealthRequestsFromElderly(String dni_elderly){
+		try{
+			return jdbcTemplate.query("SELECT * FROM REQUEST WHERE ELDERLY_DNI = ? AND SERVICETYPE = 1 AND FINISHED = FALSE",
+					new RequestRowMapper(), dni_elderly);
+		}catch(EmptyResultDataAccessException e){
+			return new ArrayList<Request>();
 		}
-		
-		public Request getRequest(int number){
-			try{
-				return jdbcTemplate.queryForObject("SELECT * FROM REQUEST WHERE NUMBER = ?", new RequestRowMapper(), number);
-			}catch (EmptyResultDataAccessException e){
-				return null;
-			}
+	}
+	
+	//Obtiene todas las solicitudes de servicios sanitarios de una persona mayor
+	public List<Request> getCleaningRequestsFromElderly(String dni_elderly){
+		try{
+			return jdbcTemplate.query("SELECT * FROM REQUEST WHERE ELDERLY_DNI = ? AND SERVICETYPE = 2 AND FINISHED = FALSE",
+					new RequestRowMapper(), dni_elderly);
+		}catch(EmptyResultDataAccessException e){
+			return new ArrayList<Request>();
 		}
-		
-		public List<Request> getRequests(){
-			try{
-				return jdbcTemplate.query("SELECT * FROM REQUEST", new RequestRowMapper());
-			}catch (EmptyResultDataAccessException e){
-				return new ArrayList<Request>();
-			}
-			
-		}
-		
-		public List<Request> getRequestsFromElderly(String dni_elderly){
-			try{
-				return jdbcTemplate.query("SELECT * FROM REQUEST WHERE ELDERLY_DNI = ?", new RequestRowMapper(), dni_elderly);
-			}catch(EmptyResultDataAccessException e){
-				return new ArrayList<Request>();
-			}
-			
-		}
+	}
+	
+	//Obtiene el número de solicitudes que hay en la BBDD
+	public int getNumberRequests() {
+		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM REQUEST", Integer.class);
+	}
+	
+	//Finaliza una solicitud con la fecha actual e indica que no se muestre
+	public void finishRequest(Request request){
+		jdbcTemplate.update("UPDATE REQUEST SET ENDDATE = ?, FINISHED = TRUE WHERE NUMBER = ?",
+							request.getEndDate(),
+							request.getNumber()
+							);
+	}
 }

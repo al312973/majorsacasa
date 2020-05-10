@@ -17,8 +17,10 @@ public final class RequestRowMapper implements RowMapper<Request>{
 		request.setRejectedDate(rs.getDate("rejectedDate"));
 		request.setComments(rs.getString("comments"));
 		request.setEndDate(rs.getDate("endDate"));
+		request.setFinished(rs.getBoolean("finished"));
 		request.setElderly_dni(rs.getString("elderly_dni"));
 		request.setContract_number(rs.getInt("contract_number"));
+		request.setUserCAS(rs.getString("userCAS"));
 		return request;
 	}
 }

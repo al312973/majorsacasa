@@ -49,15 +49,18 @@ public class VolunteerController {
 		this.elderlyDao=elderlyDao;
 	}
 	
-	
-	@RequestMapping(value="/services")
+	//Muestra el listado de todas las disponibilidades del voluntario no finalizadas
+	@RequestMapping(value="/services", method = RequestMethod.GET)
 	public String listServices(Model model, HttpSession session) {
 		UserDetails user = (UserDetails) session.getAttribute("user");
-		this.currentVolunteer = volunteerDao.getVolunteerByEmail(user.getEmail());
+		if (currentVolunteer==null)
+			this.currentVolunteer = volunteerDao.getVolunteerByEmail(user.getEmail());
+		session.setAttribute("validated", currentVolunteer.isAccepted());
 		model.addAttribute("availabilities", availabilityDao.getAvailabilitiesFromVolunteer(currentVolunteer.getUsr()));
 		return "volunteer/services";
 	}
 	
+	//Muestra información de la persona mayor que ha solicitado un servicio
 	@RequestMapping(value="/services/beneficiary/{elderly_dni}", method = RequestMethod.GET)
     public String showElderlyInfo(Model model, @PathVariable String elderly_dni) {
 		Elderly elderly = elderlyDao.getElderlyByDNI(elderly_dni);
@@ -65,15 +68,17 @@ public class VolunteerController {
         return "volunteer/beneficiary"; 
     }
 	
+	//Muestra la información personal
 	@RequestMapping(value="/profile", method = RequestMethod.GET)
     public String updateProfile(Model model) {
         model.addAttribute("volunteer", currentVolunteer);
         return "volunteer/profile"; 
     }
 	
+	//Actualiza la información personal
 	@RequestMapping(value="/profile", method = RequestMethod.POST)
-    public String processUpdateSubmit(@ModelAttribute("volunteer") Volunteer volunteer, BindingResult bindingResult, HttpSession session) {
-		
+    public String processUpdateSubmit(@ModelAttribute("volunteer") Volunteer volunteer, BindingResult bindingResult, 
+    		HttpSession session) {
 		//Comprobamos que no haya errores
 		VolunteerValidator volunteerValidator = new VolunteerValidator(volunteerDao, currentVolunteer); 
 		volunteerValidator.validate(volunteer, bindingResult);
@@ -85,22 +90,31 @@ public class VolunteerController {
         //Cambiamos los datos de la sesion
         UserDetails user = new UserDetails(volunteer.getEmail(), null, "volunteer", true);
         session.setAttribute("user", user); 
+        session.setAttribute("validated", volunteer.isAccepted());
+        currentVolunteer=volunteer;
         return "redirect:services"; 
     }
 	
-	
-	@RequestMapping(value="/addService") 
+	//Redirige a la pagina que permite añadir una nueva disponibilidad
+	@RequestMapping(value="/addService", method = RequestMethod.GET) 
     public String addAvailability(Model model) {
         model.addAttribute("availability", new Availability());
         return "volunteer/addService";
     }
 
+	//Añade una nueva disponibilidad
 	@RequestMapping(value="/addService", method=RequestMethod.POST)
 	public String processAddSubmit(@ModelAttribute("availability") Availability availability, BindingResult bindingResult) {
-		availability.setStateAvailable(false);
+		//Rellena los campos no solicitados mediante el formulario
+		if (currentVolunteer.getAcceptationDate()!=null)
+			availability.setStateAvailable(true);
+		else
+			availability.setStateAvailable(false);
+		availability.setUnsuscribeDate(null);
+		availability.setElderly_dni(null);
 		availability.setVolunteer_usr(currentVolunteer.getUsr());
 		
-		AvailabilityValidator availabilityValidator = new AvailabilityValidator(availabilityDao, null, currentVolunteer.getUsr());
+		AvailabilityValidator availabilityValidator = new AvailabilityValidator(availabilityDao, null);
 		availabilityValidator.validate(availability, bindingResult);
 		
 		if (bindingResult.hasErrors())
@@ -110,6 +124,7 @@ public class VolunteerController {
         return "redirect:services";
     }
 	
+	//Redirige a la pagina que permite modificar una disponibilidad
 	@RequestMapping(value="/updateService/{date}/{beginningHour}", method = RequestMethod.GET)
 	public String editAvailability(Model model, @PathVariable String date, @PathVariable String beginningHour) {
 		try {
@@ -126,10 +141,11 @@ public class VolunteerController {
 	
 	//Variable en la que guardamos la disponibilidad anterior para compararla con la nueva al editar
 	private Availability currentAvailability;
-	   
+	
+	//Modifica la información de una disponibilidad
 	@RequestMapping(value="/updateService", method = RequestMethod.POST) 
 	public String processUpdateSubmit(@ModelAttribute("availability") Availability availability, BindingResult bindingResult) {
-		AvailabilityValidator availabilityValidator = new AvailabilityValidator(availabilityDao, currentAvailability, currentVolunteer.getUsr());
+		AvailabilityValidator availabilityValidator = new AvailabilityValidator(availabilityDao, currentAvailability);
 		availabilityValidator.validate(availability, bindingResult);
 		
 		if (bindingResult.hasErrors()) 
@@ -156,28 +172,32 @@ public class VolunteerController {
 		return "redirect:services"; 
 	}
 
-	@RequestMapping(value="/services/delete/{date}/{beginningHour}")
+	//Borra o da de baja un servicio
+	@RequestMapping(value="/services/delete/{date}/{beginningHour}", method = RequestMethod.GET)
     public String processDelete(@PathVariable String date, @PathVariable String beginningHour) {
 	   try {
-		Date availabilityDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
-		LocalTime availabilityBeginningHour = LocalTime.parse(beginningHour);
-		
-		Availability availability = availabilityDao.getAvailability(availabilityDate, availabilityBeginningHour, currentVolunteer.getUsr());
-		
-		//Si hay una persona mayor asignada, se le envía un correo de notificación de la cancelación
-		if (availability.getElderly_dni()!=null) {
-			Elderly elderly = elderlyDao.getElderlyByDNI(availability.getElderly_dni());
+			Date availabilityDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+			LocalTime availabilityBeginningHour = LocalTime.parse(beginningHour);
 			
-			System.out.println("\nS'ha manat un correu de notificació a "+elderly.getEmail()
-			+"\nNotificació de cancelació del servei contractat amb el voluntari "+currentVolunteer.getName()+"\n"
-			+"La seva cita del:\n"
-			+ "\tDía: "+availability.getDate()+"\n"
-			+ "\tDesde les: "+availability.getBeginningHour()+" hores\n"
-			+ "\tFins les: "+availability.getEndingHour()+" hores\n"
-			+"Ha tingut que ser cancelada. Sentim les molèsties.");
-		}
-		
-		availabilityDao.deleteAvailability(availability);
+			Availability availability = availabilityDao.getAvailability(availabilityDate, availabilityBeginningHour, currentVolunteer.getUsr());
+			
+			//Si hay una persona mayor asignada, se le envía un correo de notificación de la cancelación y se establece la fecha de finalización como la actual
+			if (availability.getElderly_dni()!=null) {
+				Elderly elderly = elderlyDao.getElderlyByDNI(availability.getElderly_dni());
+				
+				System.out.println("\nS'ha manat un correu de notificació a "+elderly.getEmail()
+				+"\nNotificació de cancelació del servei contractat amb el voluntari "+currentVolunteer.getName()+"\n"
+				+"La seva cita del:\n"
+				+ "\tDía: "+availability.getDate()+"\n"
+				+ "\tDesde les: "+availability.getBeginningHour()+" hores\n"
+				+ "\tFins les: "+availability.getEndingHour()+" hores\n"
+				+"Ha tingut que ser cancelada. Sentim les molèsties.");
+				
+				availability.setUnsuscribeDate(new Date());
+				availabilityDao.finishAvailability(availability);
+			} else { //Si no hay una persona asignada se elimina la disponibilidad de la BBDD
+				availabilityDao.deleteAvailability(availability);
+			}
 		} catch (ParseException ignore) {
 		}
 	

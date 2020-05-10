@@ -5,8 +5,7 @@ public class UserDetails {
 	private String password;
 	private String type;
 	private boolean pwdCorrect;
-	
-	
+
 	public UserDetails() {
 	}
 

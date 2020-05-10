@@ -1,5 +1,7 @@
 package es.uji.ei1027.majorsacasa.controller;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +46,7 @@ public class LoginRegisterController {
 		}
 	    
 		//Comprueba que el login sea correcto e intenta cargar sus datos
-		user = userController.checkCredentials(user.getEmail(), user.getPassword()); 
+		user = userController.checkCredentials(user.getEmail(), user.getPassword());
 		if (user == null) {
 			bindingResult.rejectValue("email", "badcredentials", "Credencials errònies");
 			bindingResult.rejectValue("password", "badcredentials", "Credencials errònies");
@@ -62,7 +64,7 @@ public class LoginRegisterController {
 			
 		//Segun el tipo de usuario que ha hecho el login, lo manda a su pagina principal
 		if (user.getType().equals("elderly")) {
-			return "redirect:/elderly/elderlyRequest";
+			return "redirect:/elderly/requests";
 		} else {
 			if (user.getType().equals("socialWorker")) {
 				return "redirect:/socialWorker/list";
@@ -102,14 +104,16 @@ public class LoginRegisterController {
 		}
 		
 		//Si no hay errores registramos el nuevo voluntario en la BBDD
-		volunteer.setAcceptationDate(null); //No ha sido aceptado
+		volunteer.setApplicationDate(new Date());
+		volunteer.setAcceptationDate(null);
 		volunteer.setAccepted(false);
-		volunteer.setEndDate(null); //Se asume que en principio no hay fecha de fin y cuando el voluntario quiera darse de baja, se modificara este atributo
+		volunteer.setEndDate(null);
 		volunteerDao.addVolunteer(volunteer);
 		
 		//Dejamos el usuario como autenticado en la sesion
 		UserDetails user = new UserDetails(volunteer.getEmail(), null, "volunteer", true);
 		session.setAttribute("user", user); 
+		session.setAttribute("validated", false);
 		
 		//Se envía un correo de confirmación
 		System.out.println("\nS'ha manat un correu de confirmació a "+volunteer.getEmail()

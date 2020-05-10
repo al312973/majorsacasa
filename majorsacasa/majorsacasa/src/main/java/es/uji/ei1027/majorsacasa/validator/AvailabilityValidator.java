@@ -12,12 +12,10 @@ import es.uji.ei1027.majorsacasa.model.Volunteer;
 public class AvailabilityValidator implements Validator {
 	private AvailabilityDAO availabilityDao;
 	private Availability currentAvailability;
-	private String volunteer_usr;
 
-	public AvailabilityValidator(AvailabilityDAO availabilityDao, Availability currentAvailability, String volunteer) {
+	public AvailabilityValidator(AvailabilityDAO availabilityDao, Availability currentAvailability) {
 		this.availabilityDao = availabilityDao;
 		this.currentAvailability = currentAvailability;
-		this.volunteer_usr = volunteer;
 	}
 	
 	@Override
@@ -31,7 +29,7 @@ public class AvailabilityValidator implements Validator {
 		Availability availability = (Availability) obj;
 		
 		//Comprobamos si ya hay un servicio registrado para el mismo día a la misma hora
-		Availability existingAvailability = availabilityDao.getAvailability(availability.getDate(), availability.getBeginningHour(), volunteer_usr);
+		Availability existingAvailability = availabilityDao.getAvailability(availability.getDate(), availability.getBeginningHour(), availability.getVolunteer_usr());
 		if (existingAvailability!=null) {
 			if (currentAvailability==null) { //Si se trata de una nueva disponibilidad
 				errors.rejectValue("beginningHour", "availabilityregistrada", "Servei ja registrat");

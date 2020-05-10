@@ -39,6 +39,16 @@ public class ContractDAO {
 		jdbcTemplate.update("DELETE FROM PAY WHERE NUMBER = ?", number);
 	}
 	
+	//Obtiene un contrato específico
+	public Contract getContract(int number){
+		try{
+			return jdbcTemplate.queryForObject("SELECT * FROM CONTRACT WHERE NUMBER = ?", new ContractRowMapper(), number);
+		}catch (EmptyResultDataAccessException e){
+			return null;
+		}
+	}
+	
+	//Actualiza un contrato específico
 	public void updateContract(Contract contract){
 		jdbcTemplate.update("UPDATE CONTRACT SET DATEBEGINNING = ?, DATEENDING = ?, DESCRIPTION = ?, SERVICETYPE = ?,"
 							+ " QUANTITYSERVICES = ?, UNITSOFMEASURE = ?, PRICEUNIT = ?, BEGINNINGHOUR = ?,"
@@ -55,14 +65,6 @@ public class ContractDAO {
 								contract.getCompany_cif(),
 								contract.getNumber() 
 							);
-	}
-	
-	public Contract getContract(int number){
-		try{
-			return jdbcTemplate.queryForObject("SELECT * FROM CONTRACT WHERE NUMBER = ?", new ContractRowMapper(), number);
-		}catch (EmptyResultDataAccessException e){
-			return null;
-		}
 	}
 	
 	public List<Contract> getContracts(){

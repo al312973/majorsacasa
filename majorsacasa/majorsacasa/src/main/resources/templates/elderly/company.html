@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/baseElderly}">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Majors a casa</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+   	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+   	<h2>Empresa prestadora de serveis</h2>
+	<table class="showinfo" th:object="${company}">
+		<tr>
+			<th><label>Nom:</label></th>
+        	<td><p th:text="*{name}"></p></td>
+        </tr>			
+		<tr>
+			<th><label>CIF:</label></th>
+			<td><p th:text="*{CIF}" ></p></td>
+        </tr>
+        <tr>
+			<th><label>Adreça:</label></th>
+        	<td><p th:text="*{address}"></p></td>
+        </tr>
+        <tr>
+			<th><label>Encarregat:</label></th>
+        	<td><p th:text="*{contactPersonName}"></p></td>
+        </tr>
+		<tr>
+			<th><label>Telèfon:</label></th>
+			<td><p th:text="*{contactPersonPhoneNumber}"></p></td>
+        </tr>			
+		<tr>
+			<th><label>Email:</label></th>
+        	<td><p th:text="*{contactPersonEmail}"></p></td>
+        </tr>			
+	</table>
+	<a th:object="${contractNumber}" class="btn btn-outline-info" th:href="@{/elderly/contracts/{contract_number}(contract_number=${contractNumber})}" role="button">Torna enrere</a>
+</div>
+</body>
+</html>
