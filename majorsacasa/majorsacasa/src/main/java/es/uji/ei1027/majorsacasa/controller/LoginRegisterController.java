@@ -65,12 +65,16 @@ public class LoginRegisterController {
 		//Segun el tipo de usuario que ha hecho el login, lo manda a su pagina principal
 		if (user.getType().equals("elderly")) {
 			return "redirect:/elderly/requests";
+		} else if (user.getType().equals("socialWorker")) {
+			return "redirect:/socialWorker/list";
+		} else if (user.getType().equals("volunteer")) {
+			return "redirect:/volunteer/services";
+		} else if (user.getType().equals("casManager")) {
+			return "redirect:/casManager/altaEmpresa";
+		} else if (user.getType().equals("casCommitee")) {
+			return "redirect:/casCommitee/gestionarSolicitudes";
 		} else {
-			if (user.getType().equals("socialWorker")) {
-				return "redirect:/socialWorker/list";
-			} else {
-				return "redirect:/volunteer/services";
-			}
+			return "redirect:/casVolunteer/altaVoluntarios";
 		}
 	}
 	

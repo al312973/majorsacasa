@@ -1,5 +1,7 @@
 package es.uji.ei1027.majorsacasa.controller;
 
+import org.springframework.stereotype.Controller;
+
 import es.uji.ei1027.majorsacasa.dao.ElderlyDAO;
 import es.uji.ei1027.majorsacasa.dao.SocialWorkerDAO;
 import es.uji.ei1027.majorsacasa.dao.VolunteerDAO;
@@ -8,6 +10,7 @@ import es.uji.ei1027.majorsacasa.model.SocialWorker;
 import es.uji.ei1027.majorsacasa.model.UserDetails;
 import es.uji.ei1027.majorsacasa.model.Volunteer;
 
+@Controller
 public class UserController {
 	private ElderlyDAO elderlyDao;
 	private SocialWorkerDAO socialWorkerDao;
@@ -48,7 +51,15 @@ public class UserController {
 			UserDetails user = new UserDetails();
 			user.setEmail(socialWorker.getEmail());
 			user.setPassword(null);
-			user.setType("socialWorker");
+			if (socialWorker.getUserCAS().equals("casManager")){
+				user.setType("casManager");
+			}else if (socialWorker.getUserCAS().equals("casCommitee")){
+				user.setType("casCommitee");
+			}else if (socialWorker.getUserCAS().equals("casVolunteer")){
+				user.setType("casVolunteer");
+			}else {
+				user.setType("socialWorker");
+			}
 			if (password.equals(socialWorker.getPwd())) {
 				 user.setPwdCorrect(true);
 			}else {
@@ -57,7 +68,7 @@ public class UserController {
 			return user;
 		}
 		
-		//Comprobamos si es un trabajador social
+		//Comprobamos si es un voluntario
 		Volunteer volunteer;
 		if (userEmail.contains("@")) {
 			volunteer = volunteerDao.getVolunteerByEmail(userEmail.trim());
