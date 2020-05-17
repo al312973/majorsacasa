@@ -16,14 +16,32 @@
 	
 	<form action="#" th:action="@{/casManager/altaSocialWorker}" th:object="${socialWorker}" method="post">
 		<table>
+			<tr th:if="${#fields.hasErrors('userCAS')}">
+				<td colspan="2" align="center" class="alert alert-danger" th:errors="*{userCAS}"></td>
+			</tr>
+			<tr th:if="${#fields.hasErrors('pwd')}">
+				<td colspan="2" align="center" class="alert alert-danger" th:errors="*{pwd}"></td>
+			</tr>
 			<tr>
 				<td><label>Usuari:</label></td>
-	        	<td><input type="text" th:field="*{userCAS}" required/></td>
+	        	<td th:unless="${#fields.hasErrors('userCAS')}">
+	        		<input type="text" class="form-control" th:field="*{userCAS}" required/>
+	        	</td>
+	        		        
+	        	<td th:if="${#fields.hasErrors('userCAS')}">
+	           		<input type="password" class="form-control is-invalid" th:field="*{userCAS}" required/>
+	           	</td>
 	        </tr>
-	        <tr>
+			<tr>
 				<td><label>Contrasenya:</label></td>
-	        	<td><input type="text" th:field="*{pwd}" required/></td>
-	        </tr>
+				<td th:unless="${#fields.hasErrors('pwd')}">
+	        		<input type="password" class="form-control" th:field="*{pwd}" required/>
+	        	</td>
+	        
+	        	<td th:if="${#fields.hasErrors('pwd')}">
+	           		<input type="password" class="form-control is-invalid" th:field="*{pwd}" required/>
+	           	</td>
+			</tr>
 	        <tr>
 	            <td colspan="2"><input class="btn btn-success" type="submit" value="Afegir" role="button"/>
 	            				<a class="btn btn-outline-info" href="/casManager/atrasSocialWorker" role="button">Torna enrere</a>

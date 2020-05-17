@@ -1,13 +1,10 @@
 package es.uji.ei1027.majorsacasa.controller;
 
-import java.text.SimpleDateFormat;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import es.uji.ei1027.majorsacasa.dao.SocialWorkerDAO;
@@ -16,6 +13,8 @@ import es.uji.ei1027.majorsacasa.dao.ContractDAO;
 import es.uji.ei1027.majorsacasa.model.Company;
 import es.uji.ei1027.majorsacasa.model.Contract;
 import es.uji.ei1027.majorsacasa.model.SocialWorker;
+import es.uji.ei1027.majorsacasa.validator.CompanyValidator;
+import es.uji.ei1027.majorsacasa.validator.SocialWorkerValidator;
 
 @Controller
 @RequestMapping("/casManager")
@@ -25,7 +24,7 @@ public class CasManagerController {
 	private CompanyDAO companyDao;
 	private ContractDAO contractDao;
 	
-	//Guardamos aqui las variables de los diferentes pasos, para luego guardarlo todo en caso de completar el tercer paso
+	//Guardamos aqui las variables de los diferentes pasos, para luego guardarlo todo en caso de completar el tercer paso y para mostrar sus datos en caso de "atrás"
 	private Company company;
 	private SocialWorker socialWorker;
 	
@@ -52,9 +51,13 @@ public class CasManagerController {
 	
 	@RequestMapping(value="/altaEmpresa" , method=RequestMethod.POST)
 	public String processAddCompanySubmit(@ModelAttribute("company") Company company, BindingResult bindingResult){
+		CompanyValidator companyValidator = new CompanyValidator(companyDao, company);
+		companyValidator.validate(company, bindingResult);
+		
 		if (bindingResult.hasErrors()){
 			return "casManager/altaEmpresa"; 
 		}
+
 		this.company = company;
 		return "redirect:altaSocialWorker";
 	}
@@ -67,8 +70,10 @@ public class CasManagerController {
 	
 	@RequestMapping(value="/altaSocialWorker", method=RequestMethod.POST)
 	public String processAddSocialWorkerSubmit(@ModelAttribute("socialWorker") SocialWorker socialWorker, BindingResult bindingResult){
+		SocialWorkerValidator socialWorkerValidator = new SocialWorkerValidator(socialWorkerDao, socialWorker);
+		socialWorkerValidator.validate(socialWorker, bindingResult);
 		if (bindingResult.hasErrors()){
-			return "casManager/altaEmpresa"; 
+			return "casManager/altaSocialWorker"; 
 		}
 		
 		//Rellenamos los campos no solicitados mediante el formulario
@@ -76,18 +81,9 @@ public class CasManagerController {
 		socialWorker.setPhoneNumber(company.getContactPersonPhoneNumber());
 		socialWorker.setEmail(company.getContactPersonEmail());
 		this.socialWorker = socialWorker;
-		
-		//Mandamos correo de confirmación a la persona de contacto para avisarle que ya tiene correo y contraseña para entrar en el sistema
-		System.out.println("\nS'ha manat un correu de notificació a "+socialWorker.getEmail()
-		+"\nNotificació d'alta com a nou usuari "+socialWorker.getName()+"\n"
-		+"Les dades per a iniciar sesió son:\n"
-		+ "\tUsuari: "+socialWorker.getUserCAS()+"\n"
-		+ "\tContrasenya: "+socialWorker.getPwd()+"\n");
-		
+			
 		return "redirect:altaContrato";
 	}
-	
-	
 	
 	@RequestMapping(value="/altaContrato")
 	public String addContract(Model model){
@@ -97,14 +93,24 @@ public class CasManagerController {
 	
 	@RequestMapping(value="/altaContrato" , method=RequestMethod.POST)
 	public String processAddContractSubmit(@ModelAttribute("contract") Contract contract, BindingResult bindingResult){
+		
+		//Rellenamos los campos no solicitados mediante el formulario
 		contract.setCompany_cif(company.getCIF());
 		contract.setNumber(contractDao.getNumberContracts() + 1);
 		contract.setServiceType(company.getServiceType());
 		
-		//Guardamos la empresa, el contrato y el socialWorker porque estmo en el tercer paso
+		//Guardamos la empresa, el contrato y el socialWorker porque estamos en el tercer paso
+		
 		companyDao.addCompany(company);
 		contractDao.addContract(contract);
 		socialWorkerDao.addSocialWorker(socialWorker);
+		
+		//Mandamos correo de confirmación a la persona de contacto para avisarle que ya tiene correo y contraseña para entrar en el sistema
+		System.out.println("\nS'ha manat un correu de notificació a "+socialWorker.getEmail()
+		+"\nNotificació d'alta com a nou usuari "+socialWorker.getName()+"\n"
+		+"Les dades per a iniciar sesió son:\n"
+		+ "\tUsuari: "+socialWorker.getUserCAS()+"\n"
+		+ "\tContrasenya: "+socialWorker.getPwd()+"\n");
 		
 		return "casManager/mensajeConfirmacion";		
 	}

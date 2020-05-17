@@ -16,29 +16,77 @@
 	
 	<form action="#" th:action="@{/casManager/altaEmpresa}" th:object="${company}" method="post">
 		<table>
+			<tr th:if="${#fields.hasErrors('name')}">
+				<td colspan="2" align="center" class="alert alert-danger" th:errors="*{name}"></td>
+			</tr>
+			<tr th:if="${#fields.hasErrors('CIF')}">
+				<td colspan="2" align="center" class="alert alert-danger" th:errors="*{CIF}"></td>
+			</tr>
+			<tr th:if="${#fields.hasErrors('address')}">
+				<td colspan="2" align="center" class="alert alert-danger" th:errors="*{address}"></td>
+			</tr>
+			<tr th:if="${#fields.hasErrors('contactPersonName')}">
+				<td colspan="2" align="center" class="alert alert-danger" th:errors="*{contactPersonName}"></td>
+			</tr>
+			<tr th:if="${#fields.hasErrors('contactPersonPhoneNumber')}">
+				<td colspan="2" align="center" class="alert alert-danger" th:errors="*{contactPersonPhoneNumber}"></td>
+			</tr>
+			<tr th:if="${#fields.hasErrors('contactPersonEmail')}">
+				<td colspan="2" align="center" class="alert alert-danger" th:errors="*{pwd}"></td>
+			</tr>
 			<tr>
 				<td><label>Nom:</label></td>
-	        	<td><input type="text" th:field="*{name}" required/></td>
+	        	<td th:unless="${#fields.hasErrors('name')}">
+	        		<input type="text" class="form-control" th:field="*{name}" required/>
+	        	</td>
+	        	<td th:if="${#fields.hasErrors('name')}">
+	        		<input type="text" class="form-control is-invalid" th:field="*{name}" required/>
+	        	</td>
 	        </tr>
 	        <tr>
 				<td><label>CIF:</label></td>
-	        	<td><input type="text" th:field="*{CIF}" required/></td>
+	        	<td th:unless="${#fields.hasErrors('CIF')}">
+	        		<input type="text" class="form-control" th:field="*{CIF}" required/>
+	        	</td>
+	        	<td th:if="${#fields.hasErrors('CIF')}">
+	        		<input type="text" class="form-control is-invalid" th:field="*{CIF}" required/>
+	        	</td>
 	        </tr>
 	        <tr>
 				<td><label>Direcció:</label></td>
-	        	<td><input type="text" th:field="*{address}" required/></td>
+	        	<td th:unless="${#fields.hasErrors('address')}">
+	        		<input type="text" class="form-control" th:field="*{address}" required/>
+	        	</td>
+	        	<td th:if="${#fields.hasErrors('address')}">
+	        		<input type="text" class="form-control is-invalid" th:field="*{address}" required/>
+	        	</td>
 	        </tr>
 	        <tr>
 				<td><label>Nom i cognom de la persona de contacte:</label></td>
-	        	<td><input type="text" th:field="*{contactPersonName}" required/></td>
+	        	<td th:unless="${#fields.hasErrors('contactPersonName')}">
+	        		<input type="text" class="form-control" th:field="*{contactPersonName}" required/>
+	        	</td>
+	        	<td th:if="${#fields.hasErrors('contactPersonName')}">
+	        		<input type="text" class="form-control is-invalid" th:field="*{contactPersonName}" required/>
+	        	</td>
 	        </tr>
 	        <tr>
 				<td><label>Telèfon de la persona de contacte:</label></td>
-	        	<td><input type="text" th:field="*{contactPersonPhoneNumber}" required/></td>
+	        	<td th:unless="${#fields.hasErrors('contactPersonPhoneNumber')}">
+	        		<input type="text" class="form-control" th:field="*{contactPersonPhoneNumber}" required/>
+	        	</td>
+	        	<td th:if="${#fields.hasErrors('contactPersonPhoneNumber')}">
+	        		<input type="text" class="form-control is-invalid" th:field="*{contactPersonPhoneNumber}" required/>
+	        	</td>
 	        </tr>
 	        <tr>
 				<td><label>Email de la persona contacte:</label></td>
-	        	<td><input type="text" th:field="*{contactPersonEmail}" required/></td>
+	        	<td th:unless="${#fields.hasErrors('contactPersonEmail')}">
+	        		<input type="email" class="form-control" th:field="*{contactPersonEmail}" required/>
+	        	</td>
+	        	<td th:if="${#fields.hasErrors('contactPersonEmail')}">
+	        		<input type="email" class="form-control is-invalid" th:field="*{contactPersonEmail}" required/>
+	        	</td>
 	        </tr>
 	        <tr>
 				<td><label>Tipus servei:</label></td>
