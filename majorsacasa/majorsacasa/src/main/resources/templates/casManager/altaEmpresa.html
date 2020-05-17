@@ -73,10 +73,10 @@
 	        <tr>
 				<td><label>Telèfon de la persona de contacte:</label></td>
 	        	<td th:unless="${#fields.hasErrors('contactPersonPhoneNumber')}">
-	        		<input type="text" class="form-control" th:field="*{contactPersonPhoneNumber}" required/>
+	        		<input type="tel" placeholder="6xxxxxxxx" pattern="[0-9]{9}" class="form-control" th:field="*{contactPersonPhoneNumber}" required/>
 	        	</td>
 	        	<td th:if="${#fields.hasErrors('contactPersonPhoneNumber')}">
-	        		<input type="text" class="form-control is-invalid" th:field="*{contactPersonPhoneNumber}" required/>
+	        		<input type="tel" placeholder="6xxxxxxxx" pattern="[0-9]{9}" class="form-control is-invalid" th:field="*{contactPersonPhoneNumber}" required/>
 	        	</td>
 	        </tr>
 	        <tr>
