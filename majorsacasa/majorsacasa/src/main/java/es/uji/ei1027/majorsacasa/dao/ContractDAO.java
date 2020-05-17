@@ -83,4 +83,9 @@ public class ContractDAO {
 		}		
 	}
 	
+	//Obtiene el número de contratos que hay en la BBDD
+	public int getNumberContracts() {
+		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM CONTRACT", Integer.class);
+	}
+	
 }

@@ -11,10 +11,48 @@
 <body>
 <div layout:fragment="content">
 
-
-	<h2>PRUEBA DE CAS MANAGER</h2>
-
-
+	<h2>Dades de l'empresa</h2>
+	<h3>Pas 1 de 3</h3>
+	
+	<form action="#" th:action="@{/casManager/altaEmpresa}" th:object="${company}" method="post">
+		<table>
+			<tr>
+				<td><label>Nom:</label></td>
+	        	<td><input type="text" th:field="*{name}" required/></td>
+	        </tr>
+	        <tr>
+				<td><label>CIF:</label></td>
+	        	<td><input type="text" th:field="*{CIF}" required/></td>
+	        </tr>
+	        <tr>
+				<td><label>Direcció:</label></td>
+	        	<td><input type="text" th:field="*{address}" required/></td>
+	        </tr>
+	        <tr>
+				<td><label>Nom i cognom de la persona de contacte:</label></td>
+	        	<td><input type="text" th:field="*{contactPersonName}" required/></td>
+	        </tr>
+	        <tr>
+				<td><label>Telèfon de la persona de contacte:</label></td>
+	        	<td><input type="text" th:field="*{contactPersonPhoneNumber}" required/></td>
+	        </tr>
+	        <tr>
+				<td><label>Email de la persona contacte:</label></td>
+	        	<td><input type="text" th:field="*{contactPersonEmail}" required/></td>
+	        </tr>
+	        <tr>
+				<td><label>Tipus servei:</label></td>
+	        	<td><select class="form-control input-lg" th:field="*{serviceType}" required>
+	        			<option value="0">Servei de menjar</option>
+	        			<option value="1">Servei sanitari</option>
+	        			<option value="2">Servei de neteja</option>
+	        		</select></td>
+	        </tr>
+	        <tr>
+	            <td colspan="2"><input class="btn btn-success" type="submit" value="Afegir" role="button"/></td>
+	        </tr>
+        </table>
+    </form>  
 </div>
 </body>
 </html>
