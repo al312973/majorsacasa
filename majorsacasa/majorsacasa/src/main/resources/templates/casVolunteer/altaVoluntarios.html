@@ -31,7 +31,7 @@
          <td th:text="${volunteer.birthDate}"></td>
          <td><a th:href="@{/casVolunteer/showVolunteer/{usr}(usr=${volunteer.usr})}" th:text="${volunteer.usr}"></a></td>
          <td><a class="btn btn-success" th:href="@{/casVolunteer/altaVolunteer/{usr} (usr=${volunteer.usr})}" role="button">Dóna de alta</a></td>
-         <td><a class="btn btn-danger" th:href="@{/casVolunteer/bajaVolunteer/{usr} (usr=${volunteer.usr})}" role="button">Dóna de baixa</a></td>
+         <td><a class="btn btn-danger" th:href="@{/casVolunteer/bajaVolunteer/{usr} (usr=${volunteer.usr})}" role="button">Rebutjar</a></td>
       </tr>
      </tbody>
    </table> 
