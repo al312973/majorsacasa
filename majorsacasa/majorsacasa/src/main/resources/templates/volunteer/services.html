@@ -25,7 +25,7 @@
      </thead>
      <tbody>
        <tr th:each="availability: ${availabilities}">
-         <td th:text="${availability.date}"></td>
+         <td th:text="${#dates.format(availability.date, 'dd/MM/yyyy')}"></td>
          <td th:text="${availability.beginningHour}"></td>
          <td th:text="${availability.endingHour}"></td>
          <td th:if="${availability.elderly_dni == null}">No assignat</td>

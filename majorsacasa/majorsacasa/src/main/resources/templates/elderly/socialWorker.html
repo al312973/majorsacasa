@@ -10,27 +10,19 @@
 </head>
 <body>
 <div layout:fragment="content">
-   	<h2>Empresa prestadora de serveis</h2>
-	<table class="showinfo" th:object="${company}">
+   	<h2>Treballador social d'ajuda</h2>
+	<table class="showinfo" th:object="${socialWorker}">
 		<tr>
 			<th><label>Nom:</label></th>
         	<td><p th:text="*{name}"></p></td>
-        </tr>			
-        <tr>
-			<th><label>Adreça:</label></th>
-        	<td><p th:text="*{address}"></p></td>
-        </tr>
-        <tr>
-			<th><label>Encarregat:</label></th>
-        	<td><p th:text="*{contactPersonName}"></p></td>
         </tr>
 		<tr>
 			<th><label>Telèfon:</label></th>
-			<td><p th:text="*{contactPersonPhoneNumber}"></p></td>
+			<td><p th:text="*{phoneNumber}"></p></td>
         </tr>			
 		<tr>
 			<th><label>Email:</label></th>
-        	<td><p th:text="*{contactPersonEmail}"></p></td>
+        	<td><p th:text="*{email}"></p></td>
         </tr>			
 	</table>
 	<a th:object="${requestNumber}" class="btn btn-outline-info" th:href="@{/elderly/requests/terms/{number}(number=${requestNumber})}" role="button">Torna enrere</a>

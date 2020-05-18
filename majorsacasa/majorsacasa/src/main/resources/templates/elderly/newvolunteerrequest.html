@@ -23,17 +23,18 @@
      </thead>
      <tbody>
        <tr th:each="availability: ${availabilities}">
-         <td th:text="${availability.date}"></td>
+         <td th:text="${#dates.format(availability.date, 'dd/MM/yyyy')}"></td>
          <td th:text="${availability.beginningHour}"></td>
          <td th:text="${availability.endingHour}"></td>
          <td>
          	<a th:href="@{/elderly/volunteer/{volunteer_usr}(volunteer_usr=${availability.volunteer_usr})}" th:text="${availability.volunteer_usr}"></a>
          </td>
-         <td><a class="btn btn-success" th:href="@{/elderly/newrequest/newvolunteerrequest/add/{date}/{beginningHour}/{volunteer_usr}(date=${availability.date}, beginningHour=${availability.beginningHour}, volunteer_usr=${availability.volunteer_usr})}" role="button">Contracta</a>
+         <td><a class="btn btn-success" th:href="@{/elderly/newrequest/newvolunteerrequest/add/{date}/{beginningHour}/{volunteer_usr}(date=${availability.date}, beginningHour=${availability.beginningHour}, volunteer_usr=${availability.volunteer_usr})}" role="button">Reserva</a>
          </td>
        </tr>
      </tbody>
    </table>
+   <a class="btn btn-outline-info" href="/elderly/newrequest" role="button">Torna enrere</a>
 </div>
 </body>
 </html>

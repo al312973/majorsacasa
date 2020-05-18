@@ -24,7 +24,7 @@
      </thead>
      <tbody>
        <tr th:each="availability: ${availabilities}">
-         <td th:text="${availability.date}"></td>
+         <td th:text="${#dates.format(availability.date, 'dd/MM/yyyy')}"></td>
          <td th:text="${availability.beginningHour}"></td>
          <td th:text="${availability.endingHour}"></td>
          <td><a th:href="@{/elderly/volunteer/{volunteer_usr}(volunteer_usr=${availability.volunteer_usr})}" th:text="${availability.volunteer_usr}"></a></td>

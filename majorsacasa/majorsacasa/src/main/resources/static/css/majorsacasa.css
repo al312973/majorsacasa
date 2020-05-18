@@ -46,7 +46,7 @@ h2 {
 /* Encabezado de nivel 3 */
 h3 { 
 	font-family: "Summit_Attack", Helvetica, Arial;
-	font-size: 6vh;
+	font-size: 8vh;
 }
 
 /* Tablas */
@@ -83,4 +83,10 @@ form {
 {
     height: 40px !important;
     background-color: #FFFFFF;
+}
+
+/*Clase css que aumenta el tamaño de las letras para los elderlies*/
+.elderly
+{
+    font-size: 125%;
 }

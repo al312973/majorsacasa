@@ -1,6 +1,5 @@
 package es.uji.ei1027.majorsacasa.model;
 
-import java.time.LocalTime;
 import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -15,9 +14,6 @@ public class Contract {
 	private int quantityServices;
 	private String unitsOfMeasure;
 	private float priceUnit;
-	@DateTimeFormat(pattern = "HH:mm:ss")
-	private LocalTime beginningHour;
-	private LocalTime endingHour;
 	private String company_cif;
 	
 	public Contract() {
@@ -28,8 +24,7 @@ public class Contract {
 	public String toString() {
 		return "Contract [number=" + number + ", dateBeginning=" + dateBeginning + ", dateEnding=" + "dateEnding" + ", description=" + description
 				+ ", serviceType=" + serviceType + ", quantityServices=" + quantityServices + ", unitsOfMeasure="
-				+ unitsOfMeasure + ", priceUnit=" + priceUnit + ", beginningHour=" + beginningHour + ", endingHour="
-				+ endingHour + ", company_cif=" + company_cif + "]";
+				+ unitsOfMeasure + ", priceUnit=" + priceUnit + ", company_cif=" + company_cif + "]";
 	}
 
 	public int getNumber() {
@@ -94,22 +89,6 @@ public class Contract {
 
 	public void setPriceUnit(float priceUnit) {
 		this.priceUnit = priceUnit;
-	}
-
-	public LocalTime getBeginningHour() {
-		return beginningHour;
-	}
-
-	public void setBeginningHour(LocalTime beginningHour) {
-		this.beginningHour = beginningHour;
-	}
-
-	public LocalTime getEndingHour() {
-		return endingHour;
-	}
-
-	public void setEndingHour(LocalTime endingHour) {
-		this.endingHour = endingHour;
 	}
 
 	public String getCompany_cif() {

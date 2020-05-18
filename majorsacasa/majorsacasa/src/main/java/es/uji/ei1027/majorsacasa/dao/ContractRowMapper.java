@@ -16,8 +16,6 @@ public final class ContractRowMapper implements RowMapper<Contract>{
 		contract.setQuantityServices(rs.getInt("quantityServices"));
 		contract.setUnitsOfMeasure(rs.getString("unitsOfMeasure"));
 		contract.setPriceUnit(rs.getFloat("priceUnit"));
-		contract.setBeginningHour(rs.getTime("beginningHour").toLocalTime());
-		contract.setEndingHour(rs.getTime("endingHour").toLocalTime());
 		contract.setCompany_cif(rs.getString("company_cif"));
 		return contract;
 	}

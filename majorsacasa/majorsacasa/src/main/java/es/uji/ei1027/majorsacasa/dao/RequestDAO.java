@@ -21,7 +21,7 @@ public class RequestDAO {
 		
 	//Añade una nueva solicitud a la BBDD
 	public void addRequest(Request request){
-		jdbcTemplate.update("INSERT INTO REQUEST VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
+		jdbcTemplate.update("INSERT INTO REQUEST VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
 							request.getNumber(), 
 							request.getServiceType(),
 							request.getCreationDate(),
@@ -29,6 +29,8 @@ public class RequestDAO {
 							request.getApprovedDate(),
 							request.getRejectedDate(),
 							request.getComments(),
+							request.getBeginningHour(),
+							request.getEndingHour(),
 							request.getEndDate(),
 							request.isFinished(),
 							request.getElderly_dni(),
@@ -48,7 +50,8 @@ public class RequestDAO {
 	//Obtiene todas las solicitudes de servicios de comida de una persona mayor
 	public List<Request> getFoodRequestsFromElderly(String dni_elderly){
 		try{
-			return jdbcTemplate.query("SELECT * FROM REQUEST WHERE ELDERLY_DNI = ? AND SERVICETYPE = 0 AND FINISHED = FALSE",
+			return jdbcTemplate.query("SELECT * FROM REQUEST WHERE ELDERLY_DNI = ? AND SERVICETYPE = 0 AND FINISHED = FALSE"
+					+ " ORDER BY CREATIONDATE",
 					new RequestRowMapper(), dni_elderly);
 		}catch(EmptyResultDataAccessException e){
 			return new ArrayList<Request>();
@@ -58,7 +61,8 @@ public class RequestDAO {
 	//Obtiene todas las solicitudes de servicios sanitarios de una persona mayor
 	public List<Request> getHealthRequestsFromElderly(String dni_elderly){
 		try{
-			return jdbcTemplate.query("SELECT * FROM REQUEST WHERE ELDERLY_DNI = ? AND SERVICETYPE = 1 AND FINISHED = FALSE",
+			return jdbcTemplate.query("SELECT * FROM REQUEST WHERE ELDERLY_DNI = ? AND SERVICETYPE = 1 AND FINISHED = FALSE"
+					+ " ORDER BY CREATIONDATE",
 					new RequestRowMapper(), dni_elderly);
 		}catch(EmptyResultDataAccessException e){
 			return new ArrayList<Request>();
@@ -68,7 +72,8 @@ public class RequestDAO {
 	//Obtiene todas las solicitudes de servicios sanitarios de una persona mayor
 	public List<Request> getCleaningRequestsFromElderly(String dni_elderly){
 		try{
-			return jdbcTemplate.query("SELECT * FROM REQUEST WHERE ELDERLY_DNI = ? AND SERVICETYPE = 2 AND FINISHED = FALSE",
+			return jdbcTemplate.query("SELECT * FROM REQUEST WHERE ELDERLY_DNI = ? AND SERVICETYPE = 2 AND FINISHED = FALSE"
+					+ " ORDER BY CREATIONDATE",
 					new RequestRowMapper(), dni_elderly);
 		}catch(EmptyResultDataAccessException e){
 			return new ArrayList<Request>();

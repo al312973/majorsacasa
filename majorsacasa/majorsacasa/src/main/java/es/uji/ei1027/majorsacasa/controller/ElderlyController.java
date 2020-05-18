@@ -18,6 +18,7 @@ import es.uji.ei1027.majorsacasa.dao.AvailabilityDAO;
 import es.uji.ei1027.majorsacasa.dao.ContractDAO;
 import es.uji.ei1027.majorsacasa.dao.ElderlyDAO;
 import es.uji.ei1027.majorsacasa.dao.RequestDAO;
+import es.uji.ei1027.majorsacasa.dao.SocialWorkerDAO;
 import es.uji.ei1027.majorsacasa.model.Elderly;
 import es.uji.ei1027.majorsacasa.model.UserDetails;
 import es.uji.ei1027.majorsacasa.dao.VolunteerDAO;
@@ -45,6 +46,7 @@ public class ElderlyController {
 	private AvailabilityDAO availabilityDao;
 	private VolunteerDAO volunteerDao;
 	private CompanyDAO companyDao;
+	private SocialWorkerDAO socialWorkerDao;
 	
 	@Autowired
 	public void setAvailabilityDao(AvailabilityDAO availabilityDao){
@@ -74,6 +76,11 @@ public class ElderlyController {
 	@Autowired
 	public void setVolunteerDao(VolunteerDAO volunteerDao){
 		this.volunteerDao = volunteerDao;
+	}
+	
+	@Autowired
+	public void setSocialWorkerDao(SocialWorkerDAO socialWorkerDao){
+		this.socialWorkerDao = socialWorkerDao;
 	}
 	
 //	@RequestMapping(value="/list")
@@ -195,26 +202,41 @@ public class ElderlyController {
 	//Guardamos la página desde la que accedemos a la información de un contrato para establecer el botón hacia atrás
 	private int requestPage;
 	
-	//Muestra la información de un contrato asociado a una solicitud resuelta
-	@RequestMapping(value="/contracts/{contract_number}", method = RequestMethod.GET)
-    public String showContract(Model model, @PathVariable int contract_number) {
-		model.addAttribute("contract", contractDao.getContract(contract_number));
-		model.addAttribute("requestPage", requestPage);
-		contractNumber = contract_number;
+	//Muestra información detallada de una solicitud (incluyendo datos del contrato)
+	@RequestMapping(value="/requests/terms/{number}", method = RequestMethod.GET)
+    public String showContract(Model model, @PathVariable int number) {
+		Request request = requestDao.getRequest(number);
+		model.addAttribute("request", request);
 		
-        return "elderly/contract"; 
+		if (request.getContract_number()!=null) {
+			model.addAttribute("contract", contractDao.getContract(request.getContract_number()));
+		}
+		
+		model.addAttribute("requestPage", requestPage);
+		requestNumber = number;
+		
+        return "elderly/terms"; 
     }
 	
-	//Guardamos el último contrato visitado para establecer el botón hacia atrás
-	private int contractNumber;
+	//Guardamos las condiciones de la última solicitud visitada para establecer el botón hacia atrás
+	private int requestNumber;
 		
-	//Muestra la información de una empresa asociada a un contrato
-	@RequestMapping(value="/contracts/company/{company_cif}", method = RequestMethod.GET)
+	//Muestra la información de una empresa prestadora de un servicio asociado a una solicitud
+	@RequestMapping(value="/requests/terms/company/{company_cif}", method = RequestMethod.GET)
     public String showCompany(Model model, @PathVariable String company_cif) {
 		model.addAttribute("company", companyDao.getCompany(company_cif));
-		model.addAttribute("contractNumber", contractNumber);
+		model.addAttribute("requestNumber", requestNumber);
 		
         return "elderly/company"; 
+    }
+	
+	//Muestra la información del trabajador social que supervisa una solicitud
+	@RequestMapping(value="/requests/terms/socialWorker/{userCAS}", method = RequestMethod.GET)
+    public String showSocialWorker(Model model, @PathVariable String userCAS) {
+		model.addAttribute("socialWorker", socialWorkerDao.getSocialWorkerByUserCAS(userCAS));
+		model.addAttribute("requestNumber", requestNumber);
+		
+        return "elderly/socialWorker"; 
     }
 	
 	//Muestra la página de selección de solicitudes por tipo
@@ -307,6 +329,8 @@ public class ElderlyController {
 		request.setElderly_dni(currentElderly.getDNI());
 		request.setServiceType(typeRequest);
 		request.setState(0);
+		request.setBeginningHour(null);
+		request.setEndingHour(null);
 		request.setContract_number(null);
 		request.setUserCAS(null);
 		request.setCreationDate(new Date());

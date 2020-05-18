@@ -16,6 +16,14 @@ public final class RequestRowMapper implements RowMapper<Request>{
 		request.setApprovedDate(rs.getDate("approvedDate"));
 		request.setRejectedDate(rs.getDate("rejectedDate"));
 		request.setComments(rs.getString("comments"));
+		if (rs.getTime("beginningHour")!= null)
+			request.setBeginningHour(rs.getTime("beginningHour").toLocalTime());
+		else
+			request.setBeginningHour(null);
+		if (rs.getTime("endingHour")!=null)
+			request.setEndingHour(rs.getTime("endingHour").toLocalTime());
+		else
+			request.setEndingHour(null);
 		request.setEndDate(rs.getDate("endDate"));
 		request.setFinished(rs.getBoolean("finished"));
 		request.setElderly_dni(rs.getString("elderly_dni"));

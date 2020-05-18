@@ -10,42 +10,40 @@
 </head>
 <body>
 <div layout:fragment="content" th:object="${requestPage}">
-   	<h2 th:if="${requestPage == 0}">Contracte de menjar a domicili</h2>
-   	<h2 th:if="${requestPage == 1}">Contracte de serveis sanitaris</h2>
-   	<h2 th:if="${requestPage == 2}">Contracte de serveis de neteja</h2>
-		<table class="showinfo" th:object="${contract}">
+   	<h2 th:if="${requestPage == 0}">Condicions aplicades a la sol·licitud</h2>
+	<table class="showinfo">
+		<tbody th:object="${request}">
 			<tr>
-				<th><label>Data d'inici del contracte:</label></th>
-	        	<td><p th:text="*{dateBeginning}"></p></td>
+				<th><label>Comentaris:</label></th>
+	        	<td><p th:text="*{comments}"></p></td>
 	        </tr>			
-			<tr>
-				<th><label>Data final del contracte:</label></th>
-				<td><p th:text="*{dateEnding}" ></p></td>
-	        </tr>
 	        <tr>
 				<th><label>Hora inicial del servei:</label></th>
-	        	<td><p th:text="*{beginningHour}"></p></td>
+				<td th:if="${request.beginningHour == null}"><p>No s'ha determinat</p></td>
+	        	<td th:unless="${request.beginningHour == null}"><p th:text="*{beginningHour}"></p></td>
 	        </tr>
 	        <tr>
 				<th><label>Hora final del servei:</label></th>
-	        	<td><p th:text="*{endingHour}"></p></td>
+				<td th:if="${request.endingHour == null}"><p>No s'ha determinat</p></td>
+	        	<td th:unless="${request.endingHour == null}"><p th:text="*{endingHour}"></p></td>
 	        </tr>
-			<tr>
-				<th><label>Descripció:</label></th>
-				<td><p th:text="*{description}"></p></td>
-	        </tr>			
-			<tr>
-				<th><label>Quantitat de serveis contractats:</label></th>
-	        	<td><p th:text="*{quantityServices}"></p></td>
-	        </tr>			
-			<tr>
+	        <tr>
+				<th><label>Treballador social d'ajuda:</label></th>
+				<td th:if="${request.userCAS == null}"><p>No adjudicat</p></td>
+	        	<td th:unless="${request.userCAS == null}">
+	        		<a th:href="@{/elderly/requests/terms/socialWorker/{userCAS}(userCAS=*{userCAS})}" th:text="*{userCAS}"></a></td>
+	        </tr>
+	    </tbody>
+	    <tbody th:object="${contract}">
+			<tr th:unless="${contract == null}">
 				<th><label>Preu per servei:</label></th>
 	        	<td><span th:text="*{priceUnit}"></span><span> </span><span th:text=*{unitsOfMeasure}></span></td>
 	        </tr>
-	        <tr>
+	        <tr th:unless="${contract == null}">
 				<th><label>Empresa prestadora del servei:</label></th>
-	        	<td><a th:href="@{/elderly/contracts/company/{company_cif}(company_cif=*{company_cif})}" th:text="*{company_cif}"></a></td>
+	        	<td><a th:href="@{/elderly/requests/terms/company/{company_cif}(company_cif=*{company_cif})}" th:text="*{company_cif}"></a></td>
 	        </tr>
+	    </tbody>
 	</table>
 	<a th:if="${requestPage == 0}" class="btn btn-outline-info" href="/elderly/requests/foodrequests" role="button">Torna enrere</a>
 	<a th:if="${requestPage == 1}" class="btn btn-outline-info" href="/elderly/requests/healthrequests" role="button">Torna enrere</a>
