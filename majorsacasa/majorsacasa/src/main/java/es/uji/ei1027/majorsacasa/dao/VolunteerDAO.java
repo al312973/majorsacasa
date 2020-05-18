@@ -6,7 +6,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import es.uji.ei1027.majorsacasa.model.Volunteer;
 
@@ -72,7 +74,21 @@ public class VolunteerDAO {
 	
 	//Borra un voluntario de la BBDD
 	public void deleteVolunteer(String Usr) {
-		jdbcTemplate.update("UPDATE FROM VOLUNTEER SET ENDDATE = " + new Date() + " WHERE USR = ?", Usr);
+		jdbcTemplate.update("UPDATE VOLUNTEER SET ENDDATE = ? WHERE USR = ?", new java.sql.Date(new Date().getTime()), Usr);
+	}
+	
+	//Lista todos los voluntarios de la BBDD
+	public List<Volunteer> getVolunteers(){
+		try{
+			return jdbcTemplate.query("SELECT * FROM VOLUNTEER", new VolunteerRowMapper());
+		}catch (EmptyResultDataAccessException e){
+			return new ArrayList<Volunteer>();
+		}
+		
+	}
+	
+	public void aceptaVoluntario(String usr){
+		jdbcTemplate.update("UPDATE VOLUNTEER SET ACCEPTATIONDATE = ?, ACCEPTED = TRUE WHERE USR = ?", new java.sql.Date(new Date().getTime()) , usr);
 	}
 
 }

@@ -11,10 +11,30 @@
 <body>
 <div layout:fragment="content">
 
+	<h2>Voluntaris</h2>
 
-	<h2>PRUEBA DE CAS Volunteer</h2>
-
-
+  	<table class="table table-striped">
+     <thead>
+       <tr>
+         <th>Nom:</th>
+         <th>Hobbies:</th>
+         <th>Data naiximent:</th>
+         <th></th>
+         <th></th>
+         <th></th>
+       </tr>  
+     </thead>
+     <tbody>
+       <tr th:each="volunteer: ${volunteers}">
+         <td th:text="${volunteer.name}"></td>
+         <td th:text="${volunteer.hobbies}"></td>
+         <td th:text="${volunteer.birthDate}"></td>
+         <td><a th:href="@{/casVolunteer/showVolunteer/{usr}(usr=${volunteer.usr})}" th:text="${volunteer.usr}"></a></td>
+         <td><a class="btn btn-success" th:href="@{/casVolunteer/altaVolunteer/{usr} (usr=${volunteer.usr})}" role="button">Dóna de alta</a></td>
+         <td><a class="btn btn-danger" th:href="@{/casVolunteer/bajaVolunteer/{usr} (usr=${volunteer.usr})}" role="button">Dóna de baixa</a></td>
+      </tr>
+     </tbody>
+   </table> 
 </div>
 </body>
 </html>
