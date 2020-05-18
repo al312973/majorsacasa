@@ -48,7 +48,8 @@ public class AvailabilityDAO {
 	//Obtiene todas las disponibilidades no asignadas y de voluntarios verificados
 	public List<Availability> getFreeAvailabilities(){
 		try{
-			return jdbcTemplate.query("SELECT * FROM AVAILABILITY WHERE STATEAVAILABLE = TRUE AND ELDERLY_DNI IS NULL", 
+			return jdbcTemplate.query("SELECT * FROM AVAILABILITY WHERE STATEAVAILABLE = TRUE AND ELDERLY_DNI IS NULL"
+					+ " ORDER BY DATE, BEGINNINGHOUR", 
 					new AvailabilityRowMapper());
 		}catch(EmptyResultDataAccessException e){
 			return new ArrayList<Availability>();
@@ -58,7 +59,8 @@ public class AvailabilityDAO {
 	//Obtiene todas las disponibilidades asignadas a una persona mayor
 	public List<Availability> getAvailabilitiesFromElderly(String elderly_dni){
 		try{
-			return jdbcTemplate.query("SELECT * FROM AVAILABILITY WHERE ELDERLY_DNI = ? AND STATEAVAILABLE = TRUE", 
+			return jdbcTemplate.query("SELECT * FROM AVAILABILITY WHERE ELDERLY_DNI = ? AND STATEAVAILABLE = TRUE"
+					+ " ORDER BY DATE, BEGINNINGHOUR", 
 					new AvailabilityRowMapper(), elderly_dni);
 		}catch(EmptyResultDataAccessException e){
 			return new ArrayList<Availability>();
@@ -68,7 +70,8 @@ public class AvailabilityDAO {
 	//Obtiene todas las disponibilidades de un voluntario que no estén finalizadas
 	public List<Availability> getAvailabilitiesFromVolunteer(String volunteer){
 		try{
-			return jdbcTemplate.query("SELECT * FROM AVAILABILITY WHERE VOLUNTEER_USR = ? AND UNSUSCRIBEDATE IS NULL", 
+			return jdbcTemplate.query("SELECT * FROM AVAILABILITY WHERE VOLUNTEER_USR = ? AND UNSUSCRIBEDATE IS NULL"
+					+ " ORDER BY DATE, BEGINNINGHOUR", 
 					new AvailabilityRowMapper(), volunteer);
 		}catch (EmptyResultDataAccessException e){
 			return new ArrayList<Availability>();

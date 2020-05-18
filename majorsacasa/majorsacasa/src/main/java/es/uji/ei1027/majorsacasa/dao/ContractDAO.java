@@ -20,7 +20,7 @@ public class ContractDAO {
 	}
 	
 	public void addContract(Contract contract){
-		jdbcTemplate.update("INSERT INTO CONTRACT VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+		jdbcTemplate.update("INSERT INTO CONTRACT VALUES(?,?,?,?,?,?,?,?,?)",
 								contract.getNumber(), 
 								contract.getDateBeginning(), 
 								contract.getDateEnding(),
@@ -28,9 +28,7 @@ public class ContractDAO {
 								contract.getServiceType(), 
 								contract.getQuantityServices(), 
 								contract.getUnitsOfMeasure(), 
-								contract.getPriceUnit(), 
-								contract.getBeginningHour(), 
-								contract.getEndingHour(), 
+								contract.getPriceUnit(),
 								contract.getCompany_cif() 
 								);
 	}
@@ -51,8 +49,7 @@ public class ContractDAO {
 	//Actualiza un contrato específico
 	public void updateContract(Contract contract){
 		jdbcTemplate.update("UPDATE CONTRACT SET DATEBEGINNING = ?, DATEENDING = ?, DESCRIPTION = ?, SERVICETYPE = ?,"
-							+ " QUANTITYSERVICES = ?, UNITSOFMEASURE = ?, PRICEUNIT = ?, BEGINNINGHOUR = ?,"
-							+ " ENDINGHOUR = ?, COMPANY_CIF = ? WHERE NUMBER = ?",
+							+ " QUANTITYSERVICES = ?, UNITSOFMEASURE = ?, PRICEUNIT = ?, COMPANY_CIF = ? WHERE NUMBER = ?",
 								contract.getDateBeginning(), 
 								contract.getDateEnding(),
 								contract.getDescription(), 
@@ -60,8 +57,6 @@ public class ContractDAO {
 								contract.getQuantityServices(), 
 								contract.getUnitsOfMeasure(), 
 								contract.getPriceUnit(), 
-								contract.getBeginningHour(), 
-								contract.getEndingHour(), 
 								contract.getCompany_cif(),
 								contract.getNumber() 
 							);

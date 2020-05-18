@@ -1,5 +1,6 @@
 package es.uji.ei1027.majorsacasa.model;
 
+import java.time.LocalTime;
 import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -14,6 +15,10 @@ public class Request {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date rejectedDate;
 	private String comments;
+	@DateTimeFormat(pattern = "HH:mm:ss")
+	private LocalTime beginningHour;
+	@DateTimeFormat(pattern = "HH:mm:ss")
+	private LocalTime endingHour;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date endDate;
 	private boolean finished;
@@ -25,12 +30,14 @@ public class Request {
 		
 	}
 	
+
 	@Override
 	public String toString() {
 		return "Request [number=" + number + ", serviceType=" + serviceType + ", creationDate=" + creationDate
 				+ ", state=" + state + ", approvedDate=" + approvedDate + ", rejectedDate=" + rejectedDate
-				+ ", comments=" + comments + ", endDate=" + endDate + ", finished=" + finished + ", elderly_dni="
-				+ elderly_dni + ", contract_number=" + contract_number + ", userCAS=" + userCAS + "]";
+				+ ", comments=" + comments + ", beginningHour=" + beginningHour + ", endingHour=" + endingHour
+				+ ", endDate=" + endDate + ", finished=" + finished + ", elderly_dni=" + elderly_dni
+				+ ", contract_number=" + contract_number + ", userCAS=" + userCAS + "]";
 	}
 
 	public int getNumber() {
@@ -89,6 +96,26 @@ public class Request {
 		this.comments = comments;
 	}
 	
+	public LocalTime getBeginningHour() {
+		return beginningHour;
+	}
+
+
+	public void setBeginningHour(LocalTime beginningHour) {
+		this.beginningHour = beginningHour;
+	}
+
+
+	public LocalTime getEndingHour() {
+		return endingHour;
+	}
+
+
+	public void setEndingHour(LocalTime endingHour) {
+		this.endingHour = endingHour;
+	}
+
+
 	public Date getEndDate() {
 		return endDate;
 	}

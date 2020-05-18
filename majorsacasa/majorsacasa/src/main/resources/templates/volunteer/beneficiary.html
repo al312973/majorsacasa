@@ -27,7 +27,7 @@
 	    </tr>
 	    <tr>
 			<th><label>Data de naixement:</label></th>
-			<td><p th:text="*{birthDate}"></p></td>
+			<td><p th:text="*{#dates.format(birthDate, 'dd/MM/yyyy')}"></p></td>
 	    </tr>
 	    <tr>
 			<th><label>Adreça:</label></th>
