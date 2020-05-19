@@ -41,6 +41,7 @@ public class CompanyValidator  implements Validator{
 		if (company.getContactPersonEmail().length() > 50){
 			errors.rejectValue("contactPersonEmail", "mailincorrecte", "El email es massa llarg");
 		}
+		
 	}
 	
 }

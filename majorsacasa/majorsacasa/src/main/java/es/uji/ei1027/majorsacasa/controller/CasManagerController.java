@@ -63,28 +63,22 @@ public class CasManagerController {
 		}
 
 		this.company = company;
-		return "redirect:altaSocialWorker";
+		return "redirect:altaPersonaContacto";
 	}
 	
-	@RequestMapping(value="/altaSocialWorker")
-	public String addSocialWorker(Model model){
-		model.addAttribute("socialWorker", new SocialWorker());
-		return "casManager/altaSocialWorker";
+	@RequestMapping(value="/altaPersonaContacto")
+	public String addPwdr(Model model){
+		model.addAttribute("company", company);
+		return "casManager/altaPersonaContacto";
 	}
 	
-	@RequestMapping(value="/altaSocialWorker", method=RequestMethod.POST)
-	public String processAddSocialWorkerSubmit(@ModelAttribute("socialWorker") SocialWorker socialWorker, BindingResult bindingResult){
-		SocialWorkerValidator socialWorkerValidator = new SocialWorkerValidator(socialWorkerDao, socialWorker);
-		socialWorkerValidator.validate(socialWorker, bindingResult);
+	@RequestMapping(value="/altaPersonaContacto", method=RequestMethod.POST)
+	public String processAddSocialWorkerSubmit(@ModelAttribute("company") Company company, BindingResult bindingResult){
 		if (bindingResult.hasErrors()){
-			return "casManager/altaSocialWorker"; 
+			return "casManager/altaPersonaContacto"; 
 		}
 		
-		//Rellenamos los campos no solicitados mediante el formulario
-		socialWorker.setName(company.getContactPersonName());
-		socialWorker.setPhoneNumber(company.getContactPersonPhoneNumber());
-		socialWorker.setEmail(company.getContactPersonEmail());
-		this.socialWorker = socialWorker;
+		this.company.setPwd(company.getPwd());
 			
 		return "redirect:altaContrato";
 	}
@@ -107,21 +101,20 @@ public class CasManagerController {
 		
 		companyDao.addCompany(company);
 		contractDao.addContract(contract);
-		socialWorkerDao.addSocialWorker(socialWorker);
 		
 		//Mandamos correo de confirmación a la persona de contacto para avisarle que ya tiene correo y contraseña para entrar en el sistema
-		System.out.println("\nS'ha manat un correu de notificació a "+socialWorker.getEmail()
-		+"\nNotificació d'alta com a nou usuari "+socialWorker.getName()+"\n"
+		System.out.println("\nS'ha manat un correu de notificació a "+company.getContactPersonName()
+		+"\nNotificació d'alta com a nou usuari "+company.getContactPersonEmail()+"\n"
 		+"Les dades per a iniciar sesió son:\n"
-		+ "\tUsuari: "+socialWorker.getUserCAS()+"\n"
-		+ "\tContrasenya: "+socialWorker.getPwd()+"\n");
+		+ "\tUsuari: "+company.getContactPersonEmail()+"\n"
+		+ "\tContrasenya: "+company.getPwd()+"\n");
 		
 		return "casManager/mensajeConfirmacion";		
 	}
 	
 	
 	//Estos dos métodos siguientes los usamos para que , si el usuario da atrás en cualquier paso, que se muestren los datos que ya se habian introducido en el paso anterior
-	@RequestMapping(value="/atrasSocialWorker")
+	@RequestMapping(value="/atrasPersonaContacto")
 	public String atrasSocialWorker(Model model){
 		model.addAttribute("company", company);
 		return "casManager/altaEmpresa";
