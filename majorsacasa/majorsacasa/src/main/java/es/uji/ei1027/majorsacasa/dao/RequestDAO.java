@@ -92,4 +92,12 @@ public class RequestDAO {
 							request.getNumber()
 							);
 	}
+	
+	public List<Request> getRequests(){
+		try{
+			return jdbcTemplate.query("SELECT * FROM REQUEST", new RequestRowMapper());
+		}catch (EmptyResultDataAccessException e){
+			return new ArrayList<Request>();
+		}
+	}
 }

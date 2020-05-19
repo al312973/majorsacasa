@@ -15,6 +15,7 @@ public final class CompanyRowMapper implements RowMapper<Company> {
 		company.setContactPersonPhoneNumber(rs.getString("contactPersonPhoneNumber"));
 		company.setContactPersonEmail(rs.getString("contactPersonEmail"));
 		company.setServiceType(rs.getInt("serviceType"));
+		company.setPwd(rs.getString("pwd"));
 		return company;
 	}
 
