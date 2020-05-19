@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/baseloginregister}"><head>
+ <title>Majors a casa</title>
+ <meta charset="UTF-8" />
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+ <link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+<body>
+	<h2>Register Company</h2>
+	<h3>Enter company details:</h3>	
+	<form action="#" th:action="@{/register/company}" th:object="${company}" method="post">
+		<table>
+			<tr>
+				<td><label>Name:</label></td>
+	        	<td  th:unless="${#fields.hasErrors('name')}">
+	        		<input type="text" class="form-control" th:field="*{name}" required/>
+	        	</td>
+	        	<td th:if="${#fields.hasErrors('name')}">
+           		<input type="text" class="form-control is-invalid" th:field="*{name}" required/>
+           		</td>
+	        </tr>
+	        <tr>
+				<td><label>CIF:</label></td>
+	        	<td  th:unless="${#fields.hasErrors('CIF')}">
+	        		<input type="text" class="form-control" th:field="*{CIF}" required/>
+	        	</td>
+	        	<td th:if="${#fields.hasErrors('CIF')}">
+           		<input type="text" class="form-control is-invalid" th:field="*{CIF}" required/>
+           		</td>
+	        </tr>
+	        <tr>
+	        	<td><label>Address:</label></td>
+	        	<td  th:unless="${#fields.hasErrors('address')}">
+	        		<input type="text" class="form-control" th:field="*{address}" required/>
+	        	</td>
+	        	<td th:if="${#fields.hasErrors('address')}">
+           		<input type="text" class="form-control is-invalid" th:field="*{address}" required/>
+           		</td>
+	        </tr>
+	        <tr>
+				<td><label>Contact Person Name:</label></td>
+	           	<td  th:unless="${#fields.hasErrors('contactPersonName')}">
+	        		<input type="text" class="form-control" th:field="*{contactPersonName}" required/>
+	        	</td>
+	        	<td th:if="${#fields.hasErrors('contactPersonName')}">
+           		<input type="text" class="form-control is-invalid" th:field="*{contactPersonName}" required/>
+           		</td>
+	        </tr>
+	        <tr>
+				<td><label>Contact Person Phone Number:</label></td>
+	           	<td  th:unless="${#fields.hasErrors('contactPersonPhoneNumber')}">
+	        		<input type="text" class="form-control" th:field="*{contactPersonPhoneNumber}" required/>
+	        	</td>
+	        	<td th:if="${#fields.hasErrors('contactPersonPhoneNumber')}">
+           		<input type="text" class="form-control is-invalid" th:field="*{contactPersonPhoneNumber}" required/>
+           		</td>
+	        </tr>
+	        <tr>
+				<td><label>Contact Person Email:</label></td>
+	           	<td  th:unless="${#fields.hasErrors('contactPersonEmail')}">
+	        		<input type="text" class="form-control" th:field="*{contactPersonEmail}" required/>
+	        	</td>
+	        	<td th:if="${#fields.hasErrors('contactPersonEmail')}">
+           		<input type="text" class="form-control is-invalid" th:field="*{contactPersonEmail}" required/>
+           		</td>
+	        </tr>
+	        <tr>
+				<td><label>Service Type:</label></td>
+           		<td><select class="form-control input-lg" th:field="*{serviceType}" required>
+						<option value="food">food</option>
+						<option value="health">health</option>
+						<option value="cleaning">cleaning</option>
+				</select></td>
+	        </tr>
+	        <tr>
+        	<td><label>Password:</label></td>
+			<td th:unless="${#fields.hasErrors('pwd')}">
+        		<input type="password" class="form-control" th:field="*{pwd}" required/>
+        	</td>
+        	
+        	<td th:if="${#fields.hasErrors('pwd')}">
+           		<input type="password" class="form-control is-invalid" th:field="*{pwd}" required/>
+           	</td>
+	        <tr>
+	            <td colspan="2"><input class="btn btn-success" type="submit" value="Register" role="button"/></td>
+	        </tr>
+        </table>
+    </form>  
+</body>
+</html>
