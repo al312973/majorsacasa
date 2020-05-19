@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/baseCasCommitee}">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Majors a casa</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+   	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+	<h2>Empresa</h2>
+	<hr style="margin-top:0;"/>
+	<table class="showinfo" th:object="${company}">
+		<tr>
+			<th><label>Nom:</label></th>
+	       	<td><p th:text="*{name}"></p></td>
+	    </tr>
+	    <tr>
+			<th><label>CIF:</label></th>
+			<td><p th:text="*{CIF}"></p></td>
+	    </tr>
+	    <tr>
+			<th><label>Adreça:</label></th>
+	       	<td><p th:text="*{address}"></p></td>
+	    </tr>
+	    <tr>
+			<th><label>Nom de la persona de contacte:</label></th>
+			<td><p th:text="*{contactPersonName}"></p></td>
+	    </tr>
+	    <tr>
+			<th><label>Telèfon de la persona de contacte:</label></th>
+			<td><p th:text="*{contactPersonPhoneNumber}"></p></td>
+	    </tr>
+	    <tr>
+			<th><label>Email de la persona de contacte:</label></th>
+			<td><p th:text="*{contactPersonEmail}"></p></td>
+	    </tr>
+	</table> 
+	<a class="btn btn-outline-info" href="/casCommitee/atrasCompany" role="button">Torna enrere</a>
+</div>
+</body>
+</html>

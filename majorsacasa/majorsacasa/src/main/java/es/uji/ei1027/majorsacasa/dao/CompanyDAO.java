@@ -20,14 +20,15 @@ public class CompanyDAO {
 	}
 	
 	public void addCompany(Company company){
-		jdbcTemplate.update("INSERT INTO COMPANY VALUES(?,?,?,?,?,?,?)",
+		jdbcTemplate.update("INSERT INTO COMPANY VALUES(?,?,?,?,?,?,?,?)",
 								company.getName(), 
 								company.getCIF(), 
 								company.getAddress(), 
 								company.getContactPersonName(), 
 								company.getContactPersonPhoneNumber(), 
 								company.getContactPersonEmail(), 
-								company.getServiceType()
+								company.getServiceType(),
+								company.getPwd()
 								);
 	}
 	
@@ -37,13 +38,14 @@ public class CompanyDAO {
 	
 	public void updateCompany(Company company){
 		jdbcTemplate.update("UPDATE PAY SET NAME = ?, ADDRESS = ?, CONTACTPERSONNAME = ?,"
-							+ " CONTACTPERSONPHONENUMBER = ?, PERSONEMAIL = ?, SERVICETYPE = ? WHERE CIF = ?",
+							+ " CONTACTPERSONPHONENUMBER = ?, PERSONEMAIL = ?, SERVICETYPE = ?, PWD = ? WHERE CIF = ?",
 								company.getName(), 
 								company.getAddress(), 
 								company.getContactPersonName(), 
 								company.getContactPersonPhoneNumber(), 
 								company.getContactPersonEmail(), 
 								company.getServiceType(),
+								company.getPwd(),
 								company.getCIF()
 
 							);

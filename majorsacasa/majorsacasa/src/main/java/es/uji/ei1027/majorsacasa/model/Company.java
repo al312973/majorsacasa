@@ -8,6 +8,7 @@ public class Company {
 	private String contactPersonPhoneNumber;
 	private String contactPersonEmail;
 	private int serviceType;
+	private String pwd;
 	
 	public Company() {
 		
@@ -76,4 +77,11 @@ public class Company {
 		this.serviceType = serviceType;
 	}
 	
+	public String getPwd(){
+		return pwd;
+	}
+	
+	public void setPwd(String pwd){
+		this.pwd = pwd;
+	}
 }
