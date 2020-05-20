@@ -78,6 +78,10 @@ form {
     text-align: left;
 }
 
+#elderly{
+	font-size: 125%;
+}
+
 /*Clase css que permite insertar filas vacías en las tablas*/
 .blank_row
 {

@@ -40,14 +40,16 @@
          <td th:if="${request.endDate == null}">-</td>
          <td th:unless="${request.endDate == null}" th:text="${#dates.format(request.endDate, 'dd/MM/yyyy')}"></td>
          
-         <td><a class="btn btn-info" th:href="@{/elderly/requests/terms/{number}(number=${request.number})}" role="button">Condicions</a></td>
+         <td><a class="btn btn-info btn-lg" th:href="@{/elderly/requests/terms/{number}(number=${request.number})}" role="button">Condicions</a></td>
          
-         <td th:unless="${request.state == 2}"><a class="btn btn-danger" th:href="@{/elderly/requests/delete/{number}(number=${request.number})}" role="button">Dóna de baixa</a>
-         <td th:if="${request.state == 2}"><a class="btn btn-danger" th:href="@{/elderly/requests/delete/{number}(number=${request.number})}" role="button">Suprimeix de la llista</a>
+         <td th:unless="${request.state == 2}">
+         	<a th:unless="${request.endDate!=null and request.endDate.before(#dates.createNow())}" class="btn btn-danger btn-lg" th:href="@{/elderly/requests/delete/{number}(number=${request.number})}" role="button">Dóna de baixa</a>
+         	<a th:if="${request.endDate!=null and request.endDate.before(#dates.createNow())}" class="btn btn-warning btn-lg" th:href="@{/elderly/requests/delete/{number}(number=${request.number})}" role="button">Suprimeix de la llista</a></td>
+         <td th:if="${request.state == 2}"><a class="btn btn-warning btn-lg" th:href="@{/elderly/requests/delete/{number}(number=${request.number})}" role="button">Suprimeix de la llista</a></td>
       </tr>
      </tbody>
    </table> 
-   <a class="btn btn-outline-info" href="/elderly/requests" role="button">Torna enrere</a>
+   <a class="btn btn-outline-info btn-lg" href="/elderly/requests" role="button">Torna enrere</a>
 </div>
 </body>
 </html>

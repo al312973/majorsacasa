@@ -3,18 +3,18 @@
   <div class="collapse navbar-collapse">
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
       <li class="nav-item">
-        <a class="nav-link" href="/elderly/requests">Sol·licituds</a>
+        <a class="nav-link" id="elderly"  href="/elderly/requests">Sol·licituds</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/elderly/newrequest">Solicitar un servei</a>
+        <a class="nav-link" id="elderly"  href="/elderly/newrequest">Solicitar un servei</a>
       </li>
       <li class="nav-item">
-      	<a class="nav-link" href="/elderly/profile">Informació personal</a>
+      	<a class="nav-link" id="elderly" href="/elderly/profile">Informació personal</a>
       </li>
     </ul>
   </div>
   <span class="loggeduser" th:object="${session}">
-    	<p th:unless="*{user == null}">Autenticat com: <span class="navbar-text" th:text="*{user.email}"></span> 
-    	<a class="btn btn-outline-info" th:href="@{/logout}" role="button">Eixir</a></p>
+    	<p th:unless="*{user == null}" id="elderly" >Autenticat com: <span class="navbar-text" th:text="*{user.email}"></span> 
+    	<a class="btn btn-outline-info btn-lg" th:href="@{/logout}" role="button">Eixir</a></p>
   </span> 
 </nav>

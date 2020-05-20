@@ -29,6 +29,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+
 import es.uji.ei1027.majorsacasa.model.Availability;
 import es.uji.ei1027.majorsacasa.model.Company;
 import es.uji.ei1027.majorsacasa.model.Contract;
@@ -47,6 +49,7 @@ public class ElderlyController {
 	private VolunteerDAO volunteerDao;
 	private CompanyDAO companyDao;
 	private SocialWorkerDAO socialWorkerDao;
+	private SimpleDateFormat formatter;
 	
 	@Autowired
 	public void setAvailabilityDao(AvailabilityDAO availabilityDao){
@@ -82,33 +85,6 @@ public class ElderlyController {
 	public void setSocialWorkerDao(SocialWorkerDAO socialWorkerDao){
 		this.socialWorkerDao = socialWorkerDao;
 	}
-	
-//	@RequestMapping(value="/list")
-//	public String listElderlies(Model model) {
-//		model.addAttribute("elderlies", elderlyDao.getElderlies());
-//		return "elderly/list";
-//	}
-//	
-//	@RequestMapping(value="/add") 
-//    public String addElderly(Model model) {
-//        model.addAttribute("elderly", new Elderly());
-//        return "elderly/add";
-//    }
-
-//	@RequestMapping(value="/add", method=RequestMethod.POST)
-//	public String processAddSubmit(@ModelAttribute("elderly") Elderly elderly, BindingResult bindingResult) {
-//		//Completa y/o modifica los campos con los atributos que se necesitan y no proporciona el usuario
-//		elderly.setDateCreation(new Date());
-//		if (elderly.getAlergies().equals(""))
-//			elderly.setAlergies(null);
-//		if (elderly.getDiseases().equals(""))
-//			elderly.setDiseases(null);
-//		
-//		if (bindingResult.hasErrors())
-//			return "elderly/add";
-//        elderlyDao.addElderly(elderly);
-//        return "redirect:list";
-//    }
 		
 		
 	//Muestra la página de selección de solicitudes por tipo
@@ -117,7 +93,8 @@ public class ElderlyController {
 		UserDetails user = (UserDetails) session.getAttribute("user");
 		if (currentElderly==null)
 			this.currentElderly = elderlyDao.getElderlyByEmail(user.getEmail());
-		
+		if (formatter==null)
+			this.formatter = new SimpleDateFormat("dd/MM/yyyy");
         return "elderly/requests"; 
     }
 
@@ -161,19 +138,32 @@ public class ElderlyController {
 			LocalTime availabilitiBeginningHour = LocalTime.parse(beginningHour);
 			Availability availability = availabilityDao.getAvailability(availabilityDate, availabilitiBeginningHour, volunteer_usr);
 			
-			availability.setUnsuscribeDate(new Date());
-			availabilityDao.finishAvailability(availability);
+			Calendar today = Calendar.getInstance();
+			today.set(Calendar.HOUR_OF_DAY, 0);
+			today.set(Calendar.MINUTE, 0);
+			today.set(Calendar.SECOND, 0);
+			today.set(Calendar.MILLISECOND, 0);
 			
-			//Se envía un correo al voluntario notificando que el beneficiario ha dado de baja la cita
-			Volunteer volunteer = volunteerDao.getVolunteerByEmail(volunteer_usr);
-			System.out.println("\nS'ha manat un correu de notificació a "+volunteer.getEmail()
-			+"\nNotificació de cancelació del servei contractat amb el beneficiari "+currentElderly.getName()+" "+
-					currentElderly.getSurname()+"\n"
-			+"La seva cita del:\n"
-			+ "\tDía: "+availability.getDate()+"\n"
-			+ "\tDesde les: "+availability.getBeginningHour()+" hores\n"
-			+ "\tFins les: "+availability.getEndingHour()+" hores\n"
-			+"Ha sigut cancelada pel beneficiari. Sentim les molèsties.");
+			//Si la cita es posterior o igual a la fecha actual, se envía un correo al voluntario notificando que 
+			// el beneficiario ha dado de baja la cita
+			if (availability.getDate().compareTo(today.getTime())>=0) {
+				Volunteer volunteer = volunteerDao.getVolunteerByUsr(volunteer_usr);
+				String correo ="\nS'ha manat un correu de notificació a "+volunteer.getEmail()
+				+"\nNotificació de cancelació del servei contractat amb el beneficiari "+currentElderly.getName()+" "+
+						currentElderly.getSurname()+"\n"
+				+"La seva cita del:\n"
+				+ "\tDía: "+formatter.format(availability.getDate())+"\n"
+				+ "\tDesde les: "+availability.getBeginningHour()+" hores\n"
+				+ "\tFins les: "+availability.getEndingHour()+" hores\n"
+				+"Ha sigut cancelada pel beneficiari. Sentim les molèsties.";
+				
+				System.out.println(correo);
+				
+				//Y se establece la fecha de cancelación como la fecha actual
+				availability.setUnsuscribeDate(new Date());
+			}
+			
+			availabilityDao.finishAvailability(availability);
 		}catch (Exception ignore) {
 		}
 		return "redirect:/elderly/requests/volunteerrequests";
@@ -270,8 +260,8 @@ public class ElderlyController {
 			//Manda un correo electrónico de confirmación al voluntario para notificar que la persona mayor ha solicitado su servicio
 			  Volunteer volunteer = volunteerDao.getVolunteerByUsr(volunteer_usr);
 			  System.out.println("\nS'ha manat un correu de notificació a "+volunteer.getEmail()
-			  +"\nNotificació de assignació a un servei. La seva disponibilitat del:\n"
-			  + "\tDía: "+availability.getDate()+"\n"
+			  +"\nNotificació d'assignació d'un servei. La seva disponibilitat del:\n"
+			  + "\tDía: "+formatter.format(availability.getDate())+"\n"
 			  + "\tDesde les: "+availability.getBeginningHour()+" hores\n"
 			  + "\tFins les: "+availability.getEndingHour()+" hores\n"
 			  + "Ha sigut assignada al beneficiari: "+currentElderly.getName()+" "+currentElderly.getSurname()+".\n"
@@ -369,23 +359,19 @@ public class ElderlyController {
 	public String processDeleteRequest(@PathVariable int number){
 	   Request request = requestDao.getRequest(number);
 	   
-	   Date previousEndDate=null;
+	   Date previousEndDate=null; 
 	   if (request.getEndDate()!=null)
 		   previousEndDate = request.getEndDate();
 	   
-	   if (request.getState()!=2)
+	   if (request.getState()!=2 && request.getEndDate()!=null && request.getEndDate().after(new Date()))
 		   request.setEndDate(new Date());
 	   requestDao.finishRequest(request);
 	   
-	   //Si hay un contrato asociado, también lo finaliza
-	   if (request.getContract_number()!=0) {
+	   //Si hay un contrato asociado, y la fecha fin de la solicitud aún no se ha alcanzado, manda un correo a la empresa para notificar la baja del servicio
+	   if (request.getContract_number()!=0 && previousEndDate!=null && previousEndDate.after(new Date())) {
 		   Contract contract = contractDao.getContract(request.getContract_number());
 		   Company company = companyDao.getCompany(contract.getCompany_cif());
 		   
-		   contract.setDateEnding(new Date());
-		   contractDao.updateContract(contract);
-		   
-		   //Manda un correo a la empresa para notificar la baja del contrato
 		   String servicio ="";
 		   if (request.getServiceType() == 0){
 			   servicio = "servei de menjar";
@@ -397,12 +383,12 @@ public class ElderlyController {
 		   
 		   String correo = "\nS'ha manat un correu de notificació a "+company.getContactPersonEmail()
 		   +"\nNotificació de baixa del servei contractat pel beneficiari "+currentElderly.getName()+" "+currentElderly.getSurname()+"\n"
-		   +"El contracte del "+servicio+" número: "+contract.getNumber()+"\n"
-		   + "\t amb data d'inici: "+contract.getDateBeginning()+"\n";
+		   +"La sol·licitud del "+servicio+" associada al contracte: "+contract.getNumber()+"\n"
+		   + "\t amb data d'aprovació: "+formatter.format(request.getApprovedDate())+"\n";
 		   if (previousEndDate !=null)
-			   correo +="\t data final: "+previousEndDate+"\n";
+			   correo +="\t data final: "+formatter.format(previousEndDate)+"\n";
 		   correo+="\t i descripció: "+contract.getDescription()+"\n"
-		   +"Ha sigut donat de baixa pel beneficiari. S'ha finalitzat el contracte.";
+		   +"Ha sigut donat de baixa pel beneficiari. S'ha suprimit el servei del contracte.";
 		   
 		   System.out.println(correo);
 	   }	   

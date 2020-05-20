@@ -3,6 +3,7 @@ package es.uji.ei1027.majorsacasa.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.servlet.http.HttpSession;
@@ -33,6 +34,7 @@ public class VolunteerController {
 	private AvailabilityDAO availabilityDao;
 	private ElderlyDAO elderlyDao;
 	private Volunteer currentVolunteer;
+	private SimpleDateFormat formatter;
 	
 	@Autowired
 	public void setVolunteerDao(VolunteerDAO volunteerDao) {
@@ -55,6 +57,8 @@ public class VolunteerController {
 		UserDetails user = (UserDetails) session.getAttribute("user");
 		if (currentVolunteer==null)
 			this.currentVolunteer = volunteerDao.getVolunteerByEmail(user.getEmail());
+		if (formatter==null)
+			this.formatter = new SimpleDateFormat("dd/MM/yyyy");
 		session.setAttribute("validated", currentVolunteer.isAccepted());
 		model.addAttribute("availabilities", availabilityDao.getAvailabilitiesFromVolunteer(currentVolunteer.getUsr()));
 		return "volunteer/services";
@@ -160,7 +164,7 @@ public class VolunteerController {
 			System.out.println("\nS'ha manat un correu de notificació a "+elderly.getEmail()
 			+"\nNotificació de canvi d'horari en el servei contractat amb el voluntari "+currentVolunteer.getName()+"\n"
 			+"La seva cita passa de ser del:\n"
-			+ "\tDía: "+currentAvailability.getDate()+"\n"
+			+ "\tDía: "+formatter.format(currentAvailability.getDate())+"\n"
 			+ "\tDesde les: "+currentAvailability.getBeginningHour()+" hores\n"
 			+ "\tFins les: "+currentAvailability.getEndingHour()+" hores\n"
 			+"\nAl:\n"
@@ -181,23 +185,27 @@ public class VolunteerController {
 			
 			Availability availability = availabilityDao.getAvailability(availabilityDate, availabilityBeginningHour, currentVolunteer.getUsr());
 			
-			//Si hay una persona mayor asignada, se le envía un correo de notificación de la cancelación y se establece la fecha de finalización como la actual
-			if (availability.getElderly_dni()!=null) {
+			//Si hay una persona mayor asignada, y la fecha del servicio es igual o posterior a la actual, se le envía 
+			// un correo de notificación al beneficiario
+			Calendar today = Calendar.getInstance();
+			today.set(Calendar.HOUR_OF_DAY, 0);
+			today.set(Calendar.MINUTE, 0);
+			today.set(Calendar.SECOND, 0);
+			today.set(Calendar.MILLISECOND, 0);
+			if (availability.getElderly_dni()!=null && availability.getDate().compareTo(today.getTime())>=0) {
 				Elderly elderly = elderlyDao.getElderlyByDNI(availability.getElderly_dni());
 				
 				System.out.println("\nS'ha manat un correu de notificació a "+elderly.getEmail()
 				+"\nNotificació de cancelació del servei contractat amb el voluntari "+currentVolunteer.getName()+"\n"
 				+"La seva cita del:\n"
-				+ "\tDía: "+availability.getDate()+"\n"
+				+ "\tDía: "+formatter.format(availability.getDate())+"\n"
 				+ "\tDesde les: "+availability.getBeginningHour()+" hores\n"
 				+ "\tFins les: "+availability.getEndingHour()+" hores\n"
 				+"Ha tingut que ser cancelada. Sentim les molèsties.");
-				
-				availability.setUnsuscribeDate(new Date());
-				availabilityDao.finishAvailability(availability);
-			} else { //Si no hay una persona asignada se elimina la disponibilidad de la BBDD
-				availabilityDao.deleteAvailability(availability);
 			}
+			
+			availability.setUnsuscribeDate(new Date());
+			availabilityDao.finishAvailability(availability);
 		} catch (ParseException ignore) {
 		}
 	

@@ -28,11 +28,12 @@
          <td th:text="${availability.beginningHour}"></td>
          <td th:text="${availability.endingHour}"></td>
          <td><a th:href="@{/elderly/volunteer/{volunteer_usr}(volunteer_usr=${availability.volunteer_usr})}" th:text="${availability.volunteer_usr}"></a></td>
-         <td><a class="btn btn-danger" th:href="@{/elderly/requests/volunteerrequests/delete/{date}/{beginningHour}/{volunteer_usr} (date=${availability.date}, beginningHour=${availability.beginningHour}, volunteer_usr=${availability.volunteer_usr})}" role="button">Dóna de baixa</a></td>
+         <td th:unless="${availability.date.before(#dates.createToday())}"><a class="btn btn-danger btn-lg" th:href="@{/elderly/requests/volunteerrequests/delete/{date}/{beginningHour}/{volunteer_usr} (date=${availability.date}, beginningHour=${availability.beginningHour}, volunteer_usr=${availability.volunteer_usr})}" role="button">Dóna de baixa</a></td>
+         <td th:if="${availability.date.before(#dates.createToday())}"><a class="btn btn-warning btn-lg" th:href="@{/elderly/requests/volunteerrequests/delete/{date}/{beginningHour}/{volunteer_usr} (date=${availability.date}, beginningHour=${availability.beginningHour}, volunteer_usr=${availability.volunteer_usr})}" role="button">Suprimeix de la llista</a></td>
       </tr>
      </tbody>
    </table> 
-   <a class="btn btn-outline-info" href="/elderly/requests" role="button">Torna enrere</a>
+   <a class="btn btn-outline-info btn-lg" href="/elderly/requests" role="button">Torna enrere</a>
 </div>
 </body>
 </html>

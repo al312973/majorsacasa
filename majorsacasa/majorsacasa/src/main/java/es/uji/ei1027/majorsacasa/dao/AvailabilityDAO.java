@@ -48,7 +48,7 @@ public class AvailabilityDAO {
 	//Obtiene todas las disponibilidades no asignadas y de voluntarios verificados
 	public List<Availability> getFreeAvailabilities(){
 		try{
-			return jdbcTemplate.query("SELECT * FROM AVAILABILITY WHERE STATEAVAILABLE = TRUE AND ELDERLY_DNI IS NULL"
+			return jdbcTemplate.query("SELECT * FROM AVAILABILITY WHERE STATEAVAILABLE = TRUE AND ELDERLY_DNI IS NULL AND DATE >= CURRENT_DATE"
 					+ " ORDER BY DATE, BEGINNINGHOUR", 
 					new AvailabilityRowMapper());
 		}catch(EmptyResultDataAccessException e){
@@ -105,15 +105,6 @@ public class AvailabilityDAO {
 	public void finishAvailability(Availability availability){
 		jdbcTemplate.update("UPDATE AVAILABILITY SET UNSUSCRIBEDATE = ?, STATEAVAILABLE = FALSE WHERE DATE = ? AND BEGINNINGHOUR = ? AND VOLUNTEER_USR = ?",
 								availability.getUnsuscribeDate(),
-								availability.getDate(), 
-								availability.getBeginningHour(), 
-								availability.getVolunteer_usr()
-								);
-	}
-		
-	//Elimina de la BBDD una disponibilidad no asignada
-	public void deleteAvailability(Availability availability){
-		jdbcTemplate.update("DELETE FROM AVAILABILITY WHERE DATE = ? AND BEGINNINGHOUR = ? AND VOLUNTEER_USR = ?",
 								availability.getDate(), 
 								availability.getBeginningHour(), 
 								availability.getVolunteer_usr()
