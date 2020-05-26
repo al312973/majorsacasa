@@ -120,7 +120,7 @@ public class ElderlyController {
 	//Guardamos la página desde la que accedemos a la información de un voluntario para establecer el botón hacia atrás
 	private int availabilitiesPage;
 		
-	//Muestra los información sobre el voluntario asignado a un servicio de compañia contratado
+	//Muestra información sobre el voluntario asignado a un servicio de compañia contratado
 	@RequestMapping(value="/volunteer/{volunteer_usr}", method = RequestMethod.GET)
 	public String showVolunteer(Model model, @PathVariable String volunteer_usr){
 		model.addAttribute("volunteer", volunteerDao.getVolunteerByUsr(volunteer_usr));
@@ -129,7 +129,27 @@ public class ElderlyController {
 		return "elderly/volunteer";
 	}
 	
-	//Muestra los información sobre el voluntario asignado a un servicio de compañia contratado
+	//Muestra la página de confirmación antes de finalizar un servicio de compañia
+	@RequestMapping(value="requests/volunteerrequests/delete/confirm/{deletionType}/{date}/{beginningHour}/{volunteer_usr}", method = RequestMethod.GET)
+	public String confirmDeleteCompanyRequest(Model model, @PathVariable int deletionType, @PathVariable String date, 
+			@PathVariable String beginningHour, @PathVariable String volunteer_usr){
+		try {
+			Date availabilityDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+			LocalTime availabilitiBeginningHour = LocalTime.parse(beginningHour);
+			Availability availability = availabilityDao.getAvailability(availabilityDate, availabilitiBeginningHour, volunteer_usr);
+			
+			Volunteer volunteer = volunteerDao.getVolunteerByUsr(availability.getVolunteer_usr());
+			
+			model.addAttribute("deletionType", deletionType);
+			model.addAttribute("availability", availability);
+			model.addAttribute("volunteer", volunteer.getName());
+			
+		}catch (Exception ignore) {
+		}
+	   return "elderly/deletevolunteerrequest"; 
+	}
+		
+	//Da de baja un servicio de compañia reservado con un voluntario
 	@RequestMapping(value="requests/volunteerrequests/delete/{date}/{beginningHour}/{volunteer_usr}", method = RequestMethod.GET)
 	public String processDeleteCompanyRequest(@PathVariable String date, @PathVariable String beginningHour, 
 			@PathVariable String volunteer_usr){
@@ -198,8 +218,13 @@ public class ElderlyController {
 		Request request = requestDao.getRequest(number);
 		model.addAttribute("request", request);
 		
-		if (request.getContract_number()!=null) {
-			model.addAttribute("contract", contractDao.getContract(request.getContract_number()));
+		if (request.getUserCAS()!=null)
+			model.addAttribute("userCAS", socialWorkerDao.getSocialWorkerByUserCAS(request.getUserCAS()));
+		
+		if (request.getContract_number()!=0) {
+			Contract contract = contractDao.getContract(request.getContract_number());	
+			model.addAttribute("contract", contract);
+			model.addAttribute("company", companyDao.getCompany(contract.getCompany_cif()));
 		}
 		
 		model.addAttribute("requestPage", requestPage);
@@ -354,6 +379,16 @@ public class ElderlyController {
 	    else return "redirect:/elderly/requests/cleaningrequests";
 	}
    
+	//Muestra la página de confirmación antes de finalizar una solicitud de una empresa
+	@RequestMapping(value="/requests/delete/confirm/{deletionType}/{number}", method = RequestMethod.GET)
+	public String confirmDeleteRequest(Model model, @PathVariable int deletionType, @PathVariable int number){
+	   Request request = requestDao.getRequest(number);
+	   model.addAttribute("deletionType", deletionType);
+	   model.addAttribute("request", request);
+	   
+	   return "elderly/deletefoodhealthcleaningrequest"; 
+	}
+	
 	//Establece una solicitud de una empresa como finalizada
 	@RequestMapping(value="/requests/delete/{number}", method = RequestMethod.GET)
 	public String processDeleteRequest(@PathVariable int number){

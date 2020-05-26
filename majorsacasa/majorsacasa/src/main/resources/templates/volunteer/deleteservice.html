@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/baseVolunteer}">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Majors a casa</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+   	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+<body>
+<div layout:fragment="content" th:object="${deletionType}">
+	<div class="alert" th:classappend="${deletionType == 0} ? 'alert-danger' : 'alert-warning'" role="alert">
+		<h4 th:if="${deletionType == 0}">¿Vols donar de baixa el següent servei?</h4>
+		<h4 th:if="${deletionType == 1}">¿Vols suprimir de la llista el següent servei?</h4>
+		<h5>Aquesta acció no es podrà desfer.</h5>
+		<table class="showinfo">
+		<tbody th:object="${availability}">
+			<tr>
+				<th><label>Día:</label></th>
+	        	<td><p th:text="${#dates.format(availability.date, 'dd/MM/yyyy')}"></p></td>
+	        </tr>			
+	        <tr>
+				<th><label>Hora inicial:</label></th>
+				<td th:text="${availability.beginningHour}"></td>
+	        </tr>
+	        <tr>
+				<th><label>Hora final:</label></th>
+				<td th:text="${availability.endingHour}"></td>
+	        </tr>
+	        <tr>
+				<th><label>Beneficiari:</label></th>
+				<td th:if="${availability.elderly_dni == null}">No assignat</td>
+         		<td th:unless="${availability.elderly_dni == null}" th:object="${elderly}" th:text="${elderly}"></td>
+	        </tr>
+	        <tr>
+	        	<td>
+	        		<a class="btn" th:classappend="${deletionType == 0} ? 'btn-outline-danger' : 'btn-outline-warning'"
+	        			href="/volunteer/services" role="button">Cancel·lar</a>
+	        	</td>
+				<td align="right">
+					<a th:if="${deletionType == 0}" class="btn btn-danger" th:href="@{/volunteer/services/delete/{date}/{beginningHour}(date=${availability.date}, beginningHour=${availability.beginningHour})}" role="button">Dóna de baixa</a>
+					<a th:if="${deletionType == 1}" class="btn btn-warning" th:href="@{/volunteer/services/delete/{date}/{beginningHour}(date=${availability.date}, beginningHour=${availability.beginningHour})}" role="button">Suprimeix de la llista</a>
+				</td>
+	        </tr>
+		</tbody>
+		</table>
+	</div>
+</div>
+</body>
+</html>

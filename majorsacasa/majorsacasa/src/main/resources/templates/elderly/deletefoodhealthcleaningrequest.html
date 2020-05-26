@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/baseElderly}">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Majors a casa</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+   	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+<body>
+<div layout:fragment="content" th:object="${deletionType}">
+	<div class="alert" th:classappend="${deletionType == 0} ? 'alert-danger' : 'alert-warning'" role="alert">
+		<h4 th:if="${deletionType == 0}">¿Vols donar de baixa la següent sol·licitud?</h4>
+		<h4 th:if="${deletionType == 1}">¿Vols suprimir de la llista la següent sol·licitud?</h4>
+		<h5>Aquesta acció no es podrà desfer.</h5>
+		<table class="showinfo">
+		<tbody th:object="${request}">
+			<tr>
+				<th><label>Tipus de sol·licitud:</label></th>
+	        	<td th:if="${request.serviceType == 0}">Servei de menjar a domicili</td>
+	        	<td th:if="${request.serviceType == 1}">Servei sanitari</td>
+	        	<td th:if="${request.serviceType == 2}">Servei de neteja</td>
+	        </tr>	
+			<tr>
+				<th><label>Data de sol·licitud:</label></th>
+	        	<td><p th:text="${#dates.format(request.creationDate, 'dd/MM/yyyy')}"></p></td>
+	        </tr>			
+	        <tr>
+				<th><label>Estat:</label></th>
+				<td th:if="${request.state == 0}">Pendent d'acceptació</td>
+         		<td th:if="${request.state == 1}">Acceptada</td>
+         		<td th:if="${request.state == 2}">Rebutjada</td>
+	        </tr>
+	        <tr>
+				<th><label>Data de resolució:</label></th>
+				<td th:if="${request.state == 0}">-</td>
+         		<td th:if="${request.state == 1}" th:text="${#dates.format(request.approvedDate, 'dd/MM/yyyy')}"></td>
+         		<td th:if="${request.state == 2}" th:text="${#dates.format(request.rejectedDate, 'dd/MM/yyyy')}"></td>
+	        </tr>
+	        <tr>
+				<th><label>Servei solicitat fins al:</label></th>
+				<td th:if="${request.endDate == null}">-</td>
+         		<td th:unless="${request.endDate == null}" th:text="${#dates.format(request.endDate, 'dd/MM/yyyy')}"></td>
+	        </tr>
+	        <tr>
+	        	<td>
+	        		<a th:if="${request.serviceType == 0}" class="btn" th:classappend="${deletionType == 0} ? 'btn-outline-danger btn-lg' : 'btn-outline-warning btn-lg'"
+	        			href="/elderly/requests/foodrequests" role="button">Cancel·lar</a>
+	        		<a th:if="${request.serviceType == 1}" class="btn" th:classappend="${deletionType == 0} ? 'btn-outline-danger btn-lg' : 'btn-outline-warning btn-lg'"
+	        			href="/elderly/requests/healthrequests" role="button">Cancel·lar</a>
+	        		<a th:if="${request.serviceType == 2}" class="btn" th:classappend="${deletionType == 0} ? 'btn-outline-danger btn-lg' : 'btn-outline-warning btn-lg'"
+	        			href="/elderly/requests/cleaningrequests" role="button">Cancel·lar</a>
+	        	</td>
+				<td align="right">
+					<a th:if="${deletionType == 0}" class="btn btn-danger btn-lg" th:href="@{/elderly/requests/delete/{number}(number=${request.number})}" role="button">Dóna de baixa</a>
+					<a th:if="${deletionType == 1}" class="btn btn-warning btn-lg" th:href="@{/elderly/requests/delete/{number}(number=${request.number})}" role="button">Suprimeix de la llista</a>
+				</td>
+	        </tr>
+		</tbody>
+		</table>
+	</div>
+</div>
+</body>
+</html>

@@ -72,6 +72,14 @@ public class VolunteerDAO {
 							);
 	}
 	
+	//Establece una fecha a partir de la cual el voluntario ya no prestará servicios
+	public void setVolunteerEndDate(Date endDate, String volunteerUsr){
+		jdbcTemplate.update("UPDATE VOLUNTEER SET ENDDATE = ? WHERE USR = ?",
+							endDate,
+							volunteerUsr
+							);
+	}
+	
 	//Borra un voluntario de la BBDD
 	public void deleteVolunteer(String Usr) {
 		jdbcTemplate.update("UPDATE VOLUNTEER SET ENDDATE = ? WHERE USR = ?", new java.sql.Date(new Date().getTime()), Usr);
