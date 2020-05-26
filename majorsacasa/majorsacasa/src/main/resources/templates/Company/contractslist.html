@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/baseCasCommitee}">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Majors a casa</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+   	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+	<h2>Contracts list</h2>
+	
+	  <table class="table table-striped">
+		  <thead>
+		       <tr>
+		         <th>Number:</th>
+		         <th>Data Beginning:</th>
+		         <th>Data Ending:</th>
+		         <th>Description:</th>
+		         <th>Units of Measure:</th>
+		         <th>Price Unit:</th>
+		         
+		      </tr> 
+		 </thead>
+		 <tbody>
+		       <tr th:each="contract: ${contracts}">
+				 <td th:text="${contract.number}"></td>
+				 <td th:text="${contract.dateBeginning}"></td>
+				 <td th:text="${contract.dateEnding}"></td>
+				 <td th:text="${contract.unitsOfMeasure}"></td>
+				 <td th:text="${contract.serviceType}"></td>
+				 <td th:text="${contract.priceUnit}"></td>
+				 
+			 </tr>
+			 
+         </tbody>
+   	</table> 
+</div>
+</body>
+</html>
