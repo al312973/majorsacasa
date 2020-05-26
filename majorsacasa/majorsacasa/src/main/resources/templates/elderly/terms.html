@@ -31,7 +31,7 @@
 				<th><label>Treballador social d'ajuda:</label></th>
 				<td th:if="${request.userCAS == null}"><p>No adjudicat</p></td>
 	        	<td th:unless="${request.userCAS == null}">
-	        		<a th:href="@{/elderly/requests/terms/socialWorker/{userCAS}(userCAS=*{userCAS})}" th:text="*{userCAS}"></a></td>
+	        		<a th:object="${userCAS}" th:href="@{/elderly/requests/terms/socialWorker/{userCAS}(userCAS=*{userCAS})}" th:text="*{name}"></a></td>
 	        </tr>
 	    </tbody>
 	    <tbody th:object="${contract}">
@@ -41,7 +41,7 @@
 	        </tr>
 	        <tr th:unless="${contract == null}">
 				<th><label>Empresa prestadora del servei:</label></th>
-	        	<td><a th:href="@{/elderly/requests/terms/company/{company_cif}(company_cif=*{company_cif})}" th:text="*{company_cif}"></a></td>
+	        	<td th:object="${company}"><a th:href="@{/elderly/requests/terms/company/{company_cif}(company_cif=*{CIF})}" th:text="*{name}"></a></td>
 	        </tr>
 	    </tbody>
 	</table>

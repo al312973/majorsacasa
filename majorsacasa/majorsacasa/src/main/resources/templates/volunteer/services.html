@@ -29,13 +29,14 @@
          <td th:text="${availability.endingHour}"></td>
          <td th:if="${availability.elderly_dni == null}">No assignat</td>
          <td th:unless="${availability.elderly_dni == null}">
-         	<a th:href="@{/volunteer/services/beneficiary/{elderly_dni}(elderly_dni=${availability.elderly_dni})}" th:text="${availability.elderly_dni}"></a></td>
+         	<a th:href="@{/volunteer/services/beneficiary/{elderly_dni}(elderly_dni=${availability.elderly_dni})}" th:text="${availability.elderly_dni}"></a>
+         </td>
          
          <td th:unless="${availability.date.before(#dates.createToday())}"><a class="btn btn btn-info" th:href="@{/volunteer/updateService/{date}/{beginningHour}(date=${availability.date}, beginningHour=${availability.beginningHour})}" role="button">Modifica</a></td>
 		 <td th:if="${availability.date.before(#dates.createToday())}"></td>
          <td>
-         	<a th:unless="${availability.date.before(#dates.createToday())}" class="btn btn-danger" th:href="@{/volunteer/services/delete/{date}/{beginningHour}(date=${availability.date}, beginningHour=${availability.beginningHour})}" role="button">Dóna de baixa</a>
-         	<a th:if="${availability.date.before(#dates.createToday())}" class="btn btn-warning" th:href="@{/volunteer/services/delete/{date}/{beginningHour}(date=${availability.date}, beginningHour=${availability.beginningHour})}" role="button">Suprimeix de la llista</a>
+         	<a th:unless="${availability.date.before(#dates.createToday())}" class="btn btn-danger" th:href="@{/volunteer/services/delete/confirm/{deletionType}/{date}/{beginningHour}(deletionType=0, date=${availability.date}, beginningHour=${availability.beginningHour})}" role="button">Dóna de baixa</a>
+         	<a th:if="${availability.date.before(#dates.createToday())}" class="btn btn-warning" th:href="@{/volunteer/services/delete/confirm/{deletionType}/{date}/{beginningHour}(deletionType=1, date=${availability.date}, beginningHour=${availability.beginningHour})}" role="button">Suprimeix de la llista</a>
          </td>
        </tr>
      </tbody>

@@ -99,6 +99,46 @@ public class VolunteerController {
         return "redirect:services"; 
     }
 	
+	
+	//Redirige a la pagina que permite especificar una fecha a partir de la cual ya no estará disponible
+	@RequestMapping(value="/timeoffsick", method = RequestMethod.GET) 
+    public String setTimeOffSick(Model model) {
+		model.addAttribute("volunteer", currentVolunteer);
+        return "volunteer/timeOffSick";
+    }
+	
+	//Actualiza la información personal
+	@RequestMapping(value="/timeoffsick", method = RequestMethod.POST)
+    public String processSetTimeOffSickSubmit(@ModelAttribute("volunteer") Volunteer volunteer, BindingResult bindingResult) {
+		//Comprobamos que la fecha introducida sea posterior a la fecha actual
+		Calendar endDate = Calendar.getInstance();
+		endDate.setTime(volunteer.getEndDate());
+
+		Calendar today = Calendar.getInstance();
+		today.set(Calendar.HOUR_OF_DAY, 0);
+		today.set(Calendar.MINUTE, 0);
+		today.set(Calendar.SECOND, 0);
+		today.set(Calendar.MILLISECOND, 0);
+		if (endDate.compareTo(today)<0)
+			bindingResult.rejectValue("endDate", "dataincorrecta", "La data ha de ser igual o posterior a la actual");
+		
+		if (bindingResult.hasErrors())
+			return "volunteer/timeoffsick";
+		
+		//Actualiza el perfil del voluntario estableciendo la fecha fin
+		volunteerDao.setVolunteerEndDate(endDate.getTime(), currentVolunteer.getUsr());
+		currentVolunteer.setEndDate(endDate.getTime());
+		
+		//Busca los servicios que tenía a partir de la fecha establecida y los cancela (se establecen como no disponibles
+		// y no los muestra en el listado). Además, se manda un correo de cancelación si hay un beneficiario asignado
+		for (Availability availability : availabilityDao.getAvailabilitiesFromVolunteer(currentVolunteer.getUsr())) {
+			if (availability.getDate().compareTo(endDate.getTime())>=0){
+				finishAvailability(availability, endDate.getTime());
+			}
+		}
+		return "redirect:profile";
+	}
+	
 	//Redirige a la pagina que permite añadir una nueva disponibilidad
 	@RequestMapping(value="/addService", method = RequestMethod.GET) 
     public String addAvailability(Model model) {
@@ -118,7 +158,7 @@ public class VolunteerController {
 		availability.setElderly_dni(null);
 		availability.setVolunteer_usr(currentVolunteer.getUsr());
 		
-		AvailabilityValidator availabilityValidator = new AvailabilityValidator(availabilityDao, null);
+		AvailabilityValidator availabilityValidator = new AvailabilityValidator(availabilityDao, null, currentVolunteer.getEndDate());
 		availabilityValidator.validate(availability, bindingResult);
 		
 		if (bindingResult.hasErrors())
@@ -149,7 +189,8 @@ public class VolunteerController {
 	//Modifica la información de una disponibilidad
 	@RequestMapping(value="/updateService", method = RequestMethod.POST) 
 	public String processUpdateSubmit(@ModelAttribute("availability") Availability availability, BindingResult bindingResult) {
-		AvailabilityValidator availabilityValidator = new AvailabilityValidator(availabilityDao, currentAvailability);
+		AvailabilityValidator availabilityValidator = new AvailabilityValidator(availabilityDao, currentAvailability,  currentVolunteer.getEndDate());
+		availability.setVolunteer_usr(currentVolunteer.getUsr());
 		availabilityValidator.validate(availability, bindingResult);
 		
 		if (bindingResult.hasErrors()) 
@@ -175,6 +216,27 @@ public class VolunteerController {
 		
 		return "redirect:services"; 
 	}
+	
+	//Muestra la página de confirmación antes de finalizar o borrar un servicio
+	@RequestMapping(value="/services/delete/confirm/{deletionType}/{date}/{beginningHour}", method = RequestMethod.GET)
+	public String confirmDeleteService(Model model, @PathVariable int deletionType, @PathVariable String date, 
+			@PathVariable String beginningHour){
+		try {
+			Date availabilityDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+			LocalTime availabilitiBeginningHour = LocalTime.parse(beginningHour);
+			Availability availability = availabilityDao.getAvailability(availabilityDate, availabilitiBeginningHour, currentVolunteer.getUsr());
+			
+			model.addAttribute("deletionType", deletionType);
+			model.addAttribute("availability", availability);
+			if (availability.getElderly_dni()!=null) {
+				Elderly elderly = elderlyDao.getElderlyByDNI(availability.getElderly_dni());
+				model.addAttribute("elderly", elderly.getName()+" "+elderly.getSurname());
+			}
+			
+		}catch (Exception ignore) {
+		}
+	   return "volunteer/deleteservice"; 
+	}
 
 	//Borra o da de baja un servicio
 	@RequestMapping(value="/services/delete/{date}/{beginningHour}", method = RequestMethod.GET)
@@ -185,30 +247,37 @@ public class VolunteerController {
 			
 			Availability availability = availabilityDao.getAvailability(availabilityDate, availabilityBeginningHour, currentVolunteer.getUsr());
 			
-			//Si hay una persona mayor asignada, y la fecha del servicio es igual o posterior a la actual, se le envía 
-			// un correo de notificación al beneficiario
+			//Establece la fecha de comparación a la fecha actual
 			Calendar today = Calendar.getInstance();
 			today.set(Calendar.HOUR_OF_DAY, 0);
 			today.set(Calendar.MINUTE, 0);
 			today.set(Calendar.SECOND, 0);
 			today.set(Calendar.MILLISECOND, 0);
-			if (availability.getElderly_dni()!=null && availability.getDate().compareTo(today.getTime())>=0) {
-				Elderly elderly = elderlyDao.getElderlyByDNI(availability.getElderly_dni());
-				
-				System.out.println("\nS'ha manat un correu de notificació a "+elderly.getEmail()
-				+"\nNotificació de cancelació del servei contractat amb el voluntari "+currentVolunteer.getName()+"\n"
-				+"La seva cita del:\n"
-				+ "\tDía: "+formatter.format(availability.getDate())+"\n"
-				+ "\tDesde les: "+availability.getBeginningHour()+" hores\n"
-				+ "\tFins les: "+availability.getEndingHour()+" hores\n"
-				+"Ha tingut que ser cancelada. Sentim les molèsties.");
-			}
 			
-			availability.setUnsuscribeDate(new Date());
-			availabilityDao.finishAvailability(availability);
+			finishAvailability(availability, today.getTime());
 		} catch (ParseException ignore) {
 		}
 	
 	   	return "redirect:../../../services"; 
     }
+	
+	//Finaliza o borra un servicio concreto. Si hay una persona mayor asignada y la fecha del servicio es igual o posterior
+	// a la fecha de comparación (la actual si se cancela solo una actividad, o la de fecha fin de prestación de servicios
+	// si se ha indicado), se le envía un correo de notificación al beneficiario
+	private void finishAvailability(Availability availability, Date dateToCompare) {		
+		if (availability.getElderly_dni()!=null && availability.getDate().compareTo(dateToCompare)>=0) {
+			Elderly elderly = elderlyDao.getElderlyByDNI(availability.getElderly_dni());
+			
+			System.out.println("\nS'ha manat un correu de notificació a "+elderly.getEmail()
+			+"\nNotificació de cancelació del servei contractat amb el voluntari "+currentVolunteer.getName()+"\n"
+			+"La seva cita del:\n"
+			+ "\tDía: "+formatter.format(availability.getDate())+"\n"
+			+ "\tDesde les: "+availability.getBeginningHour()+" hores\n"
+			+ "\tFins les: "+availability.getEndingHour()+" hores\n"
+			+"Ha tingut que ser cancelada. Sentim les molèsties.");
+		}
+		
+		availability.setUnsuscribeDate(new Date());
+		availabilityDao.finishAvailability(availability);
+	}
 }

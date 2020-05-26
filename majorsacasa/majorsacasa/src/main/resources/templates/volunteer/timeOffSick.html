@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/basevolunteer}">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Majors a casa</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+   	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+	<div class="alert alert-danger" role="alert">
+	<h3>Estableix la data a partir de la qual ja no estaràs disponible</h3>
+	<h5 style="color:red;">Aquesta acció no es podrà desfer!</h5>
+	<form action="#" th:action="@{/volunteer/timeoffsick}" th:object="${volunteer}" method="post">
+		<table>
+			<tr class="blank_row"></tr>
+			<tr th:if="${#fields.hasErrors('endDate')}">
+				<td colspan="2" align="center" class="alert alert-danger" th:errors="*{endDate}"></td>
+			</tr>
+			<tr th:if="${volunteer.endDate==null or #fields.hasErrors('endDate')}">
+				<td><label>Data fí disponibilitat:</label></td>
+				<td th:unless="${#fields.hasErrors('endDate')}">
+	        		<input type="date" class="form-control" th:field="*{endDate}" required/>
+	        	</td>
+	        	
+	        	<td th:if="${#fields.hasErrors('endDate')}">
+	           		<input type="date" class="form-control is-invalid" th:field="*{endDate}" required/>
+	           	</td>
+		    </tr>
+		    <tr th:unless="${volunteer.endDate==null or #fields.hasErrors('endDate')}">
+		    	<td><label>Data fí disponibilitat:</label></td>
+		    	<td><input type="date" class="form-control" th:field="*{endDate}" readonly/></td>
+		    </tr>
+		    <tr>
+		    	<td colspan="2" align="center">
+		    	<small class="form-text text-muted">Es cancelaràn tots els serveis a partir d'aquesta data.</small>
+		    	</td>
+		    </tr>
+		    <tr class="blank_row"></tr>
+		    <tr>
+		        <td><a class="btn btn-outline-danger" href="/volunteer/profile" role="button">Torna enrere</a></td>
+		        <td align="right"><input class="btn btn-danger" type="submit" value="Estableix" role="button"/></td>
+		    </tr>
+        </table>
+    </form>
+    </div>  
+</div>
+</body>
+</html>

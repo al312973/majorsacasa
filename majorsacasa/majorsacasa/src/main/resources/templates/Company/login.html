@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/baseloginregister}">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Majors a casa</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+   	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+	<h2>Log in</h2>
+	<div>
+	<form action="#" th:action="@{/login}" th:object="${user}" method="post">
+		<table>
+		<tr>
+		<td colspan="2" align="center" class="alert alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></td>
+		</tr>
+			<tr>
+				<td><label>Email or ID:</label></td>
+	        	<td th:unless="${#fields.hasErrors('email')}">
+	        		<input type="text" class="form-control" th:field="*{email}" required/>
+	        	</td>
+      			
+            	<td th:if="${#fields.hasErrors('email')}">
+            		<input type="text" class="form-control is-invalid" th:field="*{email}" required/>
+            	</td>
+			</tr>
+			<tr>
+				<td><label>Password:</label></td>
+				<td th:unless="${#fields.hasErrors('password')}">
+	        		<input type="password" class="form-control" th:field="*{password}" required/>
+	        	</td>
+	        	
+	        	<td th:if="${#fields.hasErrors('password')}">
+            		<input type="password" class="form-control is-invalid" th:field="*{password}" required/>
+            	</td>
+			</tr>
+			<tr class="blank_row"></tr>
+			<tr>
+				<td><a class="btn btn-outline-info" href="/" role="button">Torna a l'inici</a></td>
+	            <td align="right"><input class="btn btn-info" type="submit" value="Inicia sessió" role="button"/></td>
+	    	</tr>
+	    </table>
+	</form>
+	</div>
+</div>
+</body>
+</html>

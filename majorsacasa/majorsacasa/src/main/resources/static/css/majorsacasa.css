@@ -49,6 +49,18 @@ h3 {
 	font-size: 8vh;
 }
 
+/* Encabezado de nivel 4 */
+h4 {
+	font-weight: bold;
+	font-size: 6vh;
+}
+
+/* Encabezado de nivel 5 */
+h5 {
+	font-weight: bold;
+	font-size: 4vh;
+}
+
 /* Tablas */
 table{
 	margin: 0 auto;
