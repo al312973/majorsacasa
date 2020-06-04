@@ -90,7 +90,16 @@ public class AvailabilityDAO {
 								lastAvailability.getVolunteer_usr()
 							);
 	}
-			
+	
+	//Establece una disponibilidad de un nuevo voluntario para ser mostrada a las personas mayores
+	public void setAvailabilityToShow(Availability availability) {
+		jdbcTemplate.update("UPDATE AVAILABILITY SET STATEAVAILABLE = TRUE WHERE DATE = ? AND BEGINNINGHOUR = ? AND VOLUNTEER_USR = ?", 
+				availability.getDate(),
+				availability.getBeginningHour(),
+				availability.getVolunteer_usr()
+			);
+	}
+	
 	//Asocia un beneficiario a una disponibilidad
 	public void setElderly(Availability availability){
 		jdbcTemplate.update("UPDATE AVAILABILITY SET ELDERLY_DNI = ? WHERE DATE = ? AND BEGINNINGHOUR = ? AND VOLUNTEER_USR = ?", 

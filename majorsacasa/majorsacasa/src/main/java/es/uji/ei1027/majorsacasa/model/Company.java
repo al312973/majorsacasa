@@ -7,8 +7,8 @@ public class Company {
 	private String contactPersonName;
 	private String contactPersonPhoneNumber;
 	private String contactPersonEmail;
-	private int serviceType;
 	private String pwd;
+	private int serviceType;
 	
 	public Company() {
 		
@@ -18,7 +18,7 @@ public class Company {
 	public String toString() {
 		return "Company [name=" + name + ", CIF=" + CIF + ", address=" + address + ", contactPersonName="
 				+ contactPersonName + ", contactPersonPhoneNumber=" + contactPersonPhoneNumber + ", contactPersonEmail="
-				+ contactPersonEmail + ", serviceType=" + serviceType + "]";
+				+ contactPersonEmail + ", pwd=" + pwd + ", serviceType=" + serviceType + "]";
 	}
 
 	public String getName() {
@@ -69,19 +69,19 @@ public class Company {
 		this.contactPersonEmail = contactPersonEmail;
 	}
 
+	public String getPwd() {
+		return pwd;
+	}
+
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
+
 	public int getServiceType() {
 		return serviceType;
 	}
 
 	public void setServiceType(int serviceType) {
 		this.serviceType = serviceType;
-	}
-	
-	public String getPwd(){
-		return pwd;
-	}
-	
-	public void setPwd(String pwd){
-		this.pwd = pwd;
 	}
 }

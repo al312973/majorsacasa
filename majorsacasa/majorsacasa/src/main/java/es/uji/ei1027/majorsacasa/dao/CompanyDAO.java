@@ -19,6 +19,7 @@ public class CompanyDAO {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	
+	//Añade una empresa nueva a la BBDD
 	public void addCompany(Company company){
 		jdbcTemplate.update("INSERT INTO COMPANY VALUES(?,?,?,?,?,?,?,?)",
 								company.getName(), 
@@ -32,10 +33,34 @@ public class CompanyDAO {
 								);
 	}
 	
-	public void deleteCompany(String CIF){
-		jdbcTemplate.update("DELETE FROM COMPANY WHERE CIF = ?", CIF);
+	//Obtiene una empresa concreta a partir de su CIF
+	public Company getCompanyByCIF(String CIF){
+		try{
+			return jdbcTemplate.queryForObject("SELECT * FROM COMPANY WHERE CIF = ?", new CompanyRowMapper(), CIF);
+		}catch (EmptyResultDataAccessException e){
+			return null;
+		}
 	}
 	
+	//Obtiene una empresa concreta a partir de su CIF
+	public Company getCompanyByName(String name){
+		try{
+			return jdbcTemplate.queryForObject("SELECT * FROM COMPANY WHERE name = ?", new CompanyRowMapper(), name);
+		}catch (EmptyResultDataAccessException e){
+			return null;
+		}
+	}
+	
+	//Obtiene un listado con todas las empresas registradas en el sistema
+	public List<Company> getCompanies(){
+		try{
+			return jdbcTemplate.query("SELECT * FROM COMPANY", new CompanyRowMapper());
+		}catch (EmptyResultDataAccessException e){
+			return new ArrayList<Company>();
+		}
+	}
+		
+	//Actualiza los datos de una empresa concreta
 	public void updateCompany(Company company){
 		jdbcTemplate.update("UPDATE PAY SET NAME = ?, ADDRESS = ?, CONTACTPERSONNAME = ?,"
 							+ " CONTACTPERSONPHONENUMBER = ?, PERSONEMAIL = ?, SERVICETYPE = ?, PWD = ? WHERE CIF = ?",
@@ -51,21 +76,9 @@ public class CompanyDAO {
 							);
 	}
 	
-	//Obtiene una empresa concreta a partir de su CIF
-	public Company getCompany(String CIF){
-		try{
-			return jdbcTemplate.queryForObject("SELECT * FROM COMPANY WHERE CIF = ?", new CompanyRowMapper(), CIF);
-		}catch (EmptyResultDataAccessException e){
-			return null;
-		}
-	}
-	
-	public List<Company> getCompanys(){
-		try{
-			return jdbcTemplate.query("SELECT * FROM COMPANY", new CompanyRowMapper());
-		}catch (EmptyResultDataAccessException e){
-			return new ArrayList<Company>();
-		}
+	//Elimina una empresa de la BBDD
+	public void deleteCompany(String CIF){
+		jdbcTemplate.update("DELETE FROM COMPANY WHERE CIF = ?", CIF);
 	}
 	
 }

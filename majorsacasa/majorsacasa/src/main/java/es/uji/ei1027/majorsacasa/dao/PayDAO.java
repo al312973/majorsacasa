@@ -19,6 +19,7 @@ public class PayDAO {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	
+	//Añade una fila de pago en la BBDD
 	public void addPay(Pay pay){
 		jdbcTemplate.update("INSERT INTO PAY VALUES(?,?)",
 								pay.getRequest_number(), 
@@ -26,13 +27,7 @@ public class PayDAO {
 								);
 	}
 	
-	public void deletePay(Pay pay){
-		jdbcTemplate.update("DELETE FROM PAY WHERE REQUEST_NUMBER = ?, INVOICE_NUMBER = ?",
-								pay.getRequest_number(),
-								pay.getInvoice_number()
-								);
-	}
-	
+	//Obtiene una fila de pago de la BBDD
 	public Pay getPay(Pay pay){
 		try{
 			return jdbcTemplate.queryForObject("SELECT * FROM PAY WHERE REQUEST_NUMBER = ?, INVOICE_NUMBER = ?",
@@ -45,6 +40,7 @@ public class PayDAO {
 		}
 	}
 	
+	//Obtiene todas las filas de pagos de la BBDD
 	public List<Pay> getpays(){
 		try{
 			return jdbcTemplate.query("SELECT * FROM PAY", new PayRowMapper());
@@ -53,4 +49,11 @@ public class PayDAO {
 		}
 	}
 	
+	//Elimina una fila de pago de la BBDD
+	public void deletePay(Pay pay){
+		jdbcTemplate.update("DELETE FROM PAY WHERE REQUEST_NUMBER = ?, INVOICE_NUMBER = ?",
+								pay.getRequest_number(),
+								pay.getInvoice_number()
+								);
+	}
 }

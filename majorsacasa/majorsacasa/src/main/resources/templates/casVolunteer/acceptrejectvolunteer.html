@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/baseCasVolunteer}">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Majors a casa</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+   	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+<body>
+<div layout:fragment="content" th:object="${actionType}">
+	<div class="alert" th:classappend="${actionType == 0} ? 'alert-danger' : 'alert-success'" role="alert">
+		<h4 th:if="${actionType == 0}">¿Vols rebutjar al següent voluntari?</h4>
+		<h4 th:if="${actionType == 1}">¿Vols acceptar al següent voluntari?</h4>
+		<h5>Aquesta acció no es podrà desfer.</h5>
+		<table class="showinfo">
+		<tbody th:object="${volunteer}">
+			<tr>
+				<th><label>Nom:</label></th>
+				<td th:text="${volunteer.name}"></td>
+	        	
+	        </tr>			
+	        <tr>
+				<th><label>Telèfon:</label></th>
+				<td th:text="${volunteer.phoneNumber}"></td>
+	        </tr>
+	        <tr>
+				<th><label>Email:</label></th>
+				<td th:text="${volunteer.email}"></td>
+	        </tr>
+	        <tr>
+				<th><label>Usuari:</label></th>
+				<td th:text="${volunteer.usr}"></td>
+	        </tr>
+	        <tr>
+				<th><label>Aficions:</label></th>
+				<td th:text="${volunteer.hobbies}"></td>
+	        </tr>
+	        <tr>
+				<th><label>Data de naixement:</label></th>
+         		<td><p th:text="${#dates.format(volunteer.birthDate, 'dd/MM/yyyy')}"></p></td>
+	        </tr>
+	        <tr>
+	        	<td>
+	        		<a class="btn" th:classappend="${actionType == 0} ? 'btn-outline-danger' : 'btn-outline-success'"
+	        			href="/casVolunteer/volunteersList" role="button">Cancel·lar</a>
+	        	</td>
+				<td align="right">
+					<a th:if="${actionType == 0}" class="btn btn-danger" th:href="@{/casVolunteer/reject/{usr} (usr=${volunteer.usr})}" role="button">Rebutjar</a>
+					<a th:if="${actionType == 1}" class="btn btn-success" th:href="@{/casVolunteer/accept/{usr} (usr=${volunteer.usr})}" role="button">Acceptar</a>
+				</td>
+	        </tr>
+		</tbody>
+		</table>
+	</div>
+</div>
+</body>
+</html>

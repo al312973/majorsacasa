@@ -38,7 +38,7 @@
 			<td><p th:text="*{contactPersonEmail}"></p></td>
 	    </tr>
 	</table> 
-	<a class="btn btn-outline-info" href="/casCommitee/atrasCompany" role="button">Torna enrere</a>
+	<a th:object="${requestNumber}" class="btn btn-outline-info" th:href="@{/casCommitee/requests/accept/{request} (request=${requestNumber})}" role="button">Torna enrere</a>
 </div>
 </body>
 </html>

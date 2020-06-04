@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/baseCasManager}">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Majors a casa</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+   	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+	<div class="alert alert-success" role="alert">
+		<h4>Procés finalitzat correctament</h4>
+		<h5>S'ha donat d'alta la següent empresa:</h5>
+		<table class="showinfo">
+		<tbody th:object="${company}">
+			<tr>
+				<th><label>Nom:</label></th>
+				<td th:text="${company.name}"></td>
+	        	
+	        </tr>			
+	        <tr>
+				<th><label>CIF:</label></th>
+				<td th:text="${company.CIF}"></td>
+	        </tr>
+	        <tr>
+				<th><label>Adreça:</label></th>
+				<td th:text="${company.address}"></td>
+	        </tr>
+	        <tr>
+				<th><label>Tipus de servei:</label></th>
+				<td th:if="${company.serviceType == 0}">Servei de menjar</td>
+		        <td th:if="${company.serviceType == 1}">Servei sanitari</td>
+		        <td th:if="${company.serviceType == 2}">Servei de neteja</td>
+	        </tr>
+	        <tr>
+				<th><label>Persona de contacte:</label></th>
+				<td th:text="${company.contactPersonName}"></td>
+	        </tr>
+	        <tr>
+				<th><label>Telèfon de contacte:</label></th>
+				<td th:text="${company.contactPersonPhoneNumber}"></td>
+	        </tr>
+	        <tr>
+				<th><label>Correu de contacte:</label></th>
+         		<td><p th:text="${company.contactPersonEmail}"></p></td>
+	        </tr>
+	        <tr class="blank_row"></tr>
+		</tbody>
+		<tbody th:object="${contract}">
+			<tr>
+				<td colspan="2">
+					<h5>També s'ha donat d'alta el següent contracte:</h5>
+				</td>
+			</tr>
+			<tr>
+				<th><label>Data inici:</label></th>
+				<td><p th:text="${#dates.format(contract.dateBeginning, 'dd/MM/yyyy')}"></p></td>
+	        </tr>
+	        <tr>
+				<th><label>Data fi:</label></th>
+				<td><p th:text="${#dates.format(contract.dateEnding, 'dd/MM/yyyy')}"></p></td>
+	        </tr>
+	        <tr>
+				<th><label>Descripció:</label></th>
+         		<td><p th:text="${contract.description}"></p></td>
+	        </tr>
+	        <tr>
+				<th><label>Quantitat de serveis inclosos:</label></th>
+         		<td><p th:text="${contract.quantityServices}"></p></td>
+	        </tr>
+	        <tr>
+				<th><label>Preu per servei:</label></th>
+	        	<td><span th:text="*{priceUnit}"></span><span> </span><span th:text=*{unitsOfMeasure}></span></td>
+	        </tr>
+	        <tr class="blank_row"></tr>
+			<tr>
+				<td align="center" colspan="2">
+					<a class="btn btn-success" th:href="@{/casManager/newCompany/step1}" role="button">Torna a l'inici</a>
+				</td>
+	        </tr>
+	    </tbody>
+		</table>
+	</div>
+</div>
+</body>
+</html>

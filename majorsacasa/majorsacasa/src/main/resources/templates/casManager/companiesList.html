@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/baseCasManager}">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Majors a casa</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+   	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+	<h2>Empreses</h2>
+	
+	  <table class="table table-striped">
+		  <thead>
+		       <tr>
+		         <th>Nom:</th>
+		         <th>CIF:</th>
+		         <th>Adreça:</th>
+		         <th>Tipus de servei:</th>
+		         <th></th>
+		      </tr> 
+		 </thead>
+		 <tbody>
+		       <tr th:each="company: ${companies}">
+				 <td th:text="${company.name}"></td>
+				 <td th:text="${company.CIF}"></td>
+				 <td th:text="${company.address}"></td>
+		         <td th:if="${company.serviceType == 0}">Servei de menjar</td>
+		         <td th:if="${company.serviceType == 1}">Servei sanitari</td>
+		         <td th:if="${company.serviceType == 2}">Servei de neteja</td>
+				<td><a class="btn btn-success" th:href="@{/casManager/companiesList/{CIF}/newContract(CIF=${company.CIF})}" role="button">Afegir contracte</a></td>
+			 </tr>
+         </tbody>
+   	</table> 
+</div>
+</body>
+</html>

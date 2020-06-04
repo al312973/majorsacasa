@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/baseCasManager}">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Majors a casa</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+   	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+	<h2>Dades del contracte</h2>
+	<h3>Pas 3 de 3</h3>
+	
+	<form action="#" th:action="@{/casManager/newCompany/step3}" th:object="${contract}" method="post">
+		<table>
+			<tr th:if="${#fields.hasErrors('dateBeginning')}">
+				<td colspan="2" align="center" class="alert alert-danger" th:errors="*{dateBeginning}"></td>
+			</tr>
+			<tr th:if="${#fields.hasErrors('dateEnding')}">
+				<td colspan="2" align="center" class="alert alert-danger" th:errors="*{dateEnding}"></td>
+			</tr>
+			<tr th:if="${#fields.hasErrors('description')}">
+				<td colspan="2" align="center" class="alert alert-danger" th:errors="*{description}"></td>
+			</tr>
+			<tr th:if="${#fields.hasErrors('quantityServices')}">
+				<td colspan="2" align="center" class="alert alert-danger" th:errors="*{quantityServices}"></td>
+			</tr>
+			
+			<tr>
+				<td><label>Data inici:</label></td>
+				<td th:unless="${#fields.hasErrors('dateBeginning')}">
+	        		<input type="date" class="form-control" th:field="*{dateBeginning}" required/>
+	        	</td>
+	        	
+	        	<td th:if="${#fields.hasErrors('dateBeginning')}">
+	           		<input type="date" class="form-control is-invalid" th:field="*{dateBeginning}" required/>
+	           	</td>
+	        </tr>
+	        
+	        <tr>
+				<td><label>Data fi:</label>
+				<small class="form-text text-muted">Deixa-la vuida si es un contracte indefinit.</small>
+				</td>
+				<td th:unless="${#fields.hasErrors('dateEnding')}">
+	        		<input type="date" class="form-control" th:field="*{dateEnding}"/>
+	        	</td>
+	        	
+	        	<td th:if="${#fields.hasErrors('dateEnding')}">
+	           		<input type="date" class="form-control is-invalid" th:field="*{dateEnding}"/>
+	           	</td>
+	        </tr>
+	        <tr>
+				<td><label>Descripció:</label></td>
+				<td th:unless="${#fields.hasErrors('description')}">
+					<textarea class="form-control" rows="2" th:field="*{description}" required></textarea>
+	        	</td>
+	        	
+	        	<td th:if="${#fields.hasErrors('description')}">
+	           		<textarea class="form-control is-invalid" rows="2" th:field="*{description}" required></textarea>
+	           	</td>
+	        </tr>
+	        <tr>
+				<td><label>Quantitat de serveis inclosos:</label></td>
+				<td th:unless="${#fields.hasErrors('quantityServices')}">
+	        		<input type="text" class="form-control" th:field="*{quantityServices}" required/>
+	        	</td>
+	        	
+	        	<td th:if="${#fields.hasErrors('quantityServices')}">
+	           		<input type="text" class="form-control is-invalid" th:field="*{quantityServices}" required/>
+	           	</td>
+	        </tr>
+	        
+	        <tr th:object="${serviceType}">
+				<td><label>Preu per unitat:</label></td>
+	        	<td th:if="${serviceType == 0}"><input type="text" placeholder="4" class="form-control" readonly/></td>
+	        	<td th:if="${serviceType == 1}"><input type="text" placeholder="10" class="form-control" readonly/></td>
+	        	<td th:if="${serviceType == 2}"><input type="text" placeholder="7" class="form-control" readonly/></td>
+	        </tr>
+	        
+	        <tr th:object="${serviceType}">
+				<td><label>Unitat de mesura:</label></td>
+				<td th:if="${serviceType == 0}"><input type="text" placeholder="€/menú" class="form-control" readonly/></td>
+	        	<td th:if="${serviceType == 1}"><input type="text" placeholder="€/visita" class="form-control" readonly/></td>
+	        	<td th:if="${serviceType == 2}"><input type="text" placeholder="€/hora" class="form-control" readonly/></td>
+	        </tr>
+	        
+	        <tr class="blank_row"></tr>
+	        
+	        <tr>
+	            <td><a class="btn btn-outline-info" href="/casManager/newCompany/step2" role="button">Torna enrere</a></td>
+	            <td align="right"><input class="btn btn-info" type="submit" value="Següent" role="button"/></td>
+	        </tr>
+        </table>
+    </form>  
+</div>
+</body>
+</html>

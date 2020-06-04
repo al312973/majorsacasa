@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/baseCasCommitee}">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Majors a casa</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+   	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+	<h2>Sol·licituts pendents</h2>
+	
+	  <table class="table table-striped">
+		  <thead>
+		       <tr>
+		         <th>Data de sol·licitut:</th>
+		         <th>Tipus de servei sol·licitat:</th>
+		         <th>Comentaris:</th>
+		         <th>Sol·licitat fins:</th>
+		         <th>Beneficiari:</th>
+		         <th></th>
+		         <th></th>
+		      </tr> 
+		 </thead>
+		 <tbody>
+		       <tr th:each="request: ${requests}">
+				 <td><p th:text="${#dates.format(request.creationDate, 'dd/MM/yyyy')}"></p></td>
+		         <td th:if="${request.serviceType == 0}">Servei de menjar</td>
+		         <td th:if="${request.serviceType == 1}">Servei sanitari</td>
+		         <td th:if="${request.serviceType == 2}">Servei de neteja</td>
+		         <td th:text="${request.comments}"></td>
+		         <td th:if="${request.endDate == null}">Indefinit</td>
+		         <td th:unless="${request.endDate == null}"><p th:text="${#dates.format(request.endDate, 'dd/MM/yyyy')}"></p></td>
+		         <td><a class="btn btn-info" th:href="@{/casCommitee/showElderly/{elderly_dni} (elderly_dni=${request.elderly_dni})}" th:text="${request.elderly_dni}" role="button"></a></td>   
+				 <td><a class="btn btn-success" th:href="@{/casCommitee/requests/accept/{number}(number=${request.number})}" role="button">Asignar contracte</a></td>
+				 <td><a class="btn btn-danger" th:href="@{/casCommitee/requests/reject/{number}(number=${request.number})}" role="button">Rebutjar</a></td>
+			 </tr>
+         </tbody>
+   	</table> 
+</div>
+</body>
+</html>

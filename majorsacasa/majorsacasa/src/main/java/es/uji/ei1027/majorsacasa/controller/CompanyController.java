@@ -25,7 +25,7 @@ public class CompanyController {
 	
 	@RequestMapping(value="/list")
 	public String listCompanys(Model model) {
-		model.addAttribute("companys", companyDao.getCompanys());
+		model.addAttribute("companys", companyDao.getCompanies());
 		return "company/list";
 	}
 	
@@ -46,7 +46,7 @@ public class CompanyController {
 		
 	@RequestMapping(value="/update/{CIF}", method = RequestMethod.GET)
     public String editCompany(Model model, @PathVariable String CIF) {
-		Company company = companyDao.getCompany(CIF);
+		Company company = companyDao.getCompanyByCIF(CIF);
 
 		model.addAttribute("company", company);
         return "company/update"; 

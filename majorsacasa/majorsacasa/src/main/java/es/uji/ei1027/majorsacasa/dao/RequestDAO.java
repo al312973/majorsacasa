@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import es.uji.ei1027.majorsacasa.model.Request;
@@ -85,6 +86,20 @@ public class RequestDAO {
 		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM REQUEST", Integer.class);
 	}
 	
+	//Obtiene un listado de todas las solicitudes pendientes de aceptación
+	public List<Request> getPendingRequests(){
+		try{
+			return jdbcTemplate.query("SELECT * FROM REQUEST WHERE STATE=0 AND FINISHED = FALSE ORDER BY CREATIONDATE", new RequestRowMapper());
+		}catch (EmptyResultDataAccessException e){
+			return new ArrayList<Request>();
+		}
+	}
+	
+	//Obtiene el numero de solicitudes asignadas a un contrato determinado;
+	public int getAssignedRequestsToContract(int contractNumber) {
+		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM REQUEST WHERE CONTRACT_NUMBER = "+contractNumber, Integer.class);
+	}
+	
 	//Finaliza una solicitud con la fecha actual e indica que no se muestre
 	public void finishRequest(Request request){
 		jdbcTemplate.update("UPDATE REQUEST SET ENDDATE = ?, FINISHED = TRUE WHERE NUMBER = ?",
@@ -93,11 +108,22 @@ public class RequestDAO {
 							);
 	}
 	
-	public List<Request> getRequests(){
-		try{
-			return jdbcTemplate.query("SELECT * FROM REQUEST", new RequestRowMapper());
-		}catch (EmptyResultDataAccessException e){
-			return new ArrayList<Request>();
-		}
+	//Rechaza una solicitud
+	public void rejectRequest(int requestNumber){
+		jdbcTemplate.update("UPDATE REQUEST SET STATE = 2, REJECTEDDATE = ? WHERE NUMBER = ?",
+							new java.sql.Date(new Date().getTime()),
+							requestNumber
+							);
 	}
+	
+	//Acepta una solicitud y le asigna un contrato
+	public void acceptRequest(int requestNumber, int contractNumber, String userCas){
+		jdbcTemplate.update("UPDATE REQUEST SET STATE = 1, APPROVEDDATE = ?, CONTRACT_NUMBER = ?, USERCAS = ? WHERE NUMBER = ?",
+							new java.sql.Date(new Date().getTime()),
+							contractNumber,
+							userCas,
+							requestNumber
+							);
+	}
+	
 }

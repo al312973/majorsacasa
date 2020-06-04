@@ -18,6 +18,7 @@ public class ElderlyDAO {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	
+	//Añade una nueva persona mayor en la base de datos
 	public void addElderly(Elderly elderly){
 		jdbcTemplate.update("INSERT INTO ELDERLY VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
 								elderly.getName(), 
@@ -34,10 +35,35 @@ public class ElderlyDAO {
 								elderly.getDiseases());
 	}
 	
-	public void deleteElderly(String DNI){
-		jdbcTemplate.update("DELETE FROM ELDERLY WHERE DNI = ?", DNI);
+	//Obtiene los datos de una persona mayor a partir de su DNI
+	public Elderly getElderlyByDNI(String DNI){
+		try{
+			return jdbcTemplate.queryForObject("SELECT * FROM ELDERLY WHERE DNI = ?", new ElderlyRowMapper(), DNI);
+		}catch (EmptyResultDataAccessException e){
+			return null;
+		}
 	}
 	
+	//Obtiene los datos de una persona mayor a partir de su email
+	public Elderly getElderlyByEmail(String Email){
+		try{
+			return jdbcTemplate.queryForObject("SELECT * FROM ELDERLY WHERE EMAIL = ?", new ElderlyRowMapper(), Email);
+		}catch (EmptyResultDataAccessException e){
+			return null;
+		}
+	}
+	
+	//Obtiene el listado de todas las personas mayores registradas en el sistema
+	public List<Elderly> getElderlies(){
+		try{
+			return jdbcTemplate.query("SELECT * FROM ELDERLY", new ElderlyRowMapper());
+		}catch (EmptyResultDataAccessException e){
+			return new ArrayList<Elderly>();
+		}
+		
+	}
+
+	//Actualiza los datos de una persona mayor específica
 	public void updateElderly(Elderly elderly){
 		jdbcTemplate.update("UPDATE ELDERLY SET NAME = ?, SURNAME = ?, BIRTHDATE = ?, ADDRESS = ?, PHONENUMBER = ?, BANKACCOUNTNUMBER = ?,"
 							+ " EMAIL = ?, USERPWD = ?, ALERGIES = ?, DISEASES = ? "
@@ -56,29 +82,9 @@ public class ElderlyDAO {
 							);
 	}
 	
-	public Elderly getElderlyByDNI(String DNI){
-		try{
-			return jdbcTemplate.queryForObject("SELECT * FROM ELDERLY WHERE DNI = ?", new ElderlyRowMapper(), DNI);
-		}catch (EmptyResultDataAccessException e){
-			return null;
-		}
+	//Elimina una persona mayor de la base de datos
+	public void deleteElderly(String DNI){
+		jdbcTemplate.update("DELETE FROM ELDERLY WHERE DNI = ?", DNI);
 	}
-	
-	public Elderly getElderlyByEmail(String Email){
-		try{
-			return jdbcTemplate.queryForObject("SELECT * FROM ELDERLY WHERE EMAIL = ?", new ElderlyRowMapper(), Email);
-		}catch (EmptyResultDataAccessException e){
-			return null;
-		}
-	}
-	
-	public List<Elderly> getElderlies(){
-		try{
-			return jdbcTemplate.query("SELECT * FROM ELDERLY", new ElderlyRowMapper());
-		}catch (EmptyResultDataAccessException e){
-			return new ArrayList<Elderly>();
-		}
 		
-	}
-	
 }

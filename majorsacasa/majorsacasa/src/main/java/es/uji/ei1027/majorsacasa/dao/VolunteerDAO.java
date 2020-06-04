@@ -57,6 +57,16 @@ public class VolunteerDAO {
 		}
 	}
 	
+	//Lista todos los voluntarios no aceptados de la BBDD
+	public List<Volunteer> getNotAcceptedVolunteers(){
+		try{
+			return jdbcTemplate.query("SELECT * FROM VOLUNTEER WHERE ACCEPTED = FALSE AND ENDDATE IS NULL", new VolunteerRowMapper());
+		}catch (EmptyResultDataAccessException e){
+			return new ArrayList<Volunteer>();
+		}
+		
+	}
+		
 	//Actualiza la información de un voluntario
 	public void updateVolunteer(Volunteer volunteer){
 		jdbcTemplate.update("UPDATE VOLUNTEER SET NAME = ?, PHONENUMBER = ?, EMAIL = ?, USR = ?, PWD = ?, HOBBIES = ?,"
@@ -80,23 +90,13 @@ public class VolunteerDAO {
 							);
 	}
 	
+	//Establece un voluntario como aceptado
+	public void acceptVolunteer(String usr){
+		jdbcTemplate.update("UPDATE VOLUNTEER SET ACCEPTATIONDATE = ?, ACCEPTED = TRUE WHERE USR = ?", new java.sql.Date(new Date().getTime()) , usr);
+	}
 	//Borra un voluntario de la BBDD
 	public void deleteVolunteer(String Usr) {
 		jdbcTemplate.update("UPDATE VOLUNTEER SET ENDDATE = ? WHERE USR = ?", new java.sql.Date(new Date().getTime()), Usr);
-	}
-	
-	//Lista todos los voluntarios de la BBDD
-	public List<Volunteer> getVolunteers(){
-		try{
-			return jdbcTemplate.query("SELECT * FROM VOLUNTEER", new VolunteerRowMapper());
-		}catch (EmptyResultDataAccessException e){
-			return new ArrayList<Volunteer>();
-		}
-		
-	}
-	
-	public void aceptaVoluntario(String usr){
-		jdbcTemplate.update("UPDATE VOLUNTEER SET ACCEPTATIONDATE = ?, ACCEPTED = TRUE WHERE USR = ?", new java.sql.Date(new Date().getTime()) , usr);
 	}
 
 }

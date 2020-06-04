@@ -9,29 +9,38 @@
    	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
 </head>
 <body>
-<div layout:fragment="content">
-	<h2>Contractes disponibles</h2>
+<div layout:fragment="content" th:object="${serviceType}">
+   <h2 th:if="${serviceType == 0}">Contractes de serveis de menjar a domicili</h2>
+   <h2 th:if="${serviceType == 1}">Contractes de serveis sanitaris</h2>
+   <h2 th:if="${serviceType == 2}">Contractes de serveis de neteja</h2>
 	
 	  <table class="table table-striped">
 		  <thead>
 		       <tr>
-		         <th>Número:</th>
-		         <th>Data inici:</th>
+		         <th>Data d'inici:</th>
+		         <th>Data final:</th>
+		         <th>Descripció:</th>
+		         <th>Serveis disponibles:</th>
+		         <th>Preu del servei:</th>
 		         <th>Empresa:</th>
 		         <th></th>
 		      </tr> 
 		 </thead>
-		 <tbody>
+		 <tbody th:object="${requestNumber}">
 		       <tr th:each="contract: ${contracts}">
-				 <td th:text="${contract.number}"></td>
-				 <td th:text="${contract.dateBeginning}"></td>
-				 <td><a th:href="@{/casCommitee/showCompany/{number}/{cif} (cif=${contract.company_cif}, number=${contract.number})}" th:text="${contract.company_cif}"></a></td>  
-				 <td><a class="btn btn-success" th:href="@{/casCommitee/}" role="button">Asignar</a></td>
+		       	 <td><p th:text="${#dates.format(contract.dateBeginning, 'dd/MM/yyyy')}"></p></td>
+		       	 <td th:if="${contract.dateEnding == null}">Indefinida</td>
+		         <td th:unless="${contract.dateEnding == null}"><p th:text="${#dates.format(contract.dateEnding, 'dd/MM/yyyy')}"></p></td>
+				 <td th:text="${contract.description}"></td>
+				 <td th:text="${contract.quantityServices}"></td>
+				 <td><span th:text="${contract.priceUnit}"></span><span></span><span th:text=${contract.unitsOfMeasure}></span></td>
+				 <td><a class="btn btn-info" th:href="@{/casCommitee/showCompany/{cif} (cif=${contract.company_cif})}" th:text="${contract.company_cif}" role="button"></a></td>  
+				 <td><a class="btn btn-success" th:href="@{/casCommitee/requests/accept/{requestNumber}/{contractNumber} (requestNumber=${requestNumber}, contractNumber=${contract.number})}" role="button">Asignar</a></td>
 			 </tr>
 			 
          </tbody>
    	</table> 
-   	<a class="btn btn-outline-info" href="/casCommitee/gestionarSolicitudes" role="button">Torna enrere</a>
+   	<a class="btn btn-outline-info" href="/casCommitee/requests" role="button">Torna enrere</a>
 </div>
 </body>
 </html>

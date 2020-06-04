@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/baseCasVolunteer}">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Majors a casa</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+   	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+	<h2>Voluntaris pendents d'acceptació</h2>
+
+  	<table class="table table-striped">
+     <thead>
+       <tr>
+         <th>Nom:</th>
+         <th>Hobbies:</th>
+         <th>Data naiximent:</th>
+         <th>Més informació</th>
+         <th></th>
+         <th></th>
+       </tr>  
+     </thead>
+     <tbody>
+       <tr th:each="volunteer: ${volunteers}">
+         <td th:text="${volunteer.name}"></td>
+         <td th:text="${volunteer.hobbies}"></td>
+         <td th:text="${#dates.format(volunteer.birthDate, 'dd/MM/yyyy')}"></td>
+         <td><a class="btn btn-info btn" th:href="@{/casVolunteer/showVolunteer/{usr}(usr=${volunteer.usr})}" role="button">Dades personals</a></td>
+         <td><a class="btn btn-success" th:href="@{/casVolunteer/volunteersList/confirmAction/{actionType}/{usr}(actionType=1, usr=${volunteer.usr})}" role="button">Acceptar</a><td>
+         <td><a class="btn btn-danger" th:href="@{/casVolunteer/volunteersList/confirmAction/{actionType}/{usr}(actionType=0, usr=${volunteer.usr})}" role="button">Rebutjar</a></td>
+      </tr>
+     </tbody>
+   </table> 
+</div>
+</body>
+</html>

@@ -70,11 +70,11 @@ public class LoginRegisterController {
 		} else if (user.getType().equals("volunteer")) {
 			return "redirect:/volunteer/services";
 		} else if (user.getType().equals("casManager")) {
-			return "redirect:/casManager/altaEmpresa";
+			return "redirect:/casManager/newCompany/step1";
 		} else if (user.getType().equals("casCommitee")) {
-			return "redirect:/casCommitee/gestionarSolicitudes";
+			return "redirect:/casCommitee/requests";
 		} else {
-			return "redirect:/casVolunteer/altaVoluntarios";
+			return "redirect:/casVolunteer/volunteersList";
 		}
 	}
 	

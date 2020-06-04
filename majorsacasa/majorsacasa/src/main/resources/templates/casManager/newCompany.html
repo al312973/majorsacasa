@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/baseCasManager}">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Majors a casa</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+   	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+	<h2>Dades de l'empresa</h2>
+	<h3>Pas 1 de 3</h3>
+	
+	<form action="#" th:action="@{/casManager/newCompany/step1}" th:object="${company}" method="post">
+		<table>
+			<tr th:if="${#fields.hasErrors('name')}">
+				<td colspan="2" align="center" class="alert alert-danger" th:errors="*{name}"></td>
+			</tr>
+			<tr th:if="${#fields.hasErrors('CIF')}">
+				<td colspan="2" align="center" class="alert alert-danger" th:errors="*{CIF}"></td>
+			</tr>
+			<tr th:if="${#fields.hasErrors('address')}">
+				<td colspan="2" align="center" class="alert alert-danger" th:errors="*{address}"></td>
+			</tr>
+			
+			<tr>
+				<td><label>Nom:</label></td>
+	        	<td th:unless="${#fields.hasErrors('name')}">
+	        		<input type="text" class="form-control" th:field="*{name}" required/>
+	        	</td>
+	        	<td th:if="${#fields.hasErrors('name')}">
+	        		<input type="text" class="form-control is-invalid" th:field="*{name}" required/>
+	        	</td>
+	        </tr>
+	        <tr>
+				<td><label>CIF:</label></td>
+	        	<td th:unless="${#fields.hasErrors('CIF')}">
+	        		<input type="text" class="form-control" th:field="*{CIF}" required/>
+	        	</td>
+	        	<td th:if="${#fields.hasErrors('CIF')}">
+	        		<input type="text" class="form-control is-invalid" th:field="*{CIF}" required/>
+	        	</td>
+	        </tr>
+	        <tr>
+				<td><label>Direcció fiscal:</label></td>
+	        	<td th:unless="${#fields.hasErrors('address')}">
+	        		<input type="text" class="form-control" th:field="*{address}" required/>
+	        	</td>
+	        	<td th:if="${#fields.hasErrors('address')}">
+	        		<input type="text" class="form-control is-invalid" th:field="*{address}" required/>
+	        	</td>
+	        </tr>
+	        <tr>
+				<td><label>Tipus servei:</label></td>
+	        	<td><select class="form-control input-lg" th:field="*{serviceType}" required>
+	        			<option value="0">Servei de menjar</option>
+	        			<option value="1">Servei sanitari</option>
+	        			<option value="2">Servei de neteja</option>
+	        		</select></td>
+	        </tr>
+	        <tr class="blank_row"></tr>
+	        <tr align="center">
+	            <td colspan="2"><input class="btn btn-info" type="submit" value="Següent" role="button"/></td>
+	        </tr>
+        </table>
+    </form>  
+</div>
+</body>
+</html>

@@ -18,6 +18,7 @@ public class InvoiceDAO {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	
+	//Añade una nueva factura a la base de datos
 	public void addInvoice(Invoice invoice) {
 		jdbcTemplate.update("INSERT INTO INVOICE VALUES(?,?,?,?,?)",
 							invoice.getDate(),
@@ -29,10 +30,25 @@ public class InvoiceDAO {
 							);
 			}
 	
-	public void deleteInvoice(int number) {
-		jdbcTemplate.update("DELETE FROM INVOICE WHERE NUMBER = ?", number);
+	//Obtiene los datos de una factura específica
+	public Invoice getInvoice(int number) {
+		try{
+			return jdbcTemplate.queryForObject("SELECT * FROM INVOICE WHERE NUMBER = ?", new InvoiceRowMapper(), number);
+		}catch (EmptyResultDataAccessException e){
+			return null;
+		}
 	}
 	
+	//Obtiene una lista con todas las facturas registradas en el sistema
+	public List<Invoice> getInvoices(){
+		try{
+			return jdbcTemplate.query("SELECT * FROM INVOICE", new InvoiceRowMapper());
+		}catch (EmptyResultDataAccessException e){
+			return new ArrayList<Invoice>();
+		}	
+	}
+		
+	//Actualiza los datos de una factura específica
 	public void updateInvoice(Invoice invoice){
 		jdbcTemplate.update("UPDATE INVOICE SET DATE = ?, AMOUNT = ?, CONCEPT = ?, ELDERLY_DNI = ?"
 							+ " WHERE NUMBER = ?",
@@ -44,20 +60,9 @@ public class InvoiceDAO {
 							);
 	}
 	
-	public Invoice getInvoice(int number) {
-		try{
-			return jdbcTemplate.queryForObject("SELECT * FROM INVOICE WHERE NUMBER = ?", new InvoiceRowMapper(), number);
-		}catch (EmptyResultDataAccessException e){
-			return null;
-		}
+	//Elimina una factura determinada
+	public void deleteInvoice(int number) {
+		jdbcTemplate.update("DELETE FROM INVOICE WHERE NUMBER = ?", number);
 	}
 	
-	public List<Invoice> getInvoices(){
-		try{
-			return jdbcTemplate.query("SELECT * FROM INVOICE", new InvoiceRowMapper());
-		}catch (EmptyResultDataAccessException e){
-			return new ArrayList<Invoice>();
-		}
-		
-	}
 }

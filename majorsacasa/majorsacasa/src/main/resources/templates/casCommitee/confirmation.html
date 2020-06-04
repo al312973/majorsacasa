@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/baseCasCommitee}">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Majors a casa</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+   	<link rel="stylesheet" type="text/css" href="/css/majorsacasa.css" th:href="@{/css/majorsacasa.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+	<div class="alert alert-success" role="alert">
+		<h4>Procés finalitzat correctament</h4>
+		<h5>S'ha acceptat la següent sol·licitud:</h5>
+		<table class="showinfo">
+		<tbody th:object="${request}">
+			<tr>
+				<th><label>Tipus de sevei sol·licitat:</label></th>
+				<td th:if="${request.serviceType == 0}">Servei de menjar</td>
+		        <td th:if="${request.serviceType == 1}">Servei sanitari</td>
+		        <td th:if="${request.serviceType == 2}">Servei de neteja</td>
+	        </tr>			
+	        <tr>
+				<th><label>Data de sol·licitud:</label></th>
+				<td><p th:text="${#dates.format(request.creationDate, 'dd/MM/yyyy')}"></p></td>
+	        </tr>
+	        <tr>
+				<th><label>Servei sol·licitat fins al:</label></th>
+				<td th:if="${request.endDate == null}">Indefinit</td>
+		        <td th:unless="${request.endDate == null}"><p th:text="${#dates.format(request.endDate, 'dd/MM/yyyy')}"></p></td>
+	        </tr>
+	        <tr>
+				<th><label>Comentaris:</label></th>
+				<td th:text="${request.comments}"></td>
+	        </tr>
+	        <tr>
+				<th><label>Sol·licitat pel beneficiari:</label></th>
+				<td th:text="${request.elderly_dni}"></td>
+	        </tr>
+	        <tr class="blank_row"></tr>
+		</tbody>
+		<tbody th:object="${contract}">
+			<tr>
+				<td colspan="2">
+					<h5>I se li ha assignat següent contracte:</h5>
+				</td>
+			</tr>
+			<tr>
+				<th><label>Data inici:</label></th>
+				<td><p th:text="${#dates.format(contract.dateBeginning, 'dd/MM/yyyy')}"></p></td>
+	        </tr>
+	        <tr>
+				<th><label>Data fi:</label></th>
+				<td><p th:text="${#dates.format(contract.dateEnding, 'dd/MM/yyyy')}"></p></td>
+	        </tr>
+	        <tr>
+				<th><label>Descripció:</label></th>
+         		<td><p th:text="${contract.description}"></p></td>
+	        </tr>
+	        <tr>
+				<th><label>Quantitat de serveis inclosos:</label></th>
+         		<td><p th:text="${contract.quantityServices}"></p></td>
+	        </tr>
+	        <tr>
+				<th><label>Preu per servei:</label></th>
+	        	<td><span th:text="*{priceUnit}"></span><span> </span><span th:text=*{unitsOfMeasure}></span></td>
+	        </tr>
+	        <tr class="blank_row"></tr>
+			<tr>
+				<td align="center" colspan="2">
+					<a class="btn btn-success" th:href="@{/casCommitee/requests}" role="button">Torna a l'inici</a>
+				</td>
+	        </tr>
+	    </tbody>
+		</table>
+	</div>
+</div>
+</body>
+</html>

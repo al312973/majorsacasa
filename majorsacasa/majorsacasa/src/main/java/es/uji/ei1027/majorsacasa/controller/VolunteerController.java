@@ -54,6 +54,10 @@ public class VolunteerController {
 	//Muestra el listado de todas las disponibilidades del voluntario no finalizadas
 	@RequestMapping(value="/services", method = RequestMethod.GET)
 	public String listServices(Model model, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		UserDetails user = (UserDetails) session.getAttribute("user");
 		if (currentVolunteer==null)
 			this.currentVolunteer = volunteerDao.getVolunteerByEmail(user.getEmail());
@@ -66,7 +70,11 @@ public class VolunteerController {
 	
 	//Muestra información de la persona mayor que ha solicitado un servicio
 	@RequestMapping(value="/services/beneficiary/{elderly_dni}", method = RequestMethod.GET)
-    public String showElderlyInfo(Model model, @PathVariable String elderly_dni) {
+    public String showElderlyInfo(Model model, @PathVariable String elderly_dni, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		Elderly elderly = elderlyDao.getElderlyByDNI(elderly_dni);
         model.addAttribute("elderly", elderly);
         return "volunteer/beneficiary"; 
@@ -74,7 +82,11 @@ public class VolunteerController {
 	
 	//Muestra la información personal
 	@RequestMapping(value="/profile", method = RequestMethod.GET)
-    public String updateProfile(Model model) {
+    public String updateProfile(Model model, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
         model.addAttribute("volunteer", currentVolunteer);
         return "volunteer/profile"; 
     }
@@ -83,6 +95,10 @@ public class VolunteerController {
 	@RequestMapping(value="/profile", method = RequestMethod.POST)
     public String processUpdateSubmit(@ModelAttribute("volunteer") Volunteer volunteer, BindingResult bindingResult, 
     		HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		//Comprobamos que no haya errores
 		VolunteerValidator volunteerValidator = new VolunteerValidator(volunteerDao, currentVolunteer); 
 		volunteerValidator.validate(volunteer, bindingResult);
@@ -102,14 +118,23 @@ public class VolunteerController {
 	
 	//Redirige a la pagina que permite especificar una fecha a partir de la cual ya no estará disponible
 	@RequestMapping(value="/timeoffsick", method = RequestMethod.GET) 
-    public String setTimeOffSick(Model model) {
+    public String setTimeOffSick(Model model, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		model.addAttribute("volunteer", currentVolunteer);
         return "volunteer/timeOffSick";
     }
 	
 	//Actualiza la información personal
 	@RequestMapping(value="/timeoffsick", method = RequestMethod.POST)
-    public String processSetTimeOffSickSubmit(@ModelAttribute("volunteer") Volunteer volunteer, BindingResult bindingResult) {
+    public String processSetTimeOffSickSubmit(@ModelAttribute("volunteer") Volunteer volunteer, 
+    		BindingResult bindingResult, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		//Comprobamos que la fecha introducida sea posterior a la fecha actual
 		Calendar endDate = Calendar.getInstance();
 		endDate.setTime(volunteer.getEndDate());
@@ -141,14 +166,23 @@ public class VolunteerController {
 	
 	//Redirige a la pagina que permite añadir una nueva disponibilidad
 	@RequestMapping(value="/addService", method = RequestMethod.GET) 
-    public String addAvailability(Model model) {
+    public String addAvailability(Model model, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
         model.addAttribute("availability", new Availability());
         return "volunteer/addService";
     }
 
 	//Añade una nueva disponibilidad
 	@RequestMapping(value="/addService", method=RequestMethod.POST)
-	public String processAddSubmit(@ModelAttribute("availability") Availability availability, BindingResult bindingResult) {
+	public String processAddSubmit(@ModelAttribute("availability") Availability availability, 
+			BindingResult bindingResult, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		//Rellena los campos no solicitados mediante el formulario
 		if (currentVolunteer.getAcceptationDate()!=null)
 			availability.setStateAvailable(true);
@@ -170,7 +204,11 @@ public class VolunteerController {
 	
 	//Redirige a la pagina que permite modificar una disponibilidad
 	@RequestMapping(value="/updateService/{date}/{beginningHour}", method = RequestMethod.GET)
-	public String editAvailability(Model model, @PathVariable String date, @PathVariable String beginningHour) {
+	public String editAvailability(Model model, @PathVariable String date, @PathVariable String beginningHour, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		try {
 			Date availabilityDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 			LocalTime availabilityBeginningHour = LocalTime.parse(beginningHour);
@@ -188,7 +226,12 @@ public class VolunteerController {
 	
 	//Modifica la información de una disponibilidad
 	@RequestMapping(value="/updateService", method = RequestMethod.POST) 
-	public String processUpdateSubmit(@ModelAttribute("availability") Availability availability, BindingResult bindingResult) {
+	public String processUpdateSubmit(@ModelAttribute("availability") Availability availability, 
+			BindingResult bindingResult, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		AvailabilityValidator availabilityValidator = new AvailabilityValidator(availabilityDao, currentAvailability,  currentVolunteer.getEndDate());
 		availability.setVolunteer_usr(currentVolunteer.getUsr());
 		availabilityValidator.validate(availability, bindingResult);
@@ -220,7 +263,11 @@ public class VolunteerController {
 	//Muestra la página de confirmación antes de finalizar o borrar un servicio
 	@RequestMapping(value="/services/delete/confirm/{deletionType}/{date}/{beginningHour}", method = RequestMethod.GET)
 	public String confirmDeleteService(Model model, @PathVariable int deletionType, @PathVariable String date, 
-			@PathVariable String beginningHour){
+			@PathVariable String beginningHour, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		try {
 			Date availabilityDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 			LocalTime availabilitiBeginningHour = LocalTime.parse(beginningHour);
@@ -240,7 +287,11 @@ public class VolunteerController {
 
 	//Borra o da de baja un servicio
 	@RequestMapping(value="/services/delete/{date}/{beginningHour}", method = RequestMethod.GET)
-    public String processDelete(@PathVariable String date, @PathVariable String beginningHour) {
+    public String processDelete(@PathVariable String date, @PathVariable String beginningHour, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 	   try {
 			Date availabilityDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 			LocalTime availabilityBeginningHour = LocalTime.parse(beginningHour);

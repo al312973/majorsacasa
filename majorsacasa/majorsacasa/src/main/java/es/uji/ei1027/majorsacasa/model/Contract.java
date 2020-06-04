@@ -22,7 +22,7 @@ public class Contract {
 
 	@Override
 	public String toString() {
-		return "Contract [number=" + number + ", dateBeginning=" + dateBeginning + ", dateEnding=" + "dateEnding" + ", description=" + description
+		return "Contract [number=" + number + ", dateBeginning=" + dateBeginning + ", dateEnding=" + dateEnding + ", description=" + description
 				+ ", serviceType=" + serviceType + ", quantityServices=" + quantityServices + ", unitsOfMeasure="
 				+ unitsOfMeasure + ", priceUnit=" + priceUnit + ", company_cif=" + company_cif + "]";
 	}

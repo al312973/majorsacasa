@@ -1,7 +1,9 @@
 package es.uji.ei1027.majorsacasa.controller;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +26,7 @@ public class CasCommiteeController {
 	private ElderlyDAO elderlyDao;
 	private ContractDAO contractDao;
 	private CompanyDAO companyDao;
+	private SimpleDateFormat formatter;
 	private Request request;
 	private Contract contract;
 	
@@ -47,99 +50,167 @@ public class CasCommiteeController {
 		this.companyDao = companyDao;
 	}
 	
-	//MÉTODO PARA LISTAR TODAS LAS SOLICITUDES CON ESTADO PENDIENTE DE ACEPTACION
-	@RequestMapping(value="/gestionarSolicitudes", method = RequestMethod.GET)
-    public String showCasCommiteePage(Model model) {
-		List<Request> listaSolicitudes = new ArrayList<Request>();
-		List<Request> listaSolicitudesPendientes = new ArrayList<Request>();
-		listaSolicitudes = requestDao.getRequests();
-		
-		for (Request r : listaSolicitudes){
-			if (r.getState() == 0){
-				listaSolicitudesPendientes.add(r);
-			}
+	//Método para listar todas las solicitudes con estado pendiente de aceptación
+	@RequestMapping(value="/requests", method = RequestMethod.GET)
+    public String showRequests(Model model, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
 		}
 		
-		model.addAttribute("requests", listaSolicitudesPendientes);
-        return "casCommitee/gestionarSolicitudes"; 
+		if (formatter==null)
+			this.formatter = new SimpleDateFormat("dd/MM/yyyy");
+		
+		List<Request> requests = requestDao.getPendingRequests();
+		
+		model.addAttribute("requests", requests);
+        return "casCommitee/requests"; 
     }
 	
-	//MÉTODO PARA DIRECCIONAR HACIA UNA LISTA CON LOS CONTRATOS QUE HAYA VIGENTES DEPENDIENDO DEL TIPO DE SERVICIO QUE TENGA LA SOLICITUD
-	@RequestMapping(value="/gestionarSolicitudes/{number}")
-	public String modifyRequest(@PathVariable Integer number){
+	//Método para rechazar una solicitud
+	@RequestMapping(value="/requests/reject/{number}", method=RequestMethod.GET)
+	public String rejectRequest(@PathVariable Integer number, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		request = requestDao.getRequest(number);
-		if (request.getServiceType() == 0)
-			return "redirect:../cargarContratosComida";
-		else if (request.getServiceType() == 1)
-			return "redirect:../cargarContratosSanitarios";
-		else
-			return "redirect:../cargarContratosLimpieza";
-	}
-	
-	@RequestMapping(value="/cargarContratosComida")
-	public String contratosComida(Model model){
-		List<Contract> lista = contractDao.getContracts();
-		List<Contract> contratosComida = new ArrayList<Contract>();
+		requestDao.rejectRequest(number);
 		
-		for(Contract c:lista){
-			if (c.getServiceType() == 0)
-				contratosComida.add(c);
+		//Manda un correo notificando que la solicitud ha sido rechazada
+		Elderly elderly = elderlyDao.getElderlyByDNI(request.getElderly_dni());
+		String correo ="\nS'ha manat un correu de notificació a "+elderly.getName()+" "+elderly.getSurname()+"\n"
+		+"La sol·licitud:\n"
+		+ "\tRealitzada el: "+formatter.format(request.getCreationDate())+"\n";
+		if (request.getServiceType()==0) {
+			correo+="\tDel tipus: servei de menjar\n";
+		} else if (request.getServiceType()==1) {
+			correo+="\tDel tipus: servei sanitari\n";
+		} else {
+			correo+="\tDel tipus: servei de neteja\n";
 		}
-
-		model.addAttribute("contracts", contratosComida);
+		
+		if (request.getEndDate()!=null) {
+			correo+="\tSol·licitada fins al: "+formatter.format(request.getEndDate())+"\n";
+		}
+		correo+="\tAmb comentaris: "+request.getComments()+"\n"
+		+"Ha sigut rebutjada per no complir els criteris necessaris. Sentim les molèsties";
+		
+		System.out.println(correo);
+		
+		return "redirect:/casCommitee/requests";
+	}
+		
+	//Método para redireccionar a la lista de contratos del tipo de servicio solicitado
+	@RequestMapping(value="/requests/accept/{number}", method=RequestMethod.GET)
+	public String modifyRequest(Model model, @PathVariable Integer number, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
+		request = requestDao.getRequest(number);
+		List<Contract> contracts;
+		
+		//Si es una solicitud de servicios de comida, muestra el listado de contratos de comida que se pueden asignar
+		if (request.getServiceType()==0) {
+			contracts = contractDao.getFoodContracts();
+		} else if (request.getServiceType()==1) {
+			//Si es una solicitud de servicios sanitarios, muestra el listado de contratos sanitarios que se pueden asignar
+			contracts = contractDao.getHealthContracts();
+		} else {
+			//Si es una solicitud de servicios de limpieza, muestra el listado de contratos de limpieza que se pueden asignar
+			contracts = contractDao.getCleaningContracts();
+		}
+		
+		//Mostramos el numero de servicios disponibles de cada contrato (total-veces asignado)
+		for (Contract contract : contracts) {
+			int total = contract.getQuantityServices();
+			int assigned = requestDao.getAssignedRequestsToContract(contract.getNumber());
+			contract.setQuantityServices(total-assigned);
+		}
+		
+		model.addAttribute("serviceType", request.getServiceType());
+		model.addAttribute("requestNumber", number);
+		model.addAttribute("contracts", contracts);
 		return "casCommitee/contracts";
 	}
 	
-	@RequestMapping(value="/cargarContratosSanitarios")
-	public String contratosSanitarios(Model model){
-		List<Contract> lista = contractDao.getContracts();
-		List<Contract> contratosSanitarios = new ArrayList<Contract>();
 		
-		for(Contract c:lista){
-			if (c.getServiceType() == 1)
-				contratosSanitarios.add(c);
+	//Muestra los datos de la persona mayor que ha solicitado un servicio
+	@RequestMapping(value="/showElderly/{elderly_dni}", method=RequestMethod.GET)
+	public String showElderly(Model model, @PathVariable String elderly_dni, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
 		}
-
-		model.addAttribute("contracts", contratosSanitarios);
-		return "casCommitee/contracts";
-	}	
-	
-	@RequestMapping(value="/cargarContratosLimpieza")
-	public String contratosLimpieza(Model model){
-		List<Contract> lista = contractDao.getContracts();
-		List<Contract> contratosLimpieza = new ArrayList<Contract>();
 		
-		for(Contract c:lista){
-			if (c.getServiceType() == 2)
-				contratosLimpieza.add(c);
-		}
-
-		model.addAttribute("contracts", contratosLimpieza);
-		return "casCommitee/contracts";
-	}
-	
-	//MÉTODO PARA MOSTRAR LOS DATOS DE MAYOR
-	@RequestMapping(value="/showElderly/{elderly_dni}")
-	public String showElderly(Model model, @PathVariable String elderly_dni){
 		Elderly elderly = elderlyDao.getElderlyByDNI(elderly_dni);
 		model.addAttribute("elderly", elderly);
 		return "casCommitee/elderly";
 	}
 	
-	//MÉTODO PARA MOSTRAR LOS DATOS DE LA EMPRESA
-	@RequestMapping(value="/showCompany/{number}/{cif}")
-	public String showCompany(Model model, @PathVariable Integer number, @PathVariable String cif){
-		contract = contractDao.getContract(number);
-		model.addAttribute("company", companyDao.getCompany(cif));
+	//Muestra los datos de una empresa en particular
+	@RequestMapping(value="/showCompany/{cif}", method=RequestMethod.GET)
+	public String showCompany(Model model, @PathVariable String cif, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
+		model.addAttribute("requestNumber", request.getNumber());
+		model.addAttribute("company", companyDao.getCompanyByCIF(cif));
 		return "casCommitee/company";
 	}
 	
-	@RequestMapping(value="/atrasCompany")
-	public String atrasCompany(){
-		String direccion = "redirect:gestionarSolicitudes/" + contract.getServiceType();
-		System.out.println(direccion);
-		return direccion;
+	//Método para asignar una solicitud a un contrato
+	@RequestMapping(value="/requests/accept/{requestNumber}/{contractNumber}", method=RequestMethod.GET)
+	public String assignRequest(@PathVariable Integer requestNumber, @PathVariable Integer contractNumber, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
+		request = requestDao.getRequest(requestNumber);
+		contract = contractDao.getContract(contractNumber);
+		
+		requestDao.acceptRequest(requestNumber, contractNumber, "casCommitee");
+		
+		//Manda un correo notificando que la solicitud ha sido aceptada y asignada a un contrato
+		Elderly elderly = elderlyDao.getElderlyByDNI(request.getElderly_dni());
+		String correo ="\nS'ha manat un correu de notificació a "+elderly.getName()+" "+elderly.getSurname()+"\n"
+		+"La sol·licitud:\n"
+		+ "\tRealitzada el: "+formatter.format(request.getCreationDate())+"\n";
+		if (request.getServiceType()==0) {
+			correo+="\tDel tipus: servei de menjar\n";
+		} else if (request.getServiceType()==1) {
+			correo+="\tDel tipus: servei sanitari\n";
+		} else {
+			correo+="\tDel tipus: servei de neteja\n";
+		}
+		
+		if (request.getEndDate()!=null) {
+			correo+="\tSol·licitada fins al: "+formatter.format(request.getEndDate())+"\n";
+		}
+		correo+="\tAmb comentaris: "+request.getComments()+"\n"
+		+"Ha sigut acceptada. S'han assignat unes condicions i en breu s'assignarà un horari d'atenció.";
+		
+		System.out.println(correo);
+		
+		//Después faltaría que la empresa establezca el horario de atención (parte de Kim no implementada)
+		
+		//Redirige a la página de confirmación
+		return "redirect:/casCommitee/requests/accept/confirmation";
 	}
 	
-
+	//Muestra la confirmación de asignación de un contrato a una solicitud
+	@RequestMapping(value="/requests/accept/confirmation", method=RequestMethod.GET)
+	public String assignRequest(Model model, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
+		model.addAttribute("request", request);
+		model.addAttribute("contract", contract);
+		
+		this.request = null;
+		this.contract = null;
+		
+		return "/casCommitee/confirmation";
+	}
 }

@@ -90,6 +90,10 @@ public class ElderlyController {
 	//Muestra la página de selección de solicitudes por tipo
 	@RequestMapping(value="/requests", method = RequestMethod.GET)
     public String showRequestsPage(Model model, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		UserDetails user = (UserDetails) session.getAttribute("user");
 		if (currentElderly==null)
 			this.currentElderly = elderlyDao.getElderlyByEmail(user.getEmail());
@@ -100,7 +104,11 @@ public class ElderlyController {
 
 	//Muestra las solicitudes actuales de servicios de comida de la persona mayor
 	@RequestMapping(value="/requests/foodrequests", method = RequestMethod.GET)
-    public String showFoodRequests(Model model) {
+    public String showFoodRequests(Model model, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		model.addAttribute("requests", requestDao.getFoodRequestsFromElderly(currentElderly.getDNI()));
 		model.addAttribute("requestType", 0);
 		requestPage = 0;
@@ -110,7 +118,11 @@ public class ElderlyController {
 		
 	//Muestra las solicitudes actuales de servicios de limpieza de la persona mayor
 	@RequestMapping(value="/requests/volunteerrequests", method = RequestMethod.GET)
-    public String showVolunteerRequests(Model model) {
+    public String showVolunteerRequests(Model model, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		model.addAttribute("availabilities", availabilityDao.getAvailabilitiesFromElderly(currentElderly.getDNI()));
 		availabilitiesPage = 0;
 		
@@ -122,7 +134,11 @@ public class ElderlyController {
 		
 	//Muestra información sobre el voluntario asignado a un servicio de compañia contratado
 	@RequestMapping(value="/volunteer/{volunteer_usr}", method = RequestMethod.GET)
-	public String showVolunteer(Model model, @PathVariable String volunteer_usr){
+	public String showVolunteer(Model model, @PathVariable String volunteer_usr, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		model.addAttribute("volunteer", volunteerDao.getVolunteerByUsr(volunteer_usr));
 		model.addAttribute("availabilitiesPage", availabilitiesPage);
 		
@@ -130,9 +146,13 @@ public class ElderlyController {
 	}
 	
 	//Muestra la página de confirmación antes de finalizar un servicio de compañia
-	@RequestMapping(value="requests/volunteerrequests/delete/confirm/{deletionType}/{date}/{beginningHour}/{volunteer_usr}", method = RequestMethod.GET)
+	@RequestMapping(value="/requests/volunteerrequests/delete/confirm/{deletionType}/{date}/{beginningHour}/{volunteer_usr}", method = RequestMethod.GET)
 	public String confirmDeleteCompanyRequest(Model model, @PathVariable int deletionType, @PathVariable String date, 
-			@PathVariable String beginningHour, @PathVariable String volunteer_usr){
+			@PathVariable String beginningHour, @PathVariable String volunteer_usr, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		try {
 			Date availabilityDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 			LocalTime availabilitiBeginningHour = LocalTime.parse(beginningHour);
@@ -150,9 +170,13 @@ public class ElderlyController {
 	}
 		
 	//Da de baja un servicio de compañia reservado con un voluntario
-	@RequestMapping(value="requests/volunteerrequests/delete/{date}/{beginningHour}/{volunteer_usr}", method = RequestMethod.GET)
+	@RequestMapping(value="/requests/volunteerrequests/delete/{date}/{beginningHour}/{volunteer_usr}", method = RequestMethod.GET)
 	public String processDeleteCompanyRequest(@PathVariable String date, @PathVariable String beginningHour, 
-			@PathVariable String volunteer_usr){
+			@PathVariable String volunteer_usr, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		try {
 			Date availabilityDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 			LocalTime availabilitiBeginningHour = LocalTime.parse(beginningHour);
@@ -191,7 +215,11 @@ public class ElderlyController {
 		
 	//Muestra las solicitudes actuales de servicios sanitarios de la persona mayor
 	@RequestMapping(value="/requests/healthrequests", method = RequestMethod.GET)
-    public String showHealthRequests(Model model) {
+    public String showHealthRequests(Model model, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		model.addAttribute("requests", requestDao.getHealthRequestsFromElderly(currentElderly.getDNI()));
 		model.addAttribute("requestType", 1);
 		requestPage = 1;
@@ -201,7 +229,11 @@ public class ElderlyController {
 	
 	//Muestra las solicitudes actuales de servicios de limpieza de la persona mayor
 	@RequestMapping(value="/requests/cleaningrequests", method = RequestMethod.GET)
-    public String showCleaningRequests(Model model) {
+    public String showCleaningRequests(Model model, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		model.addAttribute("requests", requestDao.getCleaningRequestsFromElderly(currentElderly.getDNI()));
 		model.addAttribute("requestType", 2);
 		requestPage = 2;
@@ -214,7 +246,11 @@ public class ElderlyController {
 	
 	//Muestra información detallada de una solicitud (incluyendo datos del contrato)
 	@RequestMapping(value="/requests/terms/{number}", method = RequestMethod.GET)
-    public String showContract(Model model, @PathVariable int number) {
+    public String showContract(Model model, @PathVariable int number, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		Request request = requestDao.getRequest(number);
 		model.addAttribute("request", request);
 		
@@ -224,7 +260,7 @@ public class ElderlyController {
 		if (request.getContract_number()!=0) {
 			Contract contract = contractDao.getContract(request.getContract_number());	
 			model.addAttribute("contract", contract);
-			model.addAttribute("company", companyDao.getCompany(contract.getCompany_cif()));
+			model.addAttribute("company", companyDao.getCompanyByCIF(contract.getCompany_cif()));
 		}
 		
 		model.addAttribute("requestPage", requestPage);
@@ -238,8 +274,12 @@ public class ElderlyController {
 		
 	//Muestra la información de una empresa prestadora de un servicio asociado a una solicitud
 	@RequestMapping(value="/requests/terms/company/{company_cif}", method = RequestMethod.GET)
-    public String showCompany(Model model, @PathVariable String company_cif) {
-		model.addAttribute("company", companyDao.getCompany(company_cif));
+    public String showCompany(Model model, @PathVariable String company_cif, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
+		model.addAttribute("company", companyDao.getCompanyByCIF(company_cif));
 		model.addAttribute("requestNumber", requestNumber);
 		
         return "elderly/company"; 
@@ -247,7 +287,11 @@ public class ElderlyController {
 	
 	//Muestra la información del trabajador social que supervisa una solicitud
 	@RequestMapping(value="/requests/terms/socialWorker/{userCAS}", method = RequestMethod.GET)
-    public String showSocialWorker(Model model, @PathVariable String userCAS) {
+    public String showSocialWorker(Model model, @PathVariable String userCAS, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		model.addAttribute("socialWorker", socialWorkerDao.getSocialWorkerByUserCAS(userCAS));
 		model.addAttribute("requestNumber", requestNumber);
 		
@@ -256,14 +300,21 @@ public class ElderlyController {
 	
 	//Muestra la página de selección de solicitudes por tipo
 	@RequestMapping(value="/newrequest", method = RequestMethod.GET)
-    public String showNewRequestsPage(Model model) {
+    public String showNewRequestsPage(Model model, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
 		
         return "elderly/newrequest"; 
     }
 	
 	//Muestra las todas las disponibilidades de voluntarios
 	@RequestMapping(value="/newrequest/newvolunteerrequest", method = RequestMethod.GET)
-    public String showVolunteerAvailabilities(Model model) {
+    public String showVolunteerAvailabilities(Model model, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		model.addAttribute("availabilities", availabilityDao.getFreeAvailabilities());
 		availabilitiesPage = 1;
 		
@@ -273,7 +324,11 @@ public class ElderlyController {
 	//Muestra la información de una empresa asociada a un contrato
 	@RequestMapping(value="/newrequest/newvolunteerrequest/add/{date}/{beginningHour}/{volunteer_usr}", method = RequestMethod.GET)
     public String processAddVolunteerService(Model model, @PathVariable String date, @PathVariable String beginningHour,
-    		@PathVariable String volunteer_usr) {
+    		@PathVariable String volunteer_usr, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		try {
 			Date availabilityDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 			LocalTime availabilityBeginningHour = LocalTime.parse(beginningHour);
@@ -298,7 +353,11 @@ public class ElderlyController {
 	
 	//Muestra la información de una empresa asociada a un contrato
 	@RequestMapping(value="/newrequest/newfoodhealthcleaningrequest/{type}", method = RequestMethod.GET)
-    public String newRequest(Model model, @PathVariable int type) {
+    public String newRequest(Model model, @PathVariable int type, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		Request request = new Request();
 		request.setServiceType(type);
 		model.addAttribute("request", request);
@@ -318,9 +377,12 @@ public class ElderlyController {
 			@RequestParam(value = "thursday", required = false) boolean thursday,
 			@RequestParam(value = "friday", required = false) boolean friday,
 			@RequestParam(value = "saturday", required = false) boolean saturday,
-			@RequestParam(value = "sunday", required = false) boolean sunday, BindingResult bindingResult) {
+			@RequestParam(value = "sunday", required = false) boolean sunday, BindingResult bindingResult, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		//Adaptamos los campos leídos y completamos con la información que la vista no proporciona
-
 		//Guardamos una copia de los comentarios por si hay errores
 		String initialComments = request.getComments();
 		String comments = request.getComments()+" Dies d'atenció:";
@@ -381,7 +443,11 @@ public class ElderlyController {
    
 	//Muestra la página de confirmación antes de finalizar una solicitud de una empresa
 	@RequestMapping(value="/requests/delete/confirm/{deletionType}/{number}", method = RequestMethod.GET)
-	public String confirmDeleteRequest(Model model, @PathVariable int deletionType, @PathVariable int number){
+	public String confirmDeleteRequest(Model model, @PathVariable int deletionType, @PathVariable int number, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 	   Request request = requestDao.getRequest(number);
 	   model.addAttribute("deletionType", deletionType);
 	   model.addAttribute("request", request);
@@ -391,8 +457,12 @@ public class ElderlyController {
 	
 	//Establece una solicitud de una empresa como finalizada
 	@RequestMapping(value="/requests/delete/{number}", method = RequestMethod.GET)
-	public String processDeleteRequest(@PathVariable int number){
-	   Request request = requestDao.getRequest(number);
+	public String processDeleteRequest(@PathVariable int number, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
+		Request request = requestDao.getRequest(number);
 	   
 	   Date previousEndDate=null; 
 	   if (request.getEndDate()!=null)
@@ -405,7 +475,7 @@ public class ElderlyController {
 	   //Si hay un contrato asociado, y la fecha fin de la solicitud aún no se ha alcanzado, manda un correo a la empresa para notificar la baja del servicio
 	   if (request.getContract_number()!=0 && previousEndDate!=null && previousEndDate.after(new Date())) {
 		   Contract contract = contractDao.getContract(request.getContract_number());
-		   Company company = companyDao.getCompany(contract.getCompany_cif());
+		   Company company = companyDao.getCompanyByCIF(contract.getCompany_cif());
 		   
 		   String servicio ="";
 		   if (request.getServiceType() == 0){
@@ -438,7 +508,11 @@ public class ElderlyController {
 
 	//Muestra la información personal de la persona mayor
 	@RequestMapping(value="/profile", method = RequestMethod.GET)
-    public String updateProfile(Model model) {
+    public String updateProfile(Model model, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
         model.addAttribute("elderly", currentElderly);
         return "elderly/profile"; 
     }
@@ -446,6 +520,10 @@ public class ElderlyController {
 	//Actualiza la información personal de la persona mayor
 	@RequestMapping(value="/profile", method = RequestMethod.POST)
     public String processUpdateSubmit(@ModelAttribute("elderly") Elderly elderly, BindingResult bindingResult, HttpSession session) {
+		if (session.getAttribute("user") == null) {
+			return "redirect:/login";
+		}
+		
 		//Adaptamos los campos leídos y completamos con la información que la vista no proporciona
 		if (elderly.getAlergies().equals(""))
 			elderly.setAlergies(null);
